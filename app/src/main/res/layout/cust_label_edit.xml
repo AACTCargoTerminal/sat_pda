@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="labelValue"
+            type="String" />
+        <variable
+            name="editValue"
+            type="androidx.lifecycle.MutableLiveData&lt;String&gt;" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/container_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Text Label (keyText) -->
+        <LinearLayout
+            android:id="@+id/info_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/key_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@{labelValue}"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Input Container -->
+        <LinearLayout
+            android:id="@+id/edit_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_cust_label_edit"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:cursorVisible="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:textIsSelectable="true"
+                android:textSize="18sp"
+                android:text="@={editValue}"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
+

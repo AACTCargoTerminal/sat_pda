@@ -1,0 +1,284 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <GridLayout
+            android:id="@+id/infoGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/userId"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`ID`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/userName"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`사용자명`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/companyName"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`법인`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/branchName"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`지사`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/departName"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`부서`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/langName"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`언어`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/terminalName"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`터미널명`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/terminalCode"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`터미널코드`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/userIp"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`IP`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/timeout"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`Timeout`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/dateTime"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`DateTime`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/permissionFlag"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`PDA권한`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/version"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`버전`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/memo"
+                    layout="@layout/info_item"
+                    bind:labelValue="@{`Memo`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/serverGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/selectServer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="서버"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/serverBtnGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="#EEEEEE"
+                        android:clickable="true"
+                        android:descendantFocusability="blocksDescendants"
+                        android:elevation="3dp"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="5dp"
+                        android:weightSum="1">
+
+                        <!-- Start Icon (optional) -->
+                        <ImageButton
+                            android:id="@+id/startIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="8dp"
+                            android:backgroundTint="@android:color/transparent"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:src="@drawable/menu"
+                            android:tint="@color/black"
+                            android:visibility="visible" />
+
+                        <!-- Text -->
+                        <TextView
+                            android:id="@+id/btn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp"
+                            android:text="텍스트"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <!-- End Icon (optional) -->
+                        <ImageButton
+                            android:id="@+id/endIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginStart="8dp"
+                            android:backgroundTint="@android:color/transparent"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:src="@drawable/keyboard_arrow_down"
+                            android:tint="@color/black"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </GridLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

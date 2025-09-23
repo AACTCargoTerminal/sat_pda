@@ -1,0 +1,188 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aact.sat_pda.screen.uld_scale.OPERATION_ULD_SCALE_Model" />
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+
+        <GridLayout
+            android:id="@+id/subFragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:columnCount="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/uldNo"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.uldNo}"
+                    bind:labelValue="@{`ULD NO`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/contourCode"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.contourCode}"
+                    bind:labelValue="@{`Contour`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/contourNo"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.contourNo}"
+                    bind:labelValue="@{``}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/fltDate"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.fltDate}"
+                    bind:labelValue="@{`일자`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/fltNo"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.fltNo}"
+                    bind:labelValue="@{`편번`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/fltDest"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.fltDest}"
+                    bind:labelValue="@{`도착`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/scaleNo"
+                    layout="@layout/cust_label_combo"
+                    bind:labelValue="@{`저울번호`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/weight"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.weight}"
+                    bind:labelValue="@{`WT.`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/dollyWeight"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.dollyWeight}"
+                    bind:labelValue="@{`Dolly WT.`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/scaleUser"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.scaleUser}"
+                    bind:labelValue="@{`계량자`}" />
+            </LinearLayout>
+
+        </GridLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

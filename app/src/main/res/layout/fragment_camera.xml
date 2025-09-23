@@ -1,0 +1,84 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aact.sat_pda.screen.camera.CAMERA_Model" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <GridLayout
+            android:id="@+id/subFragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:columnCount="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="400dp"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/previewView"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_gravity="center" />
+
+                <WebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/mawb"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.mawb}"
+                    bind:labelValue="@{`MAWB`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/list"
+                    layout="@layout/cust_label"
+                    bind:labelValue="@{`목록`}" />
+            </LinearLayout>
+
+        </GridLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

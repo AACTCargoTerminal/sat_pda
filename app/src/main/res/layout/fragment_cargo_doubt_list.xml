@@ -1,0 +1,71 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aact.sat_pda.screen.doubt_list.CARGO_DOUBT_LIST_Model" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <GridLayout
+            android:id="@+id/subFragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:columnCount="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/mawb"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.mawb}"
+                    bind:labelValue="@{`MAWB`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/custCode"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.custCode}"
+                    bind:labelValue="@{`대리점`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+                <include
+                    android:id="@+id/doubtList"
+                    layout="@layout/cust_label"
+                    bind:labelValue="@{`의심화물목록`}" />
+            </LinearLayout>
+        </GridLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

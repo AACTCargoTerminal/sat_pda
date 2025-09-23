@@ -1,0 +1,208 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aact.sat_pda.screen.accept.CARGO_ACCEPT_Model" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <GridLayout
+            android:id="@+id/subFragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:columnCount="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/mawb"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.mawb}"
+                    bind:labelValue="@{`MAWB`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/fltdate"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.fltDate}"
+                    bind:labelValue="@{`일자`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/fltno"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.fltNo}"
+                    bind:labelValue="@{`편번`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/fltDest"
+                    layout="@layout/cust_label_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    bind:editValue="@{viewModel.fltDest}"
+                    bind:labelValue="@{`도착`}" />
+
+                <include
+                    android:id="@+id/ec"
+                    layout="@layout/cust_label_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    bind:editValue="@{viewModel.ec}"
+                    bind:labelValue="@{`면장`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/agentCode"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.agentCode}"
+                    bind:labelValue="@{`대리점코드`}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/agentName"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.agentName}"
+                    bind:labelValue="@{`대리점명`}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/mfcsPackage"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.mfstPcs}"
+                    bind:labelValue="@{`서류수량`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/mfcsWeight"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.mfstWt}"
+                    bind:labelValue="@{`서류중량`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/goShow"
+                    layout="@layout/cust_label_combo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    bind:labelValue="@{`GoShow`}"/>
+
+                <include
+                    android:id="@+id/trans"
+                    layout="@layout/cust_label_combo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    bind:labelValue="@{`이고`}"/>
+
+                <include
+                    android:id="@+id/bup"
+                    layout="@layout/cust_label_combo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    bind:labelValue="@{`BUP`}"/>
+            </LinearLayout>
+
+        </GridLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

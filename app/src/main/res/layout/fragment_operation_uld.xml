@@ -1,0 +1,403 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aact.sat_pda.screen.uld.OPERATION_ULD_Model" />
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+
+        <GridLayout
+            android:id="@+id/subFragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:columnCount="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/uldType"
+                    layout="@layout/cust_label_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    bind:editValue="@{viewModel.uldType}"
+                    bind:labelValue="@{`ULD NO`}" />
+                <include
+                    android:id="@+id/uldSerialNo"
+                    layout="@layout/cust_label_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    bind:editValue="@{viewModel.uldSerialNo}"
+                    bind:labelValue="@{``}" />
+                <include
+                    android:id="@+id/uldCarrier"
+                    layout="@layout/cust_label_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    bind:editValue="@{viewModel.uldCarrier}"
+                    bind:labelValue="@{``}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/container_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <!-- Text Label (keyText) -->
+                    <LinearLayout
+                        android:id="@+id/info_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="Contour"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Input Container -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="2dp"
+                            android:background="@drawable/shape_cust_label_edit"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/contourCode"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="10dp"
+                                android:layout_marginStart="15dp"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:cursorVisible="true"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:imeOptions="actionDone"
+                                android:inputType="number"
+                                android:textIsSelectable="true"
+                                android:textSize="18sp"
+                                android:text="@={viewModel.contourCode}"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_cust_label_edit"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/contourNo"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="10dp"
+                                android:layout_marginStart="15dp"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:cursorVisible="true"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:imeOptions="actionDone"
+                                android:inputType="number"
+                                android:textIsSelectable="true"
+                                android:textSize="18sp"
+                                android:text="@={viewModel.contourNo}"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/position"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.position}"
+                    bind:labelValue="@{`위치`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal" >
+
+                <include
+                    android:id="@+id/status"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.status}"
+                    bind:labelValue="@{`상태`}" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/fltDate"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.fltDate}"
+                    bind:labelValue="@{`일자`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/fltNo"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.fltNo}"
+                    bind:labelValue="@{`편번`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/fltDest"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.fltDest}"
+                    bind:labelValue="@{`도착`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal" >
+
+                <include
+                    android:id="@+id/remark"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.remark}"
+                    bind:labelValue="@{`비고`}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/chk_bup"
+                    layout="@layout/cust_chk"
+                    bind:labelValue="@{`BUP`}"
+                    bind:editValue="@{viewModel.bupFlag}"/>
+                <include
+                    android:id="@+id/chk_bulk"
+                    layout="@layout/cust_chk"
+                    bind:labelValue="@{`BULK`}"
+                    bind:editValue="@{viewModel.bulkFlag}"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/chk_thru"
+                    layout="@layout/cust_chk"
+                    bind:labelValue="@{`Thru`}"
+                    bind:editValue="@{viewModel.thruFlag}"/>
+                <include
+                    android:id="@+id/chk_ra"
+                    layout="@layout/cust_chk"
+                    bind:labelValue="@{`RA`}"
+                    bind:editValue="@{viewModel.raFlag}"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/bdWeight"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.bdWeight}"
+                    bind:labelValue="@{`포장중량`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/bdPcs"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.bdPcs}"
+                    bind:labelValue="@{`포장수량`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/transAt"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.transAt}"
+                    bind:labelValue="@{`TRANS`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/transFlt"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.transFlt}"
+                    bind:labelValue="@{`FLT`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/uldWeight"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.uldWeight}"
+                    bind:labelValue="@{`중량`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/agent"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.agent}"
+                    bind:labelValue="@{`대리점`}" />
+            </LinearLayout>
+
+        </GridLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

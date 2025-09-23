@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tabLayout"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#1E1F2A"
+    android:clickable="true"
+    android:focusable="true">
+    <ImageView
+        android:id="@+id/tabIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/info"
+        app:tint="@color/white"/>
+    <TextView
+        android:id="@+id/tabText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사용자정보"
+        android:textSize="13sp"
+        android:textColor="@color/white"
+        android:letterSpacing="0.1"
+        android:textStyle="bold"
+        android:layout_marginTop="2dp"/>
+</LinearLayout>

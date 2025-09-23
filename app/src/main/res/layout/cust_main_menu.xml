@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_menu_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical">
+
+    <!-- 메인 메뉴 버튼 -->
+    <LinearLayout
+        android:id="@+id/main_button_layout"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:elevation="5dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/main_menu_border_bg"
+        android:orientation="horizontal">
+
+        <!-- 시작 아이콘 -->
+        <ImageView
+            android:id="@+id/start_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/menu" />
+
+        <!-- 텍스트 -->
+        <TextView
+            android:id="@+id/menu_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="로그인"
+            android:textColor="#000000"
+            android:textSize="19sp" />
+
+        <!-- 끝 아이콘 -->
+        <ImageView
+            android:id="@+id/end_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/keyboard_arrow_down" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/subMenuContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:scrollbars="none"
+        android:visibility="gone">
+        <LinearLayout
+            android:id="@+id/subMenuView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
+
+

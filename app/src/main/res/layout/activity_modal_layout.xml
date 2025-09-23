@@ -1,0 +1,52 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/subContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:clickable="true"
+    android:translationY="1000dp"
+    android:visibility="gone">
+
+
+    <!-- 세로 방향 분할 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <!-- 상단: 터치 시 닫기 영역 (1:1 비율) -->
+        <View
+            android:id="@+id/modalCloseArea"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:background="#99000000" />
+
+        <!-- 드래그 핸들 -->
+        <LinearLayout
+            android:id="@+id/dragHandle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:background="#BB000000"
+            android:gravity="center">
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:background="#000000" />
+        </LinearLayout>
+
+        <!-- 콘텐츠 영역 -->
+        <FrameLayout
+            android:id="@+id/modalContent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/white" />
+    </LinearLayout>
+
+
+</FrameLayout>

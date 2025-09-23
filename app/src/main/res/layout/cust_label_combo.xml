@@ -1,0 +1,67 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="labelValue"
+            type="String" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/container_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Text Label (keyText) -->
+        <LinearLayout
+            android:id="@+id/info_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/key_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@{labelValue}"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Input Container -->
+        <LinearLayout
+            android:id="@+id/edit_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_cust_label_edit"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <Spinner
+                android:id="@+id/combo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="11dp"
+                android:layout_marginStart="10dp"
+                android:spinnerMode="dropdown" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
+
+

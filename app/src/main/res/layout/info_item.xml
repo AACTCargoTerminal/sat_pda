@@ -1,0 +1,48 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="labelValue"
+            type="String" />
+    </data>
+
+    <LinearLayout android:id="@+id/infoGroup"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{labelValue}"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="#EEEEEE"
+            android:elevation="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="5dp"
+            android:singleLine="true"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+
+
+</layout>
+
+

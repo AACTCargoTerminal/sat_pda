@@ -1,0 +1,21 @@
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 외부 저장소 앱 전용 디렉토리 -->
+    <external-files-path
+        name="external_files"
+        path="." />
+
+    <!-- 다운로드 폴더 -->
+    <external-files-path
+        name="downloads"
+        path="Download/" />
+
+    <!-- 내부 저장소 -->
+    <files-path
+        name="internal_files"
+        path="." />
+
+    <!-- 캐시 디렉토리 -->
+    <cache-path
+        name="cache"
+        path="." />
+</paths>

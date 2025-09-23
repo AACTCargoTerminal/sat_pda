@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#D2D2D2"
+    android:gravity="center_horizontal"
+    android:padding="7dp">
+
+    <!-- 버튼 그리드 -->
+    <GridLayout
+        android:id="@+id/grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:columnCount="4"
+        android:rowCount="5"
+        android:useDefaultMargins="true">
+        <!-- 서브 디스플레이 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_columnSpan="4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDel"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="⌫"
+                android:background="#A6A6A6"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/subDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:text="0"
+                android:textSize="25sp"
+                android:singleLine="true"/>
+        </LinearLayout>
+
+        <!-- 메인 디스플레이 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_columnSpan="4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnC"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="C"
+                android:background="#A6A6A6"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:text="0"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:singleLine="true"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn7"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="7"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn8"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="8"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn9"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:text="9"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:text="+"
+            android:background="#FF9501"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn4"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="4"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn5"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="5"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn6"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="6"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/btnDiv"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="÷"
+            android:background="#FF9501"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <!-- 2행 -->
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn3"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnMul"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="×"
+            android:background="#FF9501"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn0"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnDot"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="."
+            android:background="#333333"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnEq"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="="
+            android:background="#FF9501"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/btnSub"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="−"
+            android:background="#FF9501"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <!-- 4행 -->
+
+
+    </GridLayout>
+</LinearLayout>
