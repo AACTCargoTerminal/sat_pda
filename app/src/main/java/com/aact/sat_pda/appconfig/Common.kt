@@ -35,7 +35,7 @@ object Common {
     val terminalName = MutableLiveData("")
     val userIp = MutableLiveData("")
     val memo = MutableLiveData("")
-    val version = MutableLiveData("2.0")
+    val version = MutableLiveData("2.01")
     val filename = MutableLiveData("")
     val updateFlag = MutableLiveData<Boolean>(false)
     val updateMsg = MutableLiveData<String>("업데이트중...")
