@@ -329,13 +329,13 @@ sealed class Route(
                 BottomItem.KeyBoard,
                 add,
                 BottomItem.Save,
-                BottomItem.Delete,
                 buildUp,
                 BottomItem.Complete,
                 BottomItem.Export,
                 cancel,
                 BottomItem.Offload,
                 mawbList,
+                BottomItem.Delete,
                 BottomItem.Print,
 
 
