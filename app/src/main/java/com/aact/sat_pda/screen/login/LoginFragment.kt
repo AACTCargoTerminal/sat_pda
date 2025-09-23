@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.aact.sat_pda.Biz.MainAPI
 import com.aact.sat_pda.Biz.MainAPI_Impl
 import com.aact.sat_pda.Biz.Util
+import com.aact.sat_pda.MainActivity
 import com.aact.sat_pda.appconfig.BottomItem
 import com.aact.sat_pda.appconfig.Common
 import com.aact.sat_pda.databinding.FragmentLoginBinding
@@ -38,6 +39,9 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (requireActivity() as? MainActivity)?.startProc()
+
         val pref = getPref("userId")
         if(pref==null||pref == ""){
             binding.switchSaveId.isChecked = false

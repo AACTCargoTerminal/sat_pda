@@ -338,6 +338,8 @@ class BizAPI {
                                         DataRow(LinkedHashMap(mutableItem))
                                     }
 
+                                    Common.terminalCode.value == "ALL" -> rowObj
+
                                     else -> null // 제외
                                 }
                             }
