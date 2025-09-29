@@ -169,7 +169,9 @@ open class BaseFragment : Fragment() {
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
 
             } else {
-                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+                view.requestFocus() //  임시설정
+                imm.showSoftInput(view, InputMethodManager.SHOW_FORCED)
+                //imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
             }
         }else{
             if (keboardFlag) {

@@ -560,4 +560,28 @@ interface MainAPI {
         I_IRR_NO_OF_PACKAGE: String,
     ): Result<DataTable>
 
+    suspend fun getPWM_ULD_BREAK_DOWN_M020_001(
+        I_FLIGHT_DATE: String,
+    ): Result<DataTable>
+
+    suspend fun getPWM_CARGO_OPERATION_L020_063(
+        I_SCHEDULE_SID: String,
+        I_USABLE_FLAG: String,
+    ): Result<DataTable>
+
+    suspend fun getPWM_ULD_BREAK_DOWN_M020_005(
+        I_CARGO_CONTROL_SID: String,
+    ): Result<DataTable>
+
+    suspend fun setPWM_ULD_BREAK_DOWN_M020_013(
+        I_CARGO_BREAKDOWN_SID: String,
+        I_SCHEDULE_SID: String,
+        I_OPERATION_ULD_SID: String,
+        I_CARGO_CONTROL_SID: String,
+        I_NO_OF_PACKAGE: String,
+        I_NET_WEIGHT: String,
+        I_LOCATION_CODE: String,
+    ): Result<DataTable>
+
+
 }

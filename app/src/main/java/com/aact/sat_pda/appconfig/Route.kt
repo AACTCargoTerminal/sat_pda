@@ -17,7 +17,9 @@ import com.aact.sat_pda.screen.control.CARGO_CONTROL_Fragment
 import com.aact.sat_pda.screen.control_list.CARGO_CONTROL_LIST_Fragment
 import com.aact.sat_pda.screen.damage_export.CARGO_DAMAGE_EXPORT_Fragment
 import com.aact.sat_pda.screen.doubt_list.CARGO_DOUBT_LIST_Fragment
+import com.aact.sat_pda.screen.import_bd_with_no.IMPORT_BD_WITH_NO_Fragment
 import com.aact.sat_pda.screen.import_info.IMPORT_INFO_Fragment
+import com.aact.sat_pda.screen.import_info_list.IMPORT_INFO_LIST_Fragment
 import com.aact.sat_pda.screen.import_irr.IMPORT_IRR_Fragment
 import com.aact.sat_pda.screen.import_irr_list.IMPORT_IRR_LIST_Fragment
 import com.aact.sat_pda.screen.info.InfoFragment
@@ -66,7 +68,7 @@ sealed class Route(
         fun setDefault() {
             Common.menuList = listOf<Route>(
                 Accept, ControlList, Scale, Volume, DamageExport,
-                OperationUldList,StockListDt, DoubtList,StockListAl,ImportInfo,ImportIrrList
+                OperationUldList,StockListDt, DoubtList,StockListAl,ImportInfo,ImportIrrList,ImportInfoList,ImportBDWithNo
             )
             Common.menuList.forEach { it.resetPermissions() }
         }
@@ -528,5 +530,64 @@ sealed class Route(
             return list
         }
     }
+
+    object ImportInfoList : Route("infolist","수입화물목록") {
+        override fun fragment(): Fragment = IMPORT_INFO_LIST_Fragment()
+
+        override fun bottomItems(): List<BottomItem> {
+
+            BottomItem.setDefault()
+
+            val bd = BottomItem.Save
+            bd.name = "B/D작업"
+            val inCargo = BottomItem.Add
+            inCargo.name = "입고"
+
+            val list = listOf(
+                BottomItem.KeyBoard,
+                bd,
+                inCargo
+            )
+
+            return list
+        }
+    }
+
+
+    object ImportBDWithNo : Route("importBDWithNo","수입화물B/D") {
+        override fun fragment(): Fragment = IMPORT_BD_WITH_NO_Fragment()
+
+        override fun bottomItems(): List<BottomItem> {
+
+            BottomItem.setDefault()
+
+            val dmg = BottomItem.Tmp01
+            dmg.name = "파손"
+            val irr = BottomItem.Tmp02
+            irr.name = "이례"
+            val inCargo = BottomItem.Add
+            inCargo.name = "입고"
+            val save = BottomItem.Save
+            save.name = "저장"
+            val uldComplete = BottomItem.Complete
+            uldComplete.name = "ULD완료"
+            val camera = BottomItem.Camera
+            camera.name = "사진"
+
+
+            val list = listOf(
+                BottomItem.KeyBoard,
+                dmg,
+                irr,
+                inCargo,
+                save,
+                uldComplete,
+                camera
+            )
+
+            return list
+        }
+    }
+
 
 }

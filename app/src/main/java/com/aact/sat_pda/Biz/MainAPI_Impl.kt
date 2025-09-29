@@ -3465,4 +3465,157 @@ class MainAPI_Impl : MainAPI {
 
         }
     }
+
+    override suspend fun getPWM_ULD_BREAK_DOWN_M020_001(I_FLIGHT_DATE: String): Result<DataTable> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val reqData = mapOf<String, String>(
+                    "I_FLIGHT_DATE" to I_FLIGHT_DATE,
+                    "I_LANGUAGE_CODE" to Common.langCode.value,
+                    "GUID" to Util.getGUID(),
+                    "I_REQUEST_USER_ID" to Common.userId.value,
+                    "I_REQUEST_IP_ADDRESS" to Common.userTerminalIp.value,
+                    "I_REQUEST_PROGRAM_ID" to Common.programId
+                )
+                val result = Util.sendAPI(
+                    reqData = reqData,
+                    methodName = "getPWM_ULD_BREAK_DOWN_M020_001"
+                )
+                when (result) {
+                    is Result.Success -> {
+                        Result.Success(result.data)
+                    }
+
+                    is Result.Error -> Result.Error(result.message)
+
+
+                }
+
+            } catch (e: CancellationException) {
+                Result.Error("작업이 취소되었습니다.")
+            } catch (e: Exception) {
+                Result.Error(e.message ?: "API.getPWM_ULD_BREAK_DOWN_M020_001")
+            }
+
+        }
+    }
+
+    override suspend fun getPWM_CARGO_OPERATION_L020_063(
+        I_SCHEDULE_SID: String,
+        I_USABLE_FLAG: String,): Result<DataTable> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val reqData = mapOf<String, String>(
+                    "I_SCHEDULE_SID" to I_SCHEDULE_SID,
+                    "I_USABLE_FLAG" to I_USABLE_FLAG,
+                    "I_LANGUAGE_CODE" to Common.langCode.value,
+                    "GUID" to Util.getGUID(),
+                    "I_REQUEST_USER_ID" to Common.userId.value,
+                    "I_REQUEST_IP_ADDRESS" to Common.userTerminalIp.value,
+                    "I_REQUEST_PROGRAM_ID" to Common.programId
+                )
+                val result = Util.sendAPI(
+                    reqData = reqData,
+                    methodName = "getPWM_CARGO_OPERATION_L020_063"
+                )
+                when (result) {
+                    is Result.Success -> {
+                        Result.Success(result.data)
+                    }
+
+                    is Result.Error -> Result.Error(result.message)
+
+
+                }
+
+            } catch (e: CancellationException) {
+                Result.Error("작업이 취소되었습니다.")
+            } catch (e: Exception) {
+                Result.Error(e.message ?: "API.getPWM_CARGO_OPERATION_L020_063")
+            }
+
+        }
+    }
+
+
+    override suspend fun getPWM_ULD_BREAK_DOWN_M020_005(I_CARGO_CONTROL_SID: String, ): Result<DataTable> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val reqData = mapOf<String, String>(
+                    "I_CARGO_CONTROL_SID" to I_CARGO_CONTROL_SID,
+                    "I_LANGUAGE_CODE" to Common.langCode.value,
+                    "GUID" to Util.getGUID(),
+                    "I_REQUEST_USER_ID" to Common.userId.value,
+                    "I_REQUEST_IP_ADDRESS" to Common.userTerminalIp.value,
+                    "I_REQUEST_PROGRAM_ID" to Common.programId
+                )
+                val result = Util.sendAPI(
+                    reqData = reqData,
+                    methodName = "getPWM_ULD_BREAK_DOWN_M020_005"
+                )
+                when (result) {
+                    is Result.Success -> {
+                        Result.Success(result.data)
+                    }
+
+                    is Result.Error -> Result.Error(result.message)
+
+
+                }
+
+            } catch (e: CancellationException) {
+                Result.Error("작업이 취소되었습니다.")
+            } catch (e: Exception) {
+                Result.Error(e.message ?: "API.getPWM_ULD_BREAK_DOWN_M020_005")
+            }
+
+        }
+    }
+
+    override suspend fun setPWM_ULD_BREAK_DOWN_M020_013(
+        I_CARGO_BREAKDOWN_SID: String,
+        I_SCHEDULE_SID: String,
+        I_OPERATION_ULD_SID: String,
+        I_CARGO_CONTROL_SID: String,
+        I_NO_OF_PACKAGE: String,
+        I_NET_WEIGHT: String,
+        I_LOCATION_CODE: String): Result<DataTable> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val reqData = mapOf<String, String>(
+                    "I_CARGO_BREAKDOWN_SID" to I_CARGO_BREAKDOWN_SID,
+                    "I_SCHEDULE_SID" to I_SCHEDULE_SID,
+                    "I_OPERATION_ULD_SID" to I_OPERATION_ULD_SID,
+                    "I_CARGO_CONTROL_SID" to I_CARGO_CONTROL_SID,
+                    "I_NO_OF_PACKAGE" to I_NO_OF_PACKAGE,
+                    "I_NET_WEIGHT" to I_NET_WEIGHT,
+                    "I_LOCATION_CODE" to I_LOCATION_CODE,
+                    "I_LANGUAGE_CODE" to Common.langCode.value,
+                    "GUID" to Util.getGUID(),
+                    "I_REQUEST_USER_ID" to Common.userId.value,
+                    "I_REQUEST_IP_ADDRESS" to Common.userTerminalIp.value,
+                    "I_REQUEST_PROGRAM_ID" to Common.programId
+                )
+                val result = Util.sendAPI(
+                    reqData = reqData,
+                    methodName = "setPWM_ULD_BREAK_DOWN_M020_013"
+                )
+                when (result) {
+                    is Result.Success -> {
+                        Result.Success(result.data)
+                    }
+
+                    is Result.Error -> Result.Error(result.message)
+
+
+                }
+
+            } catch (e: CancellationException) {
+                Result.Error("작업이 취소되었습니다.")
+            } catch (e: Exception) {
+                Result.Error(e.message ?: "API.setPWM_ULD_BREAK_DOWN_M020_013")
+            }
+
+        }
+    }
 }

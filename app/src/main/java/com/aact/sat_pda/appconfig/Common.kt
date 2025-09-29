@@ -10,14 +10,15 @@ object Common {
 
     val serverIp: List<DataRow> = listOf(
         DataRow(linkedMapOf("ip" to "localhost:60330", "name" to "개발환경1")),
-        DataRow(linkedMapOf("ip" to "192.168.200.179", "name" to "개발환경2")),
+        DataRow(linkedMapOf("ip" to "192.168.200.152:10000", "name" to "개발환경2")),
+        DataRow(linkedMapOf("ip" to "192.168.200.179", "name" to "개발환경3")),
         DataRow(linkedMapOf("ip" to "192.168.0.57", "name" to "운영환경")),
     )
 
     val serverKey = "aactsharpt2lkoalaicnkorea"
     val timeout: Long = 20L
     val programId: String = "PDA Android"
-    val selectServer = MutableLiveData("192.168.0.57")
+    val selectServer = MutableLiveData("192.168.200.152:10000")
 
 
     val userId = MutableLiveData<String>("")
