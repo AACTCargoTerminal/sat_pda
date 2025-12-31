@@ -114,7 +114,6 @@ class IMPORT_IRR_LIST_Fragment : BaseFragment() {
                             Pair("CARGO_CONTROL_SID", model.cargoSid),
                             Pair("MAWB", model.mawb.value)
                         )
-                        //카메라이동
                         val camera = Route.Camera
                         camera.params = params1
                         Common.addNavigate(camera)

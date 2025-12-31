@@ -126,6 +126,10 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
                             Pair("CARGO_CONTROL_SID", selectedSid)
                         )
 
+                        val rt = Route.ImportBDWithNo
+                        rt.params = params
+                        Common.addNavigate(rt)
+
                     }
                  }
 

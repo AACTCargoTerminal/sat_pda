@@ -18,6 +18,18 @@ import com.aact.sat_pda.R
 class TreeAdapter() : RecyclerView.Adapter<TreeAdapter.GroupViewHolder>() {
 
     private val groupList = mutableListOf<TreeDTO.Group>()
+    private var onItemCheckListener: ((itemCode: String, checkFlag: String) -> Unit)? = null      //박제훈 추가
+    private var onGroupClickListener: ((groupCode: String) -> Unit)? = null
+
+    // 박제훈 추가
+    fun setOnItemCheckListener(listener: (itemCode: String, checkFlag: String) -> Unit) {
+        onItemCheckListener = listener
+    }
+
+    // 박제춘 추가
+    fun setOnGroupCheckListener(listener: (groupCode: String) -> Unit) {
+        onGroupClickListener = listener
+    }
 
     fun setData(data: List<TreeDTO.Group>) {
         groupList.clear()
@@ -58,7 +70,8 @@ class TreeAdapter() : RecyclerView.Adapter<TreeAdapter.GroupViewHolder>() {
                         item.changeFlag = "Y"
                         item.checkFlag = if (isChecked) "Y" else "N"
 
-
+                        // Model에 변경사항 알림           박제훈 추가
+                        onItemCheckListener?.invoke(item.key, item.checkFlag)
                     }
                     layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -75,6 +88,9 @@ class TreeAdapter() : RecyclerView.Adapter<TreeAdapter.GroupViewHolder>() {
 
             // 클릭 시 슬라이드로 열고 닫기
             itemView.setOnClickListener {
+                // 그룹 선택 이벤트 먼저 알림
+                onGroupClickListener?.invoke(group.key)
+
                 group.isExpanded = !group.isExpanded
                 if (group.isExpanded) {
                     expand(childContainer)

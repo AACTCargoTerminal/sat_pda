@@ -583,5 +583,92 @@ interface MainAPI {
         I_LOCATION_CODE: String,
     ): Result<DataTable>
 
+    suspend fun getPWM_CARGO_OPERATION_L020_061(
+        I_SCHEDULE_SID: String,
+        I_USABLE_FLAG: String,
+    ): Result<DataTable>
 
+    suspend fun getPWM_CARGO_STOCK_M020_001(
+        I_CARGO_CONTROL_SID: String,
+    ): Result<DataTable>
+
+    suspend fun getPWM_CARGO_STOCK_M020_001_BY_NO(
+        I_CARGO_CONTROL_NO: String,
+    ): Result<DataTable>
+
+    suspend fun setPWM_ULD_BREAK_DOWN_M020_011(
+        I_CARGO_BREAKDOWN_SID: String,
+        I_SCHEDULE_SID: String,
+        I_OPERATION_ULD_SID: String,
+        I_CARGO_CONTROL_SID: String,
+        I_NO_OF_PACKAGE: String,
+        I_NET_WEIGHT: String,
+    ): Result<DataTable>
+
+    suspend fun setPWM_CARGO_STOCK_M020_011(
+        I_CARGO_CONTROL_SID: String,
+        I_STOCK_DATE: String,
+        I_STOCK_TIME: String,
+        I_MUST_DECLARE_FLAG: String,
+        I_LOCATION_CODE: String,
+        I_RACK_NO: String,
+        I_SP_FLAG: String
+    ): Result<DataTable>
+
+    suspend fun getPWM_CARGO_DAMAGE_M010_002_003_004_BY_NO(
+        I_CARGO_CONTROL_NO: String
+    ): Result<DataTable>
+
+    suspend fun setPWM_CARGO_DAMAGE_M010_013(
+        I_CARGO_CONTROL_SID: String,
+        I_DAMAGE_GROUP_CODE: String,
+        I_DAMAGE_ITEM_CODE: String,
+        I_CHECK_FLAG: String,
+        I_NO_OF_DAMAGE: String
+    ): Result<DataTable>
+
+    suspend fun setPWM_CARGO_DAMAGE_M010_012(
+        I_CARGO_CONTROL_SID: String,
+        I_DAMAGED_HOLD_FLAG: String,
+        I_DAMAGED_NO_OF_PACKAGE: String,
+        I_DAMAGED_DESCRIPTION: String,
+        I_DAMAGED_USER_ID: String,
+        I_DAMAGED_DATE: String,
+        I_DAMAGED_TIME: String
+    ): Result<DataTable>
+
+    suspend fun getPWM_CARGO_HOLD_M020_001(
+        I_CARGO_CONTROL_SID: String,
+        I_HOLD_TYPE_CODE: String
+    ): Result<DataTable>
+
+    suspend fun setPWM_CARGO_HOLD_M020_011(
+        I_CARGO_CONTROL_SID: String,
+        I_HOLD_TYPE_CODE: String,
+        I_RELEASE_TYPE_CODE: String,
+        I_RELEASE_DATE: String,
+        I_RELEASE_TIME: String,
+        I_RELEASE_REMARKS: String
+    ): Result<DataTable>
+
+    suspend fun setPWM_CARGO_RELEASE_M020_011(
+        I_CARGO_CONTROL_SID: String,
+        I_INOUT_KIND: String,
+        I_RELEASE_DATE: String,
+        I_RELEASE_TIME: String,
+        I_CUSTOMS_IDENTIFY_NO: String,
+        I_APPROVE_DATE: String,
+        I_NO_OF_PACKAGE: String,
+        I_NET_WEIGHT: String,
+        GRID_LOCATION_CODE: String,
+        GRID_NO_OF_PACKAGE: String
+    ): Result<DataTable>
+
+    suspend fun getPWM_CARGO_RELEASE_M020_001_BY_NO(
+        I_CARGO_CONTROL_SID: String
+    ): Result<DataTable>
+
+    suspend fun getPWM_CARGO_RELEASE_M020_002_BY_NO(
+        I_CARGO_CONTROL_NO: String
+    ): Result<DataTable>
 }

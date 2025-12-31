@@ -49,8 +49,8 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
         HeaderDTO("HOUSE_AIR_WAY_BILL_NO", "HAWB", 200),
         HeaderDTO("MFST_NO_OF_PACKAGE", "예약수량", 80),
         HeaderDTO("MFST_NET_WEIGHT", "예약중량",80),
-        HeaderDTO("ACCEPTED_NO_OF_PACKAGE","확정수량",80),
-        HeaderDTO("ACCEPTED_NET_WEIGHT","확정중량",80),
+        HeaderDTO("ACCEPTED_NO_OF_PACKAGE","접수수량",80),
+        HeaderDTO("ACCEPTED_NET_WEIGHT","접수중량",80),
         HeaderDTO("CARGO_CONTROL_NO","화물번호",80),
         HeaderDTO("CARGO_CONTROL_SID","id",80)
     )
@@ -137,16 +137,11 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
                         i03Count.value = Count03.toString()
 
 
-
                         data[1]?.let { table->
                             cargoList.value = table
                         }?:run {
                             cargoList.value = emptyList()
                         }
-
-
-
-
                     }else {
                         Common.sendError(Util.getTableCell(0, data[0], "COL2"))
                     }

@@ -25,7 +25,7 @@ import kotlin.text.toDouble
 import kotlin.text.trimEnd
 
 class RowAdapter(
-    private val rows: List<DataRow>,
+    private var rows: List<DataRow>,            // val >> var 로 수정 (박제훈)
     private val header: List<HeaderDTO>,
     private var select: Map<String, String>,
     private val selectMap: MutableMap<Int, DataRow> = mutableMapOf(),
@@ -36,6 +36,18 @@ class RowAdapter(
     class RowViewHolder(val layout: LinearLayout) : RecyclerView.ViewHolder(layout)
 
     var selectPosition = -1;
+
+    // 박제훈 추가
+    fun updateData(newRows: List<DataRow>, newSelect: Map<String, String>) {
+        this.rows = newRows
+        this.select = newSelect
+
+        selectMap.clear()
+
+        selectPosition = -1
+
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RowViewHolder {
         val params = LinearLayout.LayoutParams(

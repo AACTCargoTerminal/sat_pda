@@ -32,6 +32,7 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fltDate.editText.showSoftInputOnFocus = false
+        infobdModel.getLocationList()
 
         item.strEditText(binding.cargoNo.editText)
         item.limitEditText(binding.cargoNo.editText, 20)
@@ -71,6 +72,16 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
         infobdModel.pcs.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 infobdModel.calculateWeight()
+            }
+        }
+
+        infobdModel.locationList.observe(viewLifecycleOwner) { locations ->
+            if (locations.isNotEmpty()) {
+                item.setSpiner_Str(
+                    context = view.context,
+                    view = binding.location.combo,
+                    list = locations
+                ) {infobdModel.location.postValue(it)}
             }
         }
 

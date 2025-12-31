@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -47,7 +48,7 @@ class MenuFragment : BaseFragment() {
         val item_button = LayoutInflater.from(context).inflate(R.layout.cust_main_menu,binding.menuMain,false)
         val container = item_button.findViewById<LinearLayout>(R.id.main_button_layout)
         val subContainer =  item_button.findViewById<ScrollView>(R.id.subMenuContainer)
-        val subLinear = item_button.findViewById<LinearLayout>(R.id.subMenuView)
+        val subLinear = item_button.findViewById<GridLayout>(R.id.subMenuView)
         val code = item.row["CODE_CODE"] ?: ""
 
 

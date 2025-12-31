@@ -41,6 +41,7 @@ class IMPORT_BD_WITH_NO_Model: ViewModel() {
     val cargoBreakdownSid = MutableLiveData<String>("")
     val wtSum = MutableLiveData<String>("")
     val wtSumMfcs = MutableLiveData<String>("")
+    val locationList = MutableLiveData<List<String>>()
 
 
     fun setInfo() {
@@ -101,6 +102,26 @@ class IMPORT_BD_WITH_NO_Model: ViewModel() {
 
                 }
             }
+            Common.loadingOff()
+        }
+    }
+
+    fun getLocationList() {
+        viewModelScope.launch {
+            Common.loadingOn(coroutineContext[Job])
+
+            val locations = biz.getPositionListIMPC()
+
+            locations?.let { dataRows ->
+                val locationCodes = dataRows.map { row ->
+                    row.row["CODE_CODE"]?.toString() ?: ""
+                }.filter { it.isNotEmpty() }
+
+                locationList.value = locationCodes
+            }?: run {
+                locationList.value = emptyList()
+            }
+
             Common.loadingOff()
         }
     }

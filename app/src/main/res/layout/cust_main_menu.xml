@@ -3,14 +3,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="30dp"
     android:orientation="vertical">
 
     <!-- 메인 메뉴 버튼 -->
     <LinearLayout
         android:id="@+id/main_button_layout"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_width="240dp"
+        android:layout_height="60dp"
         android:elevation="5dp"
         android:gravity="center_vertical"
         android:background="@drawable/main_menu_border_bg"
@@ -19,10 +19,10 @@
         <!-- 시작 아이콘 -->
         <ImageView
             android:id="@+id/start_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="8dp"
-            android:src="@drawable/menu" />
+            android:src="@drawable/main_menu2" />
 
         <!-- 텍스트 -->
         <TextView
@@ -32,8 +32,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="로그인"
-            android:textColor="#000000"
-            android:textSize="19sp" />
+            android:textColor="#68ec2b"
+            android:textSize="30sp" />
 
         <!-- 끝 아이콘 -->
         <ImageView
@@ -53,13 +53,17 @@
         android:orientation="vertical"
         android:scrollbars="none"
         android:visibility="gone">
-        <LinearLayout
+        <GridLayout
             android:id="@+id/subMenuView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:columnCount="2"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true">
 
-        </LinearLayout>
+        </GridLayout>
 
     </ScrollView>
 
