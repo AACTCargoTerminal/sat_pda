@@ -2,11 +2,9 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
-            type="com.aact.sat_pda.screen.import_irr.IMPORT_IRR_Model" />
-
+            type="com.aact.sat_pda.screen.import_cargo_out_info.IMPORT_CARGO_OUT_INFO_Model" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -14,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff">
-
 
         <GridLayout
             android:id="@+id/subFragmentLayout"
@@ -24,6 +21,7 @@
             android:columnCount="2"
             android:orientation="horizontal">
 
+            <!-- 화물번호 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -40,10 +38,13 @@
                     bind:editValue="@{viewModel.cargoNo}"
                     bind:labelValue="@{`화물번호`}" />
             </LinearLayout>
+
+            <!-- MAWB -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
                 android:layout_margin="5dp"
                 android:background="#F0F0F0"
                 android:elevation="3dp"
@@ -55,10 +56,13 @@
                     bind:editValue="@{viewModel.mawb}"
                     bind:labelValue="@{`MAWB`}" />
             </LinearLayout>
+
+            <!-- HAWB -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
                 android:layout_margin="5dp"
                 android:background="#F0F0F0"
                 android:elevation="3dp"
@@ -70,22 +74,21 @@
                     bind:editValue="@{viewModel.hawb}"
                     bind:labelValue="@{`HAWB`}" />
             </LinearLayout>
-            <LinearLayout
+
+            <!-- D/O 섹션 제목 -->
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_columnSpan="2"
                 android:layout_margin="5dp"
-                android:background="#F0F0F0"
-                android:elevation="3dp"
-                android:orientation="vertical">
+                android:background="#D0D0D0"
+                android:padding="8dp"
+                android:text="D/O"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <include
-                    android:id="@+id/assign"
-                    layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.assign}"
-                    bind:labelValue="@{`배정`}" />
-            </LinearLayout>
+            <!-- D/O PCS -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -96,11 +99,13 @@
                 android:orientation="vertical">
 
                 <include
-                    android:id="@+id/mfcsPcs"
+                    android:id="@+id/doPcs"
                     layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.mfcsPcs}"
-                    bind:labelValue="@{`MFCS PCS`}" />
+                    bind:editValue="@{viewModel.doPcs}"
+                    bind:labelValue="@{`PCS`}" />
             </LinearLayout>
+
+            <!-- D/O WT -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -111,72 +116,43 @@
                 android:orientation="vertical">
 
                 <include
-                    android:id="@+id/mfcsWt"
+                    android:id="@+id/doWt"
                     layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.mfcsWt}"
-                    bind:labelValue="@{`MFCS WT`}" />
+                    bind:editValue="@{viewModel.doWt}"
+                    bind:labelValue="@{`WT`}" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="5dp"
-                android:background="#F0F0F0"
-                android:elevation="3dp"
-                android:orientation="vertical">
 
-                <include
-                    android:id="@+id/pcs"
-                    layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.pcs}"
-                    bind:labelValue="@{`하기 PCS`}" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="5dp"
-                android:background="#F0F0F0"
-                android:elevation="3dp"
-                android:orientation="vertical">
-
-                <include
-                    android:id="@+id/wt"
-                    layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.wt}"
-                    bind:labelValue="@{`하기 WT`}" />
-            </LinearLayout>
-            <LinearLayout
+            <!-- 반출승인 섹션 제목 -->
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_columnSpan="2"
                 android:layout_margin="5dp"
-                android:background="#F0F0F0"
-                android:elevation="3dp"
-                android:orientation="vertical">
+                android:background="#D0D0D0"
+                android:padding="8dp"
+                android:text="반출승인"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <include
-                    android:id="@+id/holdType"
-                    layout="@layout/cust_label_combo"
-                    bind:labelValue="@{`이례 유형`}" />
-            </LinearLayout>
+            <!-- 반출승인 PCS -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_columnSpan="2"
                 android:layout_margin="5dp"
                 android:background="#F0F0F0"
                 android:elevation="3dp"
                 android:orientation="vertical">
 
                 <include
-                    android:id="@+id/remark"
+                    android:id="@+id/releasePcs"
                     layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.remark}"
-                    bind:labelValue="@{`내용`}" />
+                    bind:editValue="@{viewModel.releasePcs}"
+                    bind:labelValue="@{`PCS`}" />
             </LinearLayout>
+
+            <!-- 반출승인 WT -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -187,55 +163,14 @@
                 android:orientation="vertical">
 
                 <include
-                    android:id="@+id/irrPcs"
+                    android:id="@+id/releaseWt"
                     layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.irrPcs}"
-                    bind:labelValue="@{`이례수량`}" />
+                    bind:editValue="@{viewModel.releaseWt}"
+                    bind:labelValue="@{`WT`}" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="5dp"
-                android:background="#F0F0F0"
-                android:elevation="3dp"
-                android:orientation="vertical">
 
-                <include
-                    android:id="@+id/spFlag"
-                    layout="@layout/cust_label_combo"
-                    bind:labelValue="@{`특수화물`}" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="5dp"
-                android:background="#F0F0F0"
-                android:elevation="3dp"
-                android:orientation="vertical">
-
-                <include
-                    android:id="@+id/holdDate"
-                    layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.holdDate}"
-                    bind:labelValue="@{`보류일자`}" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="5dp"
-                android:background="#F0F0F0"
-                android:elevation="3dp"
-                android:orientation="vertical">
-
-                <include
-                    android:id="@+id/holdTime"
-                    layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.holdTime}"
-                    bind:labelValue="@{`시분초`}" />
-            </LinearLayout>
         </GridLayout>
+
     </androidx.core.widget.NestedScrollView>
+
 </layout>

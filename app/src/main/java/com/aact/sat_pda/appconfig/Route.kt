@@ -2,6 +2,7 @@ package com.aact.sat_pda.appconfig
 
 import androidx.fragment.app.Fragment
 import com.aact.sat_pda.appconfig.BottomItem.Add
+import com.aact.sat_pda.appconfig.BottomItem.Cancel
 import com.aact.sat_pda.appconfig.BottomItem.Complete
 import com.aact.sat_pda.appconfig.BottomItem.Delete
 import com.aact.sat_pda.appconfig.BottomItem.Exit
@@ -17,12 +18,16 @@ import com.aact.sat_pda.screen.control.CARGO_CONTROL_Fragment
 import com.aact.sat_pda.screen.control_list.CARGO_CONTROL_LIST_Fragment
 import com.aact.sat_pda.screen.damage_export.CARGO_DAMAGE_EXPORT_Fragment
 import com.aact.sat_pda.screen.doubt_list.CARGO_DOUBT_LIST_Fragment
+import com.aact.sat_pda.screen.import_bd.IMPORT_BD_Fragment
 import com.aact.sat_pda.screen.import_bd_list.IMPORT_BD_LIST_Fragment
 import com.aact.sat_pda.screen.import_bd_list.IMPORT_BD_LIST_Model
 import com.aact.sat_pda.screen.import_bd_with_no.IMPORT_BD_WITH_NO_Fragment
 import com.aact.sat_pda.screen.import_cargo_damage.IMPORT_CARGO_DAMAGE_Fragment
 import com.aact.sat_pda.screen.import_cargo_in.IMPORT_CARGO_IN_Fragment
 import com.aact.sat_pda.screen.import_cargo_out.IMPORT_CARGO_OUT_Fragment
+import com.aact.sat_pda.screen.import_cargo_out_info.IMPORT_CARGO_OUT_INFO_Fragment
+import com.aact.sat_pda.screen.import_cargo_ovcd.IMPORT_CARGO_OVCD_Fragment
+import com.aact.sat_pda.screen.import_uld.IMPORT_ULD_Fragment
 import com.aact.sat_pda.screen.import_info.IMPORT_INFO_Fragment
 import com.aact.sat_pda.screen.import_info_list.IMPORT_INFO_LIST_Fragment
 import com.aact.sat_pda.screen.import_irr.IMPORT_IRR_Fragment
@@ -73,9 +78,14 @@ sealed class Route(
     companion object {
         fun setDefault() {
             Common.menuList = listOf<Route>(
-                Accept, Scale, Volume, ControlList,DamageExport,
-                OperationUldList,StockListDt, DoubtList,StockListAl,ImportInfo,ImportIrrList,ImportInfoList,ImportBDWithNo
-                ,ImportBDList,ImportCargoIn,ImportCargoDamage,ImportIrrRelease,ImportCargoOut
+                // 수출 메뉴
+                Accept, Scale, Volume, ControlList, DamageExport,
+                OperationUldList, StockListDt, DoubtList, StockListAl,
+                // 수입 메뉴
+                ImportCargoIn, ImportCargoOut,ImportInfoList,
+                ImportInfo, ImportBDWithNo, ImportBDList,
+                ImportIrrList, ImportCargoDamage,
+                ImportCargoOVCD
             )
             Common.menuList.forEach { it.resetPermissions() }
         }
@@ -471,7 +481,7 @@ sealed class Route(
         }
     }
 
-    object ImportInfo : Route("importInfo", "수입화물조회") {
+    object ImportInfo : Route("importInfo", "화물조회") {
         override fun fragment(): Fragment = IMPORT_INFO_Fragment()
         override fun bottomItems(): List<BottomItem> {
 
@@ -500,7 +510,7 @@ sealed class Route(
         }
     }
 
-    object ImportIrrList : Route("irrList", "수입화물보류목록") {
+    object ImportIrrList : Route("irrList", "이례등록") {
         override fun fragment(): Fragment = IMPORT_IRR_LIST_Fragment()
         override fun bottomItems(): List<BottomItem> {
 
@@ -538,7 +548,7 @@ sealed class Route(
         }
     }
 
-    object ImportInfoList : Route("infolist","수입화물목록") {
+    object ImportInfoList : Route("infolist","화물목록") {
         override fun fragment(): Fragment = IMPORT_INFO_LIST_Fragment()
 
         override fun bottomItems(): List<BottomItem> {
@@ -561,7 +571,7 @@ sealed class Route(
     }
 
 
-    object ImportBDWithNo : Route("importBDWithNo","수입화물B/D") {
+    object ImportBDWithNo : Route("importBDWithNo","화물B/D") {
         override fun fragment(): Fragment = IMPORT_BD_WITH_NO_Fragment()
 
         override fun bottomItems(): List<BottomItem> {
@@ -596,7 +606,7 @@ sealed class Route(
         }
     }
 
-    object ImportBDList : Route("importBDList","수입화물B/D작업현황") {
+    object ImportBDList : Route("importBDList","B/D현황") {
         override fun fragment(): Fragment = IMPORT_BD_LIST_Fragment()
 
         override fun bottomItems(): List<BottomItem> {
@@ -615,7 +625,38 @@ sealed class Route(
         }
     }
 
-    object ImportCargoIn : Route("importCargoIn","수입화물입고") {
+    object ImportBD : Route("importBD","수입화물B/D(항공편)") {
+        override fun fragment(): Fragment = IMPORT_BD_Fragment()
+
+        override fun bottomItems(): List<BottomItem> {
+
+            BottomItem.setDefault()
+
+            val dmg = BottomItem.Tmp01
+            dmg.name = "파손"
+            val irr = BottomItem.Tmp02
+            irr.name = "이례"
+            val inCargo = BottomItem.Add
+            inCargo.name = "입고"
+            val save = BottomItem.Save
+            save.name = "저장"
+            val search = BottomItem.Search
+            search.name = "조회"
+
+            val list = listOf(
+                BottomItem.KeyBoard,
+                search,
+                dmg,
+                irr,
+                inCargo,
+                save
+            )
+
+            return list
+        }
+    }
+
+    object ImportCargoIn : Route("importCargoIn","입고") {
         override fun fragment(): Fragment = IMPORT_CARGO_IN_Fragment()
 
         override fun bottomItems(): List<BottomItem> {
@@ -640,7 +681,7 @@ sealed class Route(
         }
     }
 
-    object ImportCargoDamage : Route("importCargoDamage","수입화물파손") {
+    object ImportCargoDamage : Route("importCargoDamage","파손등록") {
         override fun fragment(): Fragment = IMPORT_CARGO_DAMAGE_Fragment()
 
         override fun bottomItems(): List<BottomItem> {
@@ -681,7 +722,7 @@ sealed class Route(
         }
     }
 
-    object ImportCargoOut : Route("importCargoOut","수입화물출고") {
+    object ImportCargoOut : Route("importCargoOut","출고") {
         override fun fragment(): Fragment = IMPORT_CARGO_OUT_Fragment()
 
         override fun bottomItems(): List<BottomItem> {
@@ -694,6 +735,63 @@ sealed class Route(
             val list = listOf(
                 BottomItem.KeyBoard,
                 save
+            )
+
+            return list
+        }
+    }
+
+    object ImportCargoOutInfo : Route("importCargoOutInfo","수입화물출고상세") {
+        override fun fragment(): Fragment = IMPORT_CARGO_OUT_INFO_Fragment()
+
+        override fun bottomItems(): List<BottomItem> {
+
+            BottomItem.setDefault()
+
+            val list = listOf(
+                BottomItem.KeyBoard
+            )
+
+            return list
+        }
+    }
+
+    object ImportCargoOVCD : Route("importCargoOVCD","무적등록") {
+        override fun fragment(): Fragment = IMPORT_CARGO_OVCD_Fragment()
+
+        override fun bottomItems(): List<BottomItem> {
+
+            BottomItem.setDefault()
+
+            val save = BottomItem.Save
+            save.name = "등록"
+
+            val list = listOf(
+                BottomItem.KeyBoard,
+                save
+            )
+
+            return list
+        }
+    }
+
+    object ImportULD : Route("importULD","수입ULD등록") {
+        override fun fragment(): Fragment = IMPORT_ULD_Fragment()
+
+        override fun bottomItems(): List<BottomItem> {
+
+            BottomItem.setDefault()
+
+            val save = BottomItem.Save
+            save.name = "등록"
+
+            val cancel = BottomItem.Cancel
+            cancel.name = "취소"
+
+            val list = listOf(
+                BottomItem.KeyBoard,
+                save,
+                cancel
             )
 
             return list

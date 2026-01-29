@@ -564,6 +564,14 @@ interface MainAPI {
         I_FLIGHT_DATE: String,
     ): Result<DataTable>
 
+    suspend fun getPWM_ULD_BREAK_DOWN_M020_002(
+        I_SCHEDULE_SID: String,
+    ): Result<DataTable>
+
+    suspend fun getPWM_ULD_BREAK_DOWN_M020_003(
+        I_SCHEDULE_SID: String,
+    ): Result<DataTable>
+
     suspend fun getPWM_CARGO_OPERATION_L020_063(
         I_SCHEDULE_SID: String,
         I_USABLE_FLAG: String,
@@ -670,5 +678,31 @@ interface MainAPI {
 
     suspend fun getPWM_CARGO_RELEASE_M020_002_BY_NO(
         I_CARGO_CONTROL_NO: String
+    ): Result<DataTable>
+
+    suspend fun getPWM_CARGO_CONTROL_M040_001(
+        I_SCHEDULE_SID: String
+    ): Result<DataTable>
+
+    suspend fun setPWM_CARGO_CONTROL_M040_011(
+        I_CARGO_CONTROL_SID: String,
+        I_SCHEDULE_SID: String,
+        I_MANIFEST_REFERENCE_NO: String,
+        I_MASTER_BL_SEQUENCE_NO: String,
+        I_HOUSE_BL_SEQUENCE_NO: String,
+        I_MASTER_AIR_WAY_BILL_NO: String,
+        I_HOUSE_AIR_WAY_BILL_NO: String,
+        I_ORIGIN_CODE: String,
+        I_DESTINATION_CODE: String,
+        I_ASSIGN_CODE: String,
+        I_MFST_NO_OF_PACKAGE: String,
+        I_MFST_NET_WEIGHT: String,
+        I_ACCEPTED_NO_OF_PACKAGE: String,
+        I_ACCEPTED_NET_WEIGHT: String,
+        I_HOLD_TYPE_CODE: String,
+        I_HOLD_USER_ID: String,
+        I_HOLD_DATE: String,
+        I_HOLD_TIME: String,
+        I_HOLD_REMARKS: String
     ): Result<DataTable>
 }

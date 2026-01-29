@@ -116,22 +116,28 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
                         if (keboardFlag) {
                             keyboardCtl()
                         }
-                        val pcsValue = infobdModel.pcs.value?.toDoubleOrNull()?:0.0
-                        if(pcsValue == 0.0) {
+                        val pcsValue = infobdModel.pcs.value?.toDoubleOrNull() ?: 0.0
+                        if (pcsValue == 0.0) {
                             Common.sendError("수량을 확인하십시오.")
                             binding.pcs.editText.requestFocus()
                             return
                         }
 
-                        val sumPcs = infobdModel.sumPcs.value?.toDoubleOrNull()?:0.0
-                        val sumMfcsPcs = infobdModel.sumMfcsPcs.value?.toDoubleOrNull() ?:0.0
+                        val sumPcs = infobdModel.sumPcs.value?.toDoubleOrNull() ?: 0.0
+                        val sumMfcsPcs = infobdModel.sumMfcsPcs.value?.toDoubleOrNull() ?: 0.0
 
+                        // 이미 완료된 경우 - 보류 화면으로 이동 (저장 안함)
                         if (sumMfcsPcs == sumPcs) {
                             showCompletionDialog()
-                        } else if (sumMfcsPcs < sumPcs + pcsValue) {
+                            return
+                        }
+                        // 초과되는 경우 - 보류 화면으로 이동 (저장 안함)
+                        if (sumMfcsPcs < sumPcs + pcsValue) {
                             showCompletionDialog()
+                            return
                         }
 
+                        // 정상인 경우만 저장
                         infobdModel.setBreakDown()
                     }
                 }
@@ -144,7 +150,7 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
                             Pair("CARGO_CONTROL_SID", infobdModel.cargoSid),
                             Pair("CARGO_CONTROL_NO", infobdModel.cargoNo.value ?: "")
                         )
-                        val route = Route.ImportInfo  // 수정 필요
+                        val route = Route.ImportCargoDamage
                         route.params = params
                         Common.addNavigate(route)
                         return
@@ -156,7 +162,14 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
                         if (keboardFlag) {
                             keyboardCtl()
                         }
-                        infobdModel.setInfo()
+                        val params = listOf(
+                            Pair("CARGO_CONTROL_SID", infobdModel.cargoSid),
+                            Pair("CARGO_CONTROL_NO", infobdModel.cargoNo.value ?: "")
+                        )
+                        val route = Route.ImportIrr
+                        route.params = params
+                        Common.addNavigate(route)
+                        return
                     }
                 }
 
@@ -177,8 +190,11 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
                         }
 
                         //입고화면으로 Route
-                        val params = listOf(Pair("CARGO_CONTROL_SID",infobdModel.cargoSid))
-                        val route = Route.ImportInfo // 수정필요
+                        val params = listOf(
+                            Pair("CARGO_CONTROL_SID",infobdModel.cargoSid),
+                            Pair("CARGO_CONTROL_NO",infobdModel.cargoNo.value ?: "")
+                        )
+                        val route = Route.ImportCargoIn
                         route.params = params
                         Common.addNavigate(route)
                     }

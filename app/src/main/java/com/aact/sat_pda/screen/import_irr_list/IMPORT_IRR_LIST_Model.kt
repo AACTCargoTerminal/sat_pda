@@ -31,12 +31,14 @@ class IMPORT_IRR_LIST_Model : ViewModel() {
 
     val irrList = MutableLiveData<List<DataRow>>(emptyList())
     val irrHeader = listOf<HeaderDTO>(
+        HeaderDTO("CARGO_CONTROL_SID","id"),
         HeaderDTO("HOLD_TYPE_CODE", "id"),
         HeaderDTO("HOLD_FLAG", "보류", 100),
         HeaderDTO("HOLD_TIME", "보류 일시", 250),
         HeaderDTO("HOLD_REMARKS", "내용", 180)
     )
-    var irrSelect = mutableMapOf("HOLD_TYPE_CODE" to "")
+    var irrSelect = mutableMapOf("HOLD_TYPE_CODE" to "",
+                                   "CARGO_CONTROL_SID" to "")
 
     fun setInfo(){
         viewModelScope.launch {

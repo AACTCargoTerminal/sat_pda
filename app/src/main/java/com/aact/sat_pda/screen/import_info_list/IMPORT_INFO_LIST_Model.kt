@@ -37,22 +37,27 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
     val i02Count = MutableLiveData<String>("")
     val i03Count = MutableLiveData<String>("")
 
-    var cargoSelect = mutableMapOf("CARGO_CONTROL_SID" to "")
+    var cargoSelect = mutableMapOf(
+        "CARGO_CONTROL_SID" to "",
+        "CARGO_CONTROL_NO" to "",
+        "STATUS_NAME" to "",
+        "STATUS_CODE" to ""
+    )
     val cargoList = MutableLiveData<List<DataRow>>(emptyList())
 
     var scheduleSid = ""
     var terminalCode = ""
 
     val infoListHeader = listOf(
-        HeaderDTO("STATUS_NAME","상태"),
+        HeaderDTO("STATUS_NAME", "상태", 100),
         HeaderDTO("MASTER_AIR_WAY_BILL_NO", "MAWB", 200),
         HeaderDTO("HOUSE_AIR_WAY_BILL_NO", "HAWB", 200),
         HeaderDTO("MFST_NO_OF_PACKAGE", "예약수량", 80),
-        HeaderDTO("MFST_NET_WEIGHT", "예약중량",80),
-        HeaderDTO("ACCEPTED_NO_OF_PACKAGE","접수수량",80),
-        HeaderDTO("ACCEPTED_NET_WEIGHT","접수중량",80),
-        HeaderDTO("CARGO_CONTROL_NO","화물번호",80),
-        HeaderDTO("CARGO_CONTROL_SID","id",80)
+        HeaderDTO("MFST_NET_WEIGHT", "예약중량", 80),
+        HeaderDTO("ACCEPTED_NO_OF_PACKAGE", "접수수량", 80),
+        HeaderDTO("ACCEPTED_NET_WEIGHT", "접수중량", 80),
+        HeaderDTO("CARGO_CONTROL_NO", "화물번호", 80),
+        HeaderDTO("CARGO_CONTROL_SID", "id", 80)
     )
 
 
@@ -110,18 +115,6 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
                         val rows = data[1] ?: emptyList()
 
                         Common.suc.value = "조회 완료"
-                        //setClear()
-
-
-                        status.value = Util.getTableCell(0,data[1],"STATUS_NAME")
-                        mawb.value = Util.getTableCell(0,data[1],"MASTER_AIR_WAY_BILL_NO")
-                        hawb.value = Util.getTableCell(0, data[1],"HOUSE_AIR_WAY_BILL_NO")
-                        mfstPcs.value = Util.getTableCell(0, data[1],"MFST_NO_OF_PACKAGE")
-                        mfstWt.value = Util.getTableCell(0,data[1],"MFST_NET_WEIGHT")
-                        acceptPcs.value = Util.getTableCell(0,data[1],"ACCEPTED_NO_OF_PACKAGE")
-                        acceptWt.value = Util.getTableCell(0,data[1],"ACCEPTED_NET_WEIGHT")
-                        cargoNo.value = Util.getTableCell(0,data[1],"CARGO_CONTROL_NO")
-                        cargoSid.value = Util.getTableCell(0,data[1],"CARGO_CONTROL_SID")
 
                         //요약 카운트 메시지
                         val Count00 = rows.count {
@@ -138,12 +131,16 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
 
 
                         data[1]?.let { table->
+                            println("cargoList에 ${table.size}개 항목 설정")
                             cargoList.value = table
                         }?:run {
+                            println("data[1]이 null - cargoList를 빈 리스트로 설정")
                             cargoList.value = emptyList()
                         }
                     }else {
-                        Common.sendError(Util.getTableCell(0, data[0], "COL2"))
+                        val col2 = Util.getTableCell(0, data[0], "COL2")
+                        println("COL1이 OK가 아님. COL2: $col2")
+                        Common.sendError(col2)
                     }
                 }
             }
@@ -151,8 +148,6 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
             Common.loadingOff()
         }
     }
-
-
 
     fun setClear(){
         fltNo.value = ""

@@ -144,6 +144,70 @@ class IMPORT_IRR_LIST_Fragment : BaseFragment() {
                     }
                 }
 
+                is BottomItem.Save -> {
+                    item.onClick = fun() {
+
+                        if(keboardFlag) {
+                            keyboardCtl()
+                        }
+
+                        val selectedHoldType = model.irrSelect["HOLD_TYPE_CODE"]
+
+                        if (selectedHoldType.isNullOrEmpty()) {
+                            Common.sendError("목록에서 수정할 항목을 선택해주세요.")
+                            return
+                        }
+
+                        val originParams = listOf<Pair<String, String>>(
+                            Pair("CARGO_CONTROL_NO", model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID", model.cargoSid)
+                        )
+
+                        route.params = originParams
+
+                        val params = listOf<Pair<String, String>>(
+                            Pair("CARGO_CONTROL_NO",model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID",model.cargoSid),
+                            Pair("HOLD_TYPE_CODE", selectedHoldType)
+                        )
+                        val rt = Route.ImportIrr
+                        rt.params = params
+                        Common.addNavigate(rt)
+                    }
+                }
+
+                is BottomItem.Tmp01 -> {
+                    item.onClick = fun() {
+                        if (keboardFlag) {
+                            keyboardCtl()
+                        }
+
+                        val selectedHoldType = model.irrSelect["HOLD_TYPE_CODE"]
+
+                        if (selectedHoldType.isNullOrEmpty()) {
+                            Common.sendError("목록에서 해제할 항목을 선택해주세요.")
+                            return
+                        }
+
+                        val originParams = listOf<Pair<String, String>>(
+                            Pair("CARGO_CONTROL_NO", model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID", model.cargoSid)
+                        )
+
+                        route.params = originParams
+
+                        val params = listOf<Pair<String, String>>(
+                            Pair("CARGO_CONTROL_NO",model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID",model.cargoSid),
+                            Pair("HOLD_TYPE_CODE", selectedHoldType)
+                        )
+                        val rt = Route.ImportIrrRelease
+                        rt.params = params
+                        Common.addNavigate(rt)
+                    }
+
+                }
+
                 else -> null
             }
         }

@@ -40,8 +40,17 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
 
         infoListModel.cargoList.observe(viewLifecycleOwner) {
 
-            infoListModel.cargoSelect["CARGO_CONTROL_SID"] =
-                if (it.isNotEmpty()) Util.getStr(it[0].row["CARGO_CONTROL_SID"]) else ""
+            if (it.isNotEmpty()) {
+                infoListModel.cargoSelect["CARGO_CONTROL_SID"] = Util.getStr(it[0].row["CARGO_CONTROL_SID"])
+                infoListModel.cargoSelect["CARGO_CONTROL_NO"] = Util.getStr(it[0].row["CARGO_CONTROL_NO"])
+                infoListModel.cargoSelect["STATUS_NAME"] = Util.getStr(it[0].row["STATUS_NAME"])
+                infoListModel.cargoSelect["STATUS_CODE"] = Util.getStr(it[0].row["STATUS_CODE"])
+            } else {
+                infoListModel.cargoSelect["CARGO_CONTROL_SID"] = ""
+                infoListModel.cargoSelect["CARGO_CONTROL_NO"] = ""
+                infoListModel.cargoSelect["STATUS_NAME"] = ""
+                infoListModel.cargoSelect["STATUS_CODE"] = ""
+            }
 
             binding.cargoList.custItem.removeAllViews()
             val table = item.getTable_Click(
@@ -62,11 +71,21 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
 
         infoListModel.fltList.observe(viewLifecycleOwner) {dataRowList ->
             val stringList = dataRowList.map { it.row["FLIGHT_NO"] ?: ""}
+
+            // 저장된 편번 위치 찾기
+            val savedFltNo = infoListModel.fltNo.value ?: ""
+            val savedPosition = if (savedFltNo.isNotEmpty()) stringList.indexOf(savedFltNo) else -1
+
             item.setSpiner_Str(view.context, binding.fltno.combo, stringList) { selectedNo ->
                 val selectedRow = dataRowList.find { it.row["FLIGHT_NO"] == selectedNo}
                 infoListModel.scheduleSid = selectedRow?.row?.get("SCHEDULE_SID") ?: ""
                 infoListModel.fltNo.value = selectedNo
                 infoListModel.setList()
+            }
+
+            // 저장된 편번이 있으면 해당 position 선택
+            if (savedPosition >= 0) {
+                binding.fltno.combo.setSelection(savedPosition)
             }
         }
 
@@ -89,13 +108,23 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
                 route.params.find { it.first == "FLIGHT_NO" }?.second ?: ""
             val temp2 =
                 route.params.find { it.first == "CARGO_CONTROL_SID" }?.second ?: ""
+            val temp3 =
+                route.params.find { it.first == "FLT_DATE" }?.second ?: ""
+            val temp4 =
+                route.params.find {it.first == "SCHEDULE_SID"}?.second ?: ""
+
 
             infoListModel.fltNo.value = temp
             infoListModel.cargoSid.value = temp2
-
+            infoListModel.fltDate.value = temp3
+            infoListModel.scheduleSid = temp4
         }
 
         if (infoListModel.cargoSid.value.isNotEmpty()) {
+            infoListModel.setList()
+        }
+
+        if (infoListModel.scheduleSid.isNotEmpty()) {
             infoListModel.setList()
         }
 
@@ -122,11 +151,19 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
                             return
                         }
 
-                        val params = listOf<Pair<String, String>>(
-                            Pair("CARGO_CONTROL_SID", selectedSid)
+                        Route.ImportInfoList.params = listOf(
+                            Pair("FLT_DATE", infoListModel.fltDate.value ?: ""),
+                            Pair("SCHEDULE_SID",infoListModel.scheduleSid),
+                            Pair("FLIGHT_NO", infoListModel.fltNo.value ?: "")
                         )
 
-                        val rt = Route.ImportBDWithNo
+                        val params = listOf<Pair<String, String>>(
+                            Pair("CARGO_CONTROL_SID", selectedSid),
+                            Pair("CARGO_CONTROL_NO", infoListModel.cargoSelect["CARGO_CONTROL_NO"] ?: ""),
+                            Pair("FLT_DATE", infoListModel.fltDate.value ?: "")
+                        )
+
+                        val rt = Route.ImportCargoIn
                         rt.params = params
                         Common.addNavigate(rt)
 
@@ -146,8 +183,15 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
                             return
                         }
 
+                        Route.ImportInfoList.params = listOf(
+                            Pair("FLT_DATE", infoListModel.fltDate.value ?: ""),
+                            Pair("SCHEDULE_SID",infoListModel.scheduleSid),
+                            Pair("FLIGHT_NO", infoListModel.fltNo.value ?: "")
+                        )
+
                         val params = listOf<Pair<String, String>> (
-                            Pair("CARGO_CONTROL_NO", selectedNo)
+                            Pair("CARGO_CONTROL_NO", selectedNo),
+                            Pair("FLT_DATE", infoListModel.fltDate.value ?: "")
                         )
                         val rt = Route.ImportBDWithNo
                         rt.params = params

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.aact.sat_pda.screen.import_uld.IMPORT_ULD_Model" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <GridLayout
+            android:id="@+id/subFragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:columnCount="4"
+            android:orientation="horizontal">
+
+            <!-- 일자 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="3"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/fltDate"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.fltDate}"
+                    bind:labelValue="@{`일자`}" />
+            </LinearLayout>
+
+            <!-- 편번 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/fltNo"
+                    layout="@layout/cust_label_combo"
+                    bind:labelValue="@{`편번`}" />
+            </LinearLayout>
+
+            <!-- ULD Type -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="4"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/uldType"
+                    layout="@layout/cust_label_combo"
+                    bind:labelValue="@{`ULD Type`}" />
+            </LinearLayout>
+
+            <!-- Serial No -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="4"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/serialNo"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.uldSerialNo}"
+                    bind:labelValue="@{`Serial No`}" />
+            </LinearLayout>
+
+            <!-- Carrier -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="4"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/carrier"
+                    layout="@layout/cust_label_combo"
+                    bind:labelValue="@{`Carrier`}" />
+            </LinearLayout>
+
+            <!-- Origin -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="4"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/origin"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.origin}"
+                    bind:labelValue="@{`Origin`}" />
+            </LinearLayout>
+
+            <!-- ULD 목록 RecyclerView -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="4"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ULD 목록"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:padding="5dp"
+                    android:background="#E0E0E0" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/uldListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="#F5F5F5"
+                    bind:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </LinearLayout>
+
+        </GridLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

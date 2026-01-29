@@ -15,7 +15,9 @@ import kotlin.apply
 import kotlin.collections.forEachIndexed
 import com.aact.sat_pda.R
 
-class TreeAdapter() : RecyclerView.Adapter<TreeAdapter.GroupViewHolder>() {
+class TreeAdapter(
+    private val expandable: Boolean = true
+) : RecyclerView.Adapter<TreeAdapter.GroupViewHolder>() {
 
     private val groupList = mutableListOf<TreeDTO.Group>()
     private var onItemCheckListener: ((itemCode: String, checkFlag: String) -> Unit)? = null      //박제훈 추가
@@ -61,41 +63,50 @@ class TreeAdapter() : RecyclerView.Adapter<TreeAdapter.GroupViewHolder>() {
             childContainer.removeAllViews()
 
             // 하위 항목들 뷰 추가
-            group.itemArray.forEachIndexed { index, item ->
-                val checkBox = CheckBox(itemView.context).apply {
-                    text = item.value
-                    textSize = 17f
-                    isChecked = item.checkFlag == "Y"
-                    setOnCheckedChangeListener { _, isChecked ->
-                        item.changeFlag = "Y"
-                        item.checkFlag = if (isChecked) "Y" else "N"
+            if(expandable) {
+                group.itemArray.forEachIndexed { index, item ->
+                    val checkBox = CheckBox(itemView.context).apply {
+                        text = item.value
+                        textSize = 17f
+                        isChecked = item.checkFlag == "Y"
+                        setOnCheckedChangeListener { _, isChecked ->
+                            item.changeFlag = "Y"
+                            item.checkFlag = if (isChecked) "Y" else "N"
 
-                        // Model에 변경사항 알림           박제훈 추가
-                        onItemCheckListener?.invoke(item.key, item.checkFlag)
+                            // Model에 변경사항 알림           박제훈 추가
+                            onItemCheckListener?.invoke(item.key, item.checkFlag)
+                        }
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        ).apply {
+                            setMargins(0, 10, 0, 10) // 좌우 0, 위아래 5dp
+                        }
                     }
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    ).apply {
-                        setMargins(0, 10, 0, 10) // 좌우 0, 위아래 5dp
+                    childContainer.addView(checkBox)
+                }
+
+                // 펼쳐짐 상태 반영
+                childContainer.visibility = if (group.isExpanded) View.VISIBLE else View.GONE
+
+                // 클릭 시 슬라이드로 열고 닫기
+                itemView.setOnClickListener {
+                    // 그룹 선택 이벤트 먼저 알림
+                    onGroupClickListener?.invoke(group.key)
+
+                    group.isExpanded = !group.isExpanded
+                    if (group.isExpanded) {
+                        expand(childContainer)
+                    } else {
+                        collapse(childContainer)
                     }
                 }
-                childContainer.addView(checkBox)
-            }
+            } else {
+                // expandable = false: 펼침 없이 그룹 클릭 이벤트만
+                childContainer.visibility = View.GONE
 
-            // 펼쳐짐 상태 반영
-            childContainer.visibility = if (group.isExpanded) View.VISIBLE else View.GONE
-
-            // 클릭 시 슬라이드로 열고 닫기
-            itemView.setOnClickListener {
-                // 그룹 선택 이벤트 먼저 알림
-                onGroupClickListener?.invoke(group.key)
-
-                group.isExpanded = !group.isExpanded
-                if (group.isExpanded) {
-                    expand(childContainer)
-                } else {
-                    collapse(childContainer)
+                itemView.setOnClickListener{
+                    onGroupClickListener?.invoke(group.key)
                 }
             }
         }

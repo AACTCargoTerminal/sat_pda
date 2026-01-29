@@ -72,7 +72,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
-                android:layout_columnWeight="2"
+                android:layout_columnWeight="1"
                 android:layout_margin="5dp"
                 android:background="#F0F0F0"
                 android:elevation="3dp"
@@ -83,7 +83,7 @@
                     layout="@layout/cust_label_edit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
+                    android:layout_weight="1"
                     bind:editValue="@{viewModel.i00Count}"
                     bind:labelValue="@{`서면분류`}"/>
 
@@ -92,7 +92,7 @@
                     layout="@layout/cust_label_edit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
+                    android:layout_weight="1"
                     bind:editValue="@{viewModel.i02Count}"
                     bind:labelValue="@{`검수`}"/>
 
@@ -101,7 +101,7 @@
                     layout="@layout/cust_label_edit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
+                    android:layout_weight="1"
                     bind:editValue="@{viewModel.i03Count}"
                     bind:labelValue="@{`보류`}"/>
             </LinearLayout>
