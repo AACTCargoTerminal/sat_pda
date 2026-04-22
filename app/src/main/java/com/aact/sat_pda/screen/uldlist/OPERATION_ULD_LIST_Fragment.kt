@@ -141,7 +141,7 @@ class OPERATION_ULD_LIST_Fragment : BaseFragment() {
 
                 is BottomItem.Add -> {
                     item.onClick = fun() {
-                        val params = listOf(Pair("DATE",uldListModel.fltDate.value), Pair("SCHEDULE_SID",uldListModel.fltSelect.value))
+                        val params = listOf(Pair("DATE",Util.validDate(uldListModel.fltDate.value)), Pair("SCHEDULE_SID",uldListModel.fltSelect.value))
 
                         val route = Route.OperationUld
                         route.params = params

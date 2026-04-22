@@ -176,8 +176,8 @@ class IMPORT_CARGO_IN_Model: ViewModel() {
                 val locationCodes = dataRows.map {row ->
                     row.row["CODE_CODE"]?.toString() ?: ""
                 }.filter { it.isNotEmpty() }
+                locationList.value = listOf("") + locationCodes
 
-                locationList.value = locationCodes
             } ?: run {
                 locationList.value = emptyList()
             }
@@ -225,7 +225,7 @@ class IMPORT_CARGO_IN_Model: ViewModel() {
         savedWt = Util.getTableCell(0,data[1],"ACCEPTED_NET_WEIGHT")
 
         status.value = Util.getTableCell(0, data[1], "CARGO_STATUS_NAME")
-        location.value = Util.getTableCell(0, data[1], "DEFAULT_LOCATION_CODE")
+        //location.value = Util.getTableCell(0, data[1], "DEFAULT_LOCATION_CODE")
 
         scheduleSid = Util.getTableCell(0, data[1], "SCHEDULE_SID")
         assign.value = Util.getTableCell(0, data[1], "ASSIGN_CODE")

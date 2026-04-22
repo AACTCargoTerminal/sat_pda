@@ -186,7 +186,7 @@ class CARGO_SCALE_Model : ViewModel() {
                     val data = ret.data.table
                     data[0]?.let { status ->
                         if (Util.getTableCell(0, status, "COL1") == "OK") {
-
+                            setClearAll()
                             data[1]?.let { data1 ->
                                 val tempList = linkedMapOf<String, String>()
                                 if (data1.size > 0) {

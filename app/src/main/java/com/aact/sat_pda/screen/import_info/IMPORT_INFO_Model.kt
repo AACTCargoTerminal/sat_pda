@@ -74,6 +74,7 @@ class IMPORT_INFO_Model : ViewModel() {
                         Common.suc.value = "조회 완료"
                         cargoSid = Util.getTableCell(0,data[1],"CARGO_CONTROL_SID")
                         mawb.value = Util.getTableCell(0,data[1],"MASTER_AIR_WAY_BILL_NO")
+                        hawb.value = Util.getTableCell(0, data[1], "HOUSE_AIR_WAY_BILL_NO")
                         fltDate.value = Util.getTableCell(0,data[1],"FLIGHT_DATE")
                         fltNo.value = Util.getTableCell(0,data[1],"FLIGHT_NO")
                         assign.value = Util.getTableCell(0,data[1],"ASSIGN_CODE")

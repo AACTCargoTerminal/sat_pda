@@ -177,6 +177,38 @@
                     bind:editValue="@{viewModel.holdRemark}"
                     bind:labelValue="@{`내용`}" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/holdDate"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.holdDate}"
+                    bind:labelValue="@{`보류일자`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/holdTime"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.holdTime}"
+                    bind:labelValue="@{`시분초`}" />
+            </LinearLayout>
 <!--            <LinearLayout-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_height="wrap_content"-->
@@ -238,37 +270,37 @@
                     bind:labelValue="@{`사유`}" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="5dp"
-                android:background="#F0F0F0"
-                android:elevation="3dp"
-                android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_margin="5dp"
+                            android:background="#F0F0F0"
+                            android:elevation="3dp"
+                            android:orientation="vertical">
 
-                <include
-                    android:id="@+id/holdDate"
-                    layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.holdDate}"
-                    bind:labelValue="@{`보류일자`}" />
-            </LinearLayout>
+                            <include
+                                android:id="@+id/releaseDate"
+                                layout="@layout/cust_label_edit"
+                                bind:editValue="@{viewModel.releaseDate}"
+                                bind:labelValue="@{`보류일자`}" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:layout_margin="5dp"
+                            android:background="#F0F0F0"
+                            android:elevation="3dp"
+                            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="5dp"
-                android:background="#F0F0F0"
-                android:elevation="3dp"
-                android:orientation="vertical">
+                            <include
+                                android:id="@+id/releaseTime"
+                                layout="@layout/cust_label_edit"
+                                bind:editValue="@{viewModel.releaseTime}"
+                                bind:labelValue="@{`시분초`}" />
+                        </LinearLayout>
 
-                <include
-                    android:id="@+id/holdTime"
-                    layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.holdTime}"
-                    bind:labelValue="@{`시분초`}" />
-            </LinearLayout>
 
         </GridLayout>
 

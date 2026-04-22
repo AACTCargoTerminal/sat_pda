@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import com.aact.sat_pda.Biz.Util
 import com.aact.sat_pda.databinding.FragmentImportBdListBinding
 import com.aact.sat_pda.screen.BaseFragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class IMPORT_BD_LIST_Fragment : BaseFragment() {
     private var _binding: FragmentImportBdListBinding? = null
@@ -29,8 +31,9 @@ class IMPORT_BD_LIST_Fragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val fltDateEdit = binding.fltdate.editText
+        fltDateEdit.showSoftInputOnFocus = false
 
-        binding.fltdate.editText.showSoftInputOnFocus = false
 
         bdListModel.fltList.observe(viewLifecycleOwner) { dataRowList ->
             val stringList = dataRowList.map { it.row["FLIGHT_NO"] ?: "" }
@@ -46,6 +49,22 @@ class IMPORT_BD_LIST_Fragment : BaseFragment() {
             if (it.isNotEmpty()) {
                 bdListModel.setFlight()
             }
+        }
+
+        var isEditing = false
+
+        action.textChange_after(fltDateEdit) { s ->
+            if (isEditing) return@textChange_after
+            isEditing = true
+
+            val str = s?.toString() ?: ""
+
+            val result = Util.validDate(str)
+            fltDateEdit.setText(result)
+            fltDateEdit.setSelection(result.length)
+            bdListModel.fltDate.value = result
+
+            isEditing = false
         }
 
         bdListModel.cargoList.observe(viewLifecycleOwner) {

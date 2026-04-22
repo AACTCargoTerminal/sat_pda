@@ -36,6 +36,8 @@ class IMPORT_IRR_LIST_Fragment : BaseFragment() {
         item.strEditText(binding.cargoNo.editText)
         item.disableEditText(binding.mawb.editText)
         item.disableEditText(binding.hawb.editText)
+        item.disableEditText(binding.fltDate.editText)
+        item.disableEditText(binding.fltNo.editText)
         item.disableEditText(binding.assign.editText)
         item.disableEditText(binding.status.editText)
         item.disableEditText(binding.mfcsPcs.editText)
