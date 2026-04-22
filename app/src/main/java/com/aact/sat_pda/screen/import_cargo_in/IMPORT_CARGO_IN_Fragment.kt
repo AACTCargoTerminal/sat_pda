@@ -66,12 +66,23 @@ class IMPORT_CARGO_IN_Fragment: BaseFragment() {
         }
 
         cargoInModel.locationList.observe(viewLifecycleOwner) { locations ->
-            if(locations.isNotEmpty()) {
+            if (locations.isNotEmpty()) {
                 item.setSpiner_Str(
                     context = view.context,
                     view = binding.location.combo,
                     list = locations
-                ) {cargoInModel.location.postValue(it)}
+                ) { cargoInModel.location.postValue(it) }
+                val current = cargoInModel.location.value ?: ""
+                val idx = locations.indexOf(current)
+                binding.location.combo.setSelection(if (idx >= 0) idx else 0)
+            }
+        }
+
+        cargoInModel.location.observe(viewLifecycleOwner) { loc ->
+            val list = cargoInModel.locationList.value ?: return@observe
+            if (list.isNotEmpty()) {
+                val idx = list.indexOf(loc ?: "")
+                if (idx >= 0) binding.location.combo.setSelection(idx)
             }
         }
 

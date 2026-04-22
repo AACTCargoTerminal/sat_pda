@@ -42,6 +42,7 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
         item.disableEditText(binding.hawb.editText)
         item.disableEditText(binding.assign.editText)
         item.disableEditText(binding.status.editText)
+        item.disableEditText(binding.unloadCode.editText)
         item.disableEditText(binding.cargoDes.editText)
         item.strEditText(binding.pcs.editText)
         item.strEditText(binding.wt.editText)
@@ -82,6 +83,17 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
                     view = binding.location.combo,
                     list = locations
                 ) {infobdModel.location.postValue(it)}
+                val current = infobdModel.location.value ?: ""
+                val idx = locations.indexOf(current)
+                binding.location.combo.setSelection(if (idx >= 0) idx else 0)
+            }
+        }
+
+        infobdModel.location.observe(viewLifecycleOwner) { loc ->
+            val list = infobdModel.locationList.value ?: return@observe
+            if (list.isNotEmpty()) {
+                val idx = list.indexOf(loc ?: "")
+                if (idx >= 0) binding.location.combo.setSelection(idx)
             }
         }
 

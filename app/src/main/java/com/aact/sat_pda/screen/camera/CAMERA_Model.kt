@@ -106,7 +106,7 @@ class CAMERA_Model : ViewModel() {
                     is Result.Success<DataTable> -> {
                         val data = ret.data.table
                         if(Util.getTableCell(0,data[0],"COL1")=="OK"){
-                            Common.suc.value = "저장 됬습니다."
+                            Common.suc.value = "저장 됐습니다."
                             data[1]?.let { data1 ->
                                 cameraList.value = data1
                             }?:run {

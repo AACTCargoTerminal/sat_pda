@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import com.aact.sat_pda.Biz.BizAPI
 import com.aact.sat_pda.Biz.Util
 import com.aact.sat_pda.appconfig.BottomItem
 import com.aact.sat_pda.appconfig.Common
 import com.aact.sat_pda.appconfig.Route
 import com.aact.sat_pda.databinding.FragmentImportInfoListBinding
 import com.aact.sat_pda.screen.BaseFragment
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class IMPORT_INFO_LIST_Fragment : BaseFragment() {
     private var _binding: FragmentImportInfoListBinding? = null
@@ -32,8 +36,8 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        binding.fltdate.editText.showSoftInputOnFocus = false
+        val fltDateEdit = binding.fltdate.editText
+        fltDateEdit.showSoftInputOnFocus = false
         item.disableEditText(binding.i00Count.editText)
         item.disableEditText(binding.i02Count.editText)
         item.disableEditText(binding.i03Count.editText)
@@ -94,6 +98,23 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
             if (it.isNotEmpty()) {
                 infoListModel.getFlight()
             }
+        }
+
+
+        var isEditing = false
+
+        action.textChange_after(fltDateEdit) { s ->
+            if (isEditing) return@textChange_after
+            isEditing = true
+
+            val str = s?.toString() ?: ""
+
+            val result = Util.validDate(str)
+            fltDateEdit.setText(result)
+            fltDateEdit.setSelection(result.length)
+            infoListModel.fltDate.value = result
+
+            isEditing = false
         }
 
     }

@@ -40,6 +40,7 @@ class IMPORT_CARGO_OUT_Fragment: BaseFragment() {
         item.limitEditText(binding.cargoNo.editText, 20)
 
         item.disableEditText(binding.mawb.editText)
+        item.disableEditText(binding.hawb.editText)
         item.disableEditText(binding.fltDate.editText)
         item.disableEditText(binding.status.editText)
         item.disableEditText(binding.fltNo.editText)

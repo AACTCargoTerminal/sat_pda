@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_columnSpan="2"
+                android:layout_columnSpan="1"
                 android:layout_margin="5dp"
                 android:background="#F0F0F0"
                 android:elevation="3dp"
@@ -53,6 +53,24 @@
                     layout="@layout/cust_label_edit"
                     bind:editValue="@{viewModel.mawb}"
                     bind:labelValue="@{`MAWB`}" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/hawb"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.hawb}"
+                    bind:labelValue="@{`HAWB`}" />
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
@@ -211,6 +229,22 @@
                     android:id="@+id/locationList"
                     layout="@layout/cust_label_recycle"
                     bind:labelValue="@{`위치별 출고수량`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include android:id="@+id/customsId"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.customsId}"
+                    bind:labelValue="@{`반출근거번호`}" />
             </LinearLayout>
 
         </GridLayout>

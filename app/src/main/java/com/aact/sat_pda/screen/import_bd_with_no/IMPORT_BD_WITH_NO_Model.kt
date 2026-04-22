@@ -116,8 +116,8 @@ class IMPORT_BD_WITH_NO_Model: ViewModel() {
                 val locationCodes = dataRows.map { row ->
                     row.row["CODE_CODE"]?.toString() ?: ""
                 }.filter { it.isNotEmpty() }
-
-                locationList.value = locationCodes
+                locationList.value = listOf("") + locationCodes
+                //locationList.value = locationCodes
             }?: run {
                 locationList.value = emptyList()
             }

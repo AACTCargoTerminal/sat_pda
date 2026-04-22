@@ -205,7 +205,7 @@ sealed class Route(
         }
     }
 
-    object Location : Route("location", "수출화물이동") {
+    object Location : Route("location", "화물이동") {
         override fun fragment(): Fragment = CARGO_LOCATION_Fragment()
         override fun bottomItems(): List<BottomItem> {
             BottomItem.setDefault()

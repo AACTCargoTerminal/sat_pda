@@ -29,7 +29,7 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
     val mfstWt = MutableLiveData<String>("")
     val acceptPcs =MutableLiveData<String>("")
     val acceptWt = MutableLiveData<String>("")
-    val fltDate = MutableLiveData<String>(Util.formatDate_15(Common.dateTime.value))
+    val fltDate = MutableLiveData<String>(Util.validDate(Util.formatDate_15(Common.dateTime.value)))
     val fltNo = MutableLiveData<String>("")
     val fltList = MutableLiveData<List<DataRow>>(emptyList())
 
@@ -63,7 +63,7 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
 
 
     fun getFlight() {
-        val flt_date = fltDate.value ?: ""
+        val flt_date = (fltDate.value ?: "").replace("-", "")
 
         viewModelScope.launch {
             Common.loadingOn(coroutineContext[Job])
@@ -80,7 +80,8 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
                             Common.suc.value = "조회 됐습니다."
                             scheduleSid = Util.getTableCell(0,data1,"SCHEDULE_SID")
                             fltNo.value = Util.getTableCell(0,data1,"FLIGHT_NO")
-                            fltDate.value = Util.getTableCell(0,data1,"FLIGHT_DATE")
+                            // observe 무한 호출 방지로 수정
+                            //fltDate.value = Util.getTableCell(0,data1,"FLIGHT_DATE")
                             terminalCode = Util.getTableCell(0,data1,"TERMINAL_CODE")
                             fltList.value = data1 ?: emptyList()
                         }

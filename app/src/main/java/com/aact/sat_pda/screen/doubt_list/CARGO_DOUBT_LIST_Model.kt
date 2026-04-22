@@ -21,7 +21,7 @@ class CARGO_DOUBT_LIST_Model : ViewModel() {
     val biz = BizAPI()
 
     var custSid = "0"
-    var fltDate = "20230828"
+    var fltDate = MutableLiveData<String>(Util.formatDate_15(Common.dateTime.value))
     val mawb = MutableLiveData<String>("")
     val custCode = MutableLiveData<String>("")
     var custName = ""
@@ -104,9 +104,8 @@ class CARGO_DOUBT_LIST_Model : ViewModel() {
     }
 
     suspend fun getInfo() {
-
         val ret =
-            api.getPWM_XRAY_L010_007(fltDate, fltDate, mawb.value, Common.terminalCode.value, "")
+            api.getPWM_XRAY_L010_007(fltDate.value, fltDate.value, mawb.value, Common.terminalCode.value, "")
 
         when (ret) {
             is Result.Error -> Common.sendError(ret.message)
