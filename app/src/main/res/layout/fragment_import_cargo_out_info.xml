@@ -1,0 +1,176 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.aact.sat_pda.screen.import_cargo_out_info.IMPORT_CARGO_OUT_INFO_Model" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <GridLayout
+            android:id="@+id/subFragmentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:columnCount="2"
+            android:orientation="horizontal">
+
+            <!-- 화물번호 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/cargoNo"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.cargoNo}"
+                    bind:labelValue="@{`화물번호`}" />
+            </LinearLayout>
+
+            <!-- MAWB -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/mawb"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.mawb}"
+                    bind:labelValue="@{`MAWB`}" />
+            </LinearLayout>
+
+            <!-- HAWB -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/hawb"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.hawb}"
+                    bind:labelValue="@{`HAWB`}" />
+            </LinearLayout>
+
+            <!-- D/O 섹션 제목 -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#D0D0D0"
+                android:padding="8dp"
+                android:text="D/O"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- D/O PCS -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/doPcs"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.doPcs}"
+                    bind:labelValue="@{`PCS`}" />
+            </LinearLayout>
+
+            <!-- D/O WT -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/doWt"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.doWt}"
+                    bind:labelValue="@{`WT`}" />
+            </LinearLayout>
+
+            <!-- 반출승인 섹션 제목 -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#D0D0D0"
+                android:padding="8dp"
+                android:text="반출승인"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- 반출승인 PCS -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/releasePcs"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.releasePcs}"
+                    bind:labelValue="@{`PCS`}" />
+            </LinearLayout>
+
+            <!-- 반출승인 WT -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/releaseWt"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.releaseWt}"
+                    bind:labelValue="@{`WT`}" />
+            </LinearLayout>
+
+        </GridLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

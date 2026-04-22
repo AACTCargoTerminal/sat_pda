@@ -26,6 +26,7 @@ sealed class BottomItem(
     object Complete: BottomItem("완료",R.drawable.check_circle)
     object Export: BottomItem("출고",R.drawable.outbound)
     object Offload: BottomItem("오프로드",R.drawable.swap_vert)
+    object Cancel: BottomItem("취소",R.drawable.close)
     object Tmp01: BottomItem("",0)
     object Tmp02: BottomItem("",0)
 
@@ -46,6 +47,7 @@ sealed class BottomItem(
             List.name = List.defaultName
             Delete.name = Delete.defaultName
             Complete.name = Complete.defaultName
+            Cancel.name = Cancel.defaultName
             Tmp01.name = Tmp01.defaultName
             Tmp02.name = Tmp02.defaultName
         }

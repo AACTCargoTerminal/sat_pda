@@ -158,8 +158,7 @@
 
                 <include
                     android:id="@+id/holdType"
-                    layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.holdType}"
+                    layout="@layout/cust_label_combo"
                     bind:labelValue="@{`이례 유형`}" />
             </LinearLayout>
             <LinearLayout

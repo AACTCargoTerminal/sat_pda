@@ -507,4 +507,29 @@ class BizAPI {
 
         return null
     }
+
+    suspend fun getPositionListIMPC(): List<DataRow>? {
+        val api: MainAPI = MainAPI_Impl()
+
+        val ret = api.getCommonCodeWHLOC("WHLOC", "IMPC", "Y")
+
+        when (ret) {
+            is Result.Success<DataTable> -> {
+                val data = ret.data.table
+                data[0]?.let { status ->
+                    if (Util.getTableCell(0, status, "COL1") == "OK") {
+                        data[1]?.let {
+                            return it
+                        }
+                        return emptyList()
+                    } else {
+                        Common.sendError(Util.getTableCell(0, status, "COL2"))
+                    }
+                }
+            }
+            is Result.Error -> Common.sendError(ret.message)
+        }
+        return null
+    }
+
 }

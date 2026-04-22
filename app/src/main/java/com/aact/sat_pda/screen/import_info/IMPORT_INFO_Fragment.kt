@@ -47,6 +47,14 @@ class IMPORT_INFO_Fragment : BaseFragment() {
         item.disableEditText(binding.desc.editText)
         item.disableEditText(binding.status.editText)
 
+
+        model.cargoNo.observe(viewLifecycleOwner) {
+            if (it.length == 19) {
+                model.setInfo()
+            }
+        }
+
+
         action.doneAction(binding.cargoNo.editText) {
             model.setInfo()
         }
@@ -66,6 +74,9 @@ class IMPORT_INFO_Fragment : BaseFragment() {
                     }
             }
         }
+
+
+
     }
 
     override fun onStart() {
@@ -130,6 +141,101 @@ class IMPORT_INFO_Fragment : BaseFragment() {
                         rt.params = params
 
                         Common.addNavigate(rt)
+                    }
+                }
+
+                is BottomItem.Save -> {
+                    item.onClick = fun() {
+                        if(model.cargoNo.value.isEmpty()){
+                            Common.sendError("수입화물이 조회되지 않았습니다.")
+                            return
+                        }
+
+                        val originParams = listOf<Pair<String,String>>(
+                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
+                        )
+
+                        route.params = originParams
+
+                        val params = listOf(Pair("CARGO_CONTROL_NO",model.cargoNo.value),Pair("CARGO_CONTROL_SID",model.cargoSid))
+
+                        val rt = Route.ImportBDWithNo
+
+                        rt.params = params
+
+                        Common.addNavigate(rt)
+
+                    }
+                }
+
+                is BottomItem.Location -> {
+                    item.onClick = fun(){
+
+                        val originParamas = listOf<Pair<String,String>>(
+                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
+                        )
+
+                        route.params = originParamas
+
+                        val params = listOf(Pair("CARGO_CONTROL_SID",model.cargoSid))
+
+                        val rt = Route.Location
+
+                        rt.params = params
+
+                        Common.addNavigate(rt)
+
+                    }
+                }
+
+                is BottomItem.Tmp02 -> {
+                    item.onClick = fun() {
+                        if(model.cargoNo.value.isEmpty()){
+                            Common.sendError("수입화물이 조회되지 않았습니다.")
+                            return
+                        }
+
+                        val originParams = listOf<Pair<String,String>>(
+                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
+                        )
+
+                        route.params = originParams
+
+                        val params = listOf(Pair("CARGO_CONTROL_NO",model.cargoNo.value),Pair("CARGO_CONTROL_SID",model.cargoSid))
+
+                        val rt = Route.ImportCargoDamage
+
+                        rt.params = params
+
+                        Common.addNavigate(rt)
+
+                    }
+                }
+
+                is BottomItem.Add -> {
+                    item.onClick = fun() {
+                        if(model.cargoNo.value.isEmpty()){
+                            Common.sendError("수입화물이 조회되지 않았습니다.")
+                            return
+                        }
+
+                        val originParams = listOf<Pair<String,String>>(
+                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
+                        )
+
+                        route.params = originParams
+
+                        val params = listOf(
+                            Pair("CARGO_CONTROL_NO", model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID", model.cargoSid)
+                        )
+
+                        val rt = Route.ImportCargoIn
+
+                        rt.params = params
+
+                        Common.addNavigate(rt)
+
                     }
                 }
                 else -> null

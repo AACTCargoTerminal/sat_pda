@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="#FFFFFF">
+
+    <!-- ULD -->
+    <TextView
+        android:id="@+id/txtULD"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:text="AKE12345KE"
+        android:textSize="14sp"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <!-- FLT_DT -->
+    <TextView
+        android:id="@+id/txtFltDt"
+        android:layout_width="0dp"
+        android:layout_weight="1.5"
+        android:layout_height="wrap_content"
+        android:text="20250106"
+        android:textSize="13sp"
+        android:textColor="#333333"
+        android:gravity="center" />
+
+    <!-- FLT_NO -->
+    <TextView
+        android:id="@+id/txtFltNo"
+        android:layout_width="0dp"
+        android:layout_weight="1.2"
+        android:layout_height="wrap_content"
+        android:text="KE001"
+        android:textSize="13sp"
+        android:textColor="#333333"
+        android:gravity="center" />
+
+    <!-- ORG -->
+    <TextView
+        android:id="@+id/txtOrg"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="ICN"
+        android:textSize="13sp"
+        android:textColor="#333333"
+        android:gravity="center" />
+
+</LinearLayout>

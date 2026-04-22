@@ -72,6 +72,7 @@ class IMPORT_INFO_Model : ViewModel() {
                     val data = ret.data.table
                     if(Util.getTableCell(0,data[0],"COL1")=="OK"){
                         Common.suc.value = "조회 완료"
+                        cargoSid = Util.getTableCell(0,data[1],"CARGO_CONTROL_SID")
                         mawb.value = Util.getTableCell(0,data[1],"MASTER_AIR_WAY_BILL_NO")
                         fltDate.value = Util.getTableCell(0,data[1],"FLIGHT_DATE")
                         fltNo.value = Util.getTableCell(0,data[1],"FLIGHT_NO")

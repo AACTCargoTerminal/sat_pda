@@ -87,6 +87,17 @@ class MainActivity : AppCompatActivity() {
     lateinit var soundPool: SoundPool
     var soundList: List<SoundDTO> = emptyList()
     lateinit var  audioManager : AudioManager
+
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val allGranted = permissions.values.all { it }
+            if (allGranted) {
+                Common.permissionFlag.value = true
+            } else {
+                Common.permissionFlag.value = false
+            }
+        }
+
     private val unknownSourcesLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             // 돌아왔을 때 권한 다시 확인
@@ -191,6 +202,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 권한 요청
+        requestPermissionsIfNeeded()
 
         if(ApplicationInfo.FLAG_DEBUGGABLE and this.applicationInfo.flags == 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -834,11 +848,44 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.CAMERA
         )
 
+        // Android 버전별 저장소 권한 추가
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+            permissions.add(Manifest.permission.READ_MEDIA_IMAGES)
+            permissions.add(Manifest.permission.READ_MEDIA_VIDEO)
+        } else {
+            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
         // 권한 체크
         return permissions.all {
             ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
         }
 
+    }
+
+    private fun requestPermissionsIfNeeded() {
+        val permissions = mutableListOf(
+            Manifest.permission.CAMERA
+        )
+
+        // Android 버전별 저장소 권한 추가
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+            permissions.add(Manifest.permission.READ_MEDIA_IMAGES)
+            permissions.add(Manifest.permission.READ_MEDIA_VIDEO)
+        } else {
+            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        // 권한이 없는 것만 필터링
+        val deniedPermissions = permissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (deniedPermissions.isNotEmpty()) {
+            permissionLauncher.launch(deniedPermissions.toTypedArray())
+        } else {
+            Common.permissionFlag.value = true
+        }
     }
 
     fun startUpdateWorker(context: Context) {
