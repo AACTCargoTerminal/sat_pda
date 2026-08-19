@@ -70,6 +70,7 @@ class IMPORT_IRR_Model : ViewModel() {
                     if (holdTypeCode.isNotEmpty()) {
                         remark.value = Util.getTableCell(0, data[1], "HOLD_REMARKS")
                     }
+                    spFlag.value = Util.getTableCell(0, data[1], "SP_FLAG")
 
                 } else {
                     Common.sendError(Util.getTableCell(0, data[0], "COL2"))
@@ -87,6 +88,7 @@ class IMPORT_IRR_Model : ViewModel() {
         pcs.value = ""
         wt.value = ""
         remark.value = ""
+        spFlag.value = "N"
     }
 
     fun saveClick() {
