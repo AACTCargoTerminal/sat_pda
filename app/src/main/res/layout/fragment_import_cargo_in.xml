@@ -124,9 +124,9 @@
                 android:orientation="vertical">
 
                 <include
-                    android:id="@+id/status"
+                    android:id="@+id/unLoadCode"
                     layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.status}"
+                    bind:editValue="@{viewModel.unLoadCode}"
                     bind:labelValue="@{`SP1`}" />
             </LinearLayout>
             <LinearLayout
@@ -144,6 +144,22 @@
                     layout="@layout/cust_label_edit"
                     bind:editValue="@{viewModel.cargoDes}"
                     bind:labelValue="@{`화물명세`}" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="5dp"
+                android:background="#F0F0F0"
+                android:elevation="3dp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/status"
+                    layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.status}"
+                    bind:labelValue="@{`상태`}" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"

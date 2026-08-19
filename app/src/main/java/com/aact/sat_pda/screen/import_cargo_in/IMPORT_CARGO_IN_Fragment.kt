@@ -43,6 +43,7 @@ class IMPORT_CARGO_IN_Fragment: BaseFragment() {
         item.disableEditText(binding.fltDate.editText)
         item.disableEditText(binding.fltNo.editText)
         item.disableEditText(binding.assign.editText)
+        item.disableEditText(binding.unLoadCode.editText)
         item.disableEditText(binding.status.editText)
         item.disableEditText(binding.paperPcs.editText)
         item.disableEditText(binding.paperWt.editText)
@@ -143,11 +144,15 @@ class IMPORT_CARGO_IN_Fragment: BaseFragment() {
 
         when {
             cargoInModel.cargoSid.isNotEmpty() -> {
-                cargoInModel.setInfo()
+                if (cargoInModel.mawb.value.isNullOrEmpty()) {
+                    cargoInModel.setInfo()
+                }
                 binding.location.combo.requestFocus()
             }
             !cargoInModel.cargoNo.value.isNullOrEmpty() -> {
-                cargoInModel.setInfoByNo()
+                if (cargoInModel.mawb.value.isNullOrEmpty()) {
+                    cargoInModel.setInfoByNo()
+                }
                 binding.location.combo.requestFocus()
             }
             else -> {
@@ -160,29 +165,32 @@ class IMPORT_CARGO_IN_Fragment: BaseFragment() {
         for (item in route) {
             when (item) {
                 is BottomItem.Save -> {
-                    item.onClick = {
+                    item.onClick = fun() {
                         if (keboardFlag) {
                             keyboardCtl()
                         }
 
                         if (cargoInModel.cargoSid.isNullOrEmpty()) {
                             Common.sendError("입고처리 화물이 조회되지 않았습니다.")
+                            return
                         }
 
                         if (cargoInModel.locationList.value.isNullOrEmpty() || cargoInModel.rackNoList.value.isNullOrEmpty()) {
                             Common.sendError("입고위치, RackNo를 확인하십시오")
+                            return
                         }
                         cargoInModel.saveClick()
                     }
                 }
 
                 is BottomItem.Tmp01 -> {
-                    item.onClick = {
+                    item.onClick = fun() {
                         if (keboardFlag) {
                             keyboardCtl()
                         }
                         if (cargoInModel.cargoNo.value.isEmpty()) {
                             Common.sendError("화물번호가 입력이 안되었습니다.")
+                            return
                         }
 
 
@@ -203,8 +211,13 @@ class IMPORT_CARGO_IN_Fragment: BaseFragment() {
                             keyboardCtl()
                         }
 
+                        val params = listOf(
+                            Pair("CARGO_CONTROL_SID", cargoInModel.cargoSid),
+                            Pair("CARGO_CONTROL_NO", cargoInModel.cargoNo.value ?: "")
+                        )
+
                         val route = Route.ImportIrrList
-                        route.params = emptyList()
+                        route.params = params
                         Common.addNavigate(route)
                     }
                 }
