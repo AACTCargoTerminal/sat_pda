@@ -22,6 +22,7 @@ class OPERATION_ULD_BUILDUP_Model : ViewModel() {
     val biz = BizAPI()
 
     var isEdit = false
+    var isEditing = false
 
     var operationSid = ""
     var fltSelect = ""
@@ -202,8 +203,8 @@ class OPERATION_ULD_BUILDUP_Model : ViewModel() {
                 if (Util.getStr(value.row["CHK"]) == "Y") {
                     val cargoControlSid = Util.getStr(array[key].row["CARGO_CONTROL_SID"])
                     val workNetWeight = Util.getStr(array[key].row["WORKABLE_NET_WEIGHT"])
-                    val workMfstWeight = Util.getStr(array[key].row["WORKABLE_MFST_WEIGHT"])
-                    var workPcs = Util.getStr(array[key].row["WORKABLE_NO_OF_PACKAGE"])
+                    val workMfstWeight = Util.getStr(array[key].row["MFST_NET_WEIGHT"])
+                    val workPcs = Util.getStr(array[key].row["WORKABLE_NO_OF_PACKAGE"])
 
                     val ret1 = api.getPWM_ULD_BUILD_UP_M010_003(cargoControlSid)
 
@@ -228,8 +229,10 @@ class OPERATION_ULD_BUILDUP_Model : ViewModel() {
                                                 Util.getDouble(pcs) / Util.getDouble(workPcs) * Util.getDouble(
                                                     workNetWeight
                                                 )
-                                            workPcs =
-                                                (Util.getDouble(workPcs) - Util.getDouble(pcs)).toString()
+                                            val mfstWt =
+                                                Util.getDouble(pcs) / Util.getDouble(workPcs) * Util.getDouble(
+                                                    workMfstWeight
+                                                )
 
                                             val ret2 = api.setPWM_ULD_BUILD_UP_M010_011(
                                                 operationSid,
@@ -237,7 +240,7 @@ class OPERATION_ULD_BUILDUP_Model : ViewModel() {
                                                 locationCode,
                                                 pcs,
                                                 netWt.toString(),
-                                                workMfstWeight
+                                                mfstWt.toString()
                                             )
 
                                             when (ret2) {

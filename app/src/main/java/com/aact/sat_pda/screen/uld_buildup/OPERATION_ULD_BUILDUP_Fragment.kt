@@ -42,13 +42,53 @@ class OPERATION_ULD_BUILDUP_Fragment : BaseFragment() {
         item.strEditText(binding.spcCode.editText)
         item.strEditText(binding.spcRemark.editText)
 
+        action.doneAction(binding.mawb.editText) {
+            if (keboardFlag) {
+                keyboardCtl()
+            }
+            lifecycleScope.launch {
+                Common.loadingOn(coroutineContext[Job])
+                uldModel.setInfo2()
+                Common.loadingOff()
+            }
+        }
+
+        action.textChange_after(binding.fltDate.editText) { s ->
+            if (uldModel.isEditing) return@textChange_after
+            uldModel.isEditing = true
+
+            val str = s?.toString() ?: ""
+            val result = Util.validDate(str)
+
+            binding.fltDate.editText.setText(result)
+            binding.fltDate.editText.setSelection(result.length)
+
+            val dateParam = Util.formatDate_8(result)
+
+            if (dateParam.length == 8) {
+                lifecycleScope.launch {
+                    uldModel.setFlight()
+                }
+            }
+
+            uldModel.isEditing = false
+        }
+
         action.doneAction(binding.fltNo.editText) {
             if (keboardFlag) {
                 keyboardCtl()
             }
 
+            val dateParam = Util.formatDate_8(uldModel.fltDate.value)
+
             lifecycleScope.launch {
                 Common.loadingOn(coroutineContext[Job])
+
+                if (dateParam.replace("-", "").length < 8) {
+                    Common.sendError("일자를 확인해주세요")
+                    Common.loadingOff()
+                    return@launch
+                }
 
                 uldModel.setFlight()
 
@@ -63,7 +103,6 @@ class OPERATION_ULD_BUILDUP_Fragment : BaseFragment() {
 
                 Common.loadingOff()
             }
-
         }
 
         action.doneAction(binding.spcCode.editText) {
@@ -75,7 +114,7 @@ class OPERATION_ULD_BUILDUP_Fragment : BaseFragment() {
                 getCommonParse(
                     subContent = uldModel.spcTable,
                     body = uldModel.spcList,
-                    filterStr = Util.getStr(uldModel.fltNo.value),
+                    filterStr = Util.getStr(uldModel.spcCode.value),
                     filterColumn = listOf("CODE_CODE","CODE_NAME")
                 )
             }
@@ -94,6 +133,13 @@ class OPERATION_ULD_BUILDUP_Fragment : BaseFragment() {
                     Util.validSelectTable(uldModel.workSelect.value, it)
             }
             binding.workList.custItem.addView(table)
+        }
+
+        uldModel.mawb.observe(viewLifecycleOwner) {
+            val isMawbSearch = it.length == 11
+
+            binding.fltDate.editText.isEnabled = !isMawbSearch
+            binding.fltNo.editText.isEnabled = !isMawbSearch
         }
 
         uldModel.workSelect.observe(viewLifecycleOwner) {
