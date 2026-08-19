@@ -44,6 +44,7 @@ class IMPORT_CARGO_OUT_Fragment: BaseFragment() {
         item.disableEditText(binding.fltDate.editText)
         item.disableEditText(binding.status.editText)
         item.disableEditText(binding.fltNo.editText)
+        item.disableEditText(binding.outPcs.editText)
 
         // 콤보박스 초기화
         cargoOutModel.getInOutKindList()
@@ -57,7 +58,12 @@ class IMPORT_CARGO_OUT_Fragment: BaseFragment() {
                     list = names
                 ) { selectedName ->
                     //선택된 이름으로 index와 code 찾기
-                    val index = names.indexOf(selectedName)
+                    if (selectedName.isEmpty()) {
+                        cargoOutModel.inOutKindIndex.value = -1
+                        cargoOutModel.inOutKindCode.value = ""
+                        return@setSpiner_Str
+                    }
+                    val index = cargoOutModel.inOutKindList.indexOfFirst { it.row["CODE_NAME"] == selectedName }
                     cargoOutModel.inOutKindIndex.value = index
                     if (index >= 0) {
                         cargoOutModel.inOutKindCode.value =
@@ -67,8 +73,18 @@ class IMPORT_CARGO_OUT_Fragment: BaseFragment() {
             }
         }
 
+        cargoOutModel.inOutKindIndex.observe(viewLifecycleOwner) { index ->
+
+            if (index == -1) {
+                binding.inOutKindList.combo.setSelection(0)
+            } else {
+                // Spinner 0번이 빈값이므로 실제 코드는 +1
+                binding.inOutKindList.combo.setSelection(index + 1)
+            }
+        }
+
         cargoOutModel.cargoNo.observe(viewLifecycleOwner){
-            if (it.length == 20) {
+            if (it.length == 19) {
                 cargoOutModel.setInfoByNo()
             }
         }

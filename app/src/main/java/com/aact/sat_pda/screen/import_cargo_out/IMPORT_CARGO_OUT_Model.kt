@@ -58,9 +58,10 @@ class IMPORT_CARGO_OUT_Model : ViewModel() {
             val ret = biz.getCommonCode("BW015", "")
             if (ret != null) {
                 inOutKindList = ret
-                inOutkindNameList.value = ret.map { it.row["CODE_NAME"] ?: "" }
+                inOutkindNameList.value = listOf("") + ret.map { it.row["CODE_NAME"] ?: "" }
             } else {
-                inOutkindNameList.value = emptyList()
+                inOutKindList = emptyList()
+                inOutkindNameList.value = listOf("")
             }
 
             Common.loadingOff()
@@ -71,6 +72,9 @@ class IMPORT_CARGO_OUT_Model : ViewModel() {
     fun setInfoByNo() {
         viewModelScope.launch {
             Common.loadingOn(coroutineContext[Job])
+
+            inOutKindCode.value = ""
+            inOutKindIndex.value = -1
 
             val ret = api.getPWM_CARGO_RELEASE_M020_001_BY_NO(cargoNo.value)
 
@@ -193,7 +197,7 @@ class IMPORT_CARGO_OUT_Model : ViewModel() {
             Common.loadingOn(coroutineContext[Job])
 
             // 그리드 데이터 공백 구분 문자열로 변환
-            val gridLocationCode = locationList.value?.joinToString(" ") { it.locationCode } ?: ""
+            val gridLocationCode = locationList.value?.joinToString(" ") { it.locationName } ?: ""
             val gridNoOfPackage = locationList.value?.joinToString(" ") { it.outPcs.value ?: "0" } ?: ""
 
             // releaseTime 6자리로 변환 (HH:MM:SS → HHMMSS)
