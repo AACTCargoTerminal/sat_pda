@@ -121,6 +121,21 @@ class CAMERA_Fragment : BaseFragment() {
                     }
                 }
 
+                is BottomItem.Delete -> {
+                    item.onClick = fun() {
+                        val edmSid =
+                            cameraModel.cameraSelect.value
+                                ?.get("EDM_SID") ?: ""
+
+                        if (edmSid.isEmpty()) {
+                            Common.sendError("선택한 항목이 없습니다.")
+                            return
+                        }
+
+                        cameraModel.deletePicture()
+                    }
+                }
+
                 else -> null
             }
         }
