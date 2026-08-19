@@ -54,15 +54,16 @@ class MenuFragment : BaseFragment() {
 
         val filterSubData = Common.menuList.filter { it.group == code }
 
-        filterSubData.forEach {
-            if(it.execute == "Y"){
+        filterSubData.forEach { route ->
+            if(route.execute == "Y"){
                 val subView = LayoutInflater.from(subContainer.context).inflate(R.layout.cust_sub_menu,subContainer,false)
                 val sub = subView.findViewById<LinearLayout>(R.id.main_button_layout)
-                sub.setOnClickListener { click ->
-                    Common.route.value = it
+                sub.setOnClickListener {
+                    route.params = emptyList()
+                    Common.addNavigate(route)
                 }
                 val text = subView.findViewById<TextView>(R.id.menu_text)
-                text.setText(it.name)
+                text.setText(route.name)
                 subLinear.addView(subView)
             }
 
