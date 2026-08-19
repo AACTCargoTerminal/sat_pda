@@ -1,0 +1,78 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+                name="viewModel"
+                type="com.aact.sat_pda.screen.pallet.PALLET_UPDATE_Model" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff">
+
+        <GridLayout
+
+                android:id="@+id/subFragmentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:columnCount="2"
+                android:orientation="horizontal">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="5dp"
+                    android:background="#F0F0F0"
+                    android:elevation="3dp"
+                    android:orientation="vertical">
+
+                <include
+                        android:id="@+id/mawb"
+                        layout="@layout/cust_label_edit"
+                        bind:editValue="@{viewModel.mawb}"
+                        bind:labelValue="@{`MAWB`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="5dp"
+                    android:background="#F0F0F0"
+                    android:elevation="3dp"
+                    android:orientation="vertical">
+
+                <include
+                        android:id="@+id/oldPalletPcs"
+                        layout="@layout/cust_label_edit"
+                        bind:editValue="@{viewModel.oldPalletPcs}"
+                        bind:labelValue="@{`파렛트 수량`}" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="5dp"
+                    android:background="#F0F0F0"
+                    android:elevation="3dp"
+                    android:orientation="vertical">
+
+                <include
+                        android:id="@+id/newPalletPcs"
+                        layout="@layout/cust_label_edit"
+                        bind:editValue="@{viewModel.newPalletPcs}"
+                        bind:labelValue="@{`변경 수량`}" />
+            </LinearLayout>
+
+        </GridLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>
