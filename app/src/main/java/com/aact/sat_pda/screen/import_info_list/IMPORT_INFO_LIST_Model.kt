@@ -33,6 +33,7 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
     val fltNo = MutableLiveData<String>("")
     val fltList = MutableLiveData<List<DataRow>>(emptyList())
 
+    val totalCount = MutableLiveData<String>("")
     val i00Count = MutableLiveData<String>("")
     val i02Count = MutableLiveData<String>("")
     val i03Count = MutableLiveData<String>("")
@@ -116,6 +117,8 @@ class IMPORT_INFO_LIST_Model : ViewModel() {
                         val rows = data[1] ?: emptyList()
 
                         Common.suc.value = "조회 완료"
+
+                        totalCount.value = rows.size.toString()
 
                         //요약 카운트 메시지
                         val Count00 = rows.count {
