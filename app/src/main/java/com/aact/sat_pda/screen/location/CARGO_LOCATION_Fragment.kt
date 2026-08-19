@@ -83,14 +83,6 @@ class CARGO_LOCATION_Fragment : BaseFragment() {
                 it["NO_OF_PACKAGE"]?.let { pcs ->
                     cargoLocationModel.pcs.value = pcs
                 }
-                val locName = it["LOCATION_NAME"]
-                val locCode = it["LOCATION_CODE"]
-                if (locName != null && locCode != null) {
-                    cargoLocationModel.position.value = Pair(locCode, locName)
-                }
-                it["RACK_NO"]?.let { rack ->
-                    cargoLocationModel.rackNo.value = rack
-                }
             }
             binding.locationTable.custItem.addView(table)
         }
@@ -117,8 +109,6 @@ class CARGO_LOCATION_Fragment : BaseFragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
-        cargoLocationModel.startProc()
-
     }
 
     override fun onStart() {
@@ -133,6 +123,8 @@ class CARGO_LOCATION_Fragment : BaseFragment() {
                 route.params.find { it.first == "CARGO_CONTROL_SID" }?.second ?: ""
             cargoLocationModel.cargoControlSid = temp
         }
+
+        cargoLocationModel.startProc()
 
         for (item in route.bottomItems()) {
             when (item) {
