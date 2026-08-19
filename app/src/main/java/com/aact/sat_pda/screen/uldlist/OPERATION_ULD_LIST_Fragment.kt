@@ -72,9 +72,14 @@ class OPERATION_ULD_LIST_Fragment : BaseFragment() {
             binding.fltDate.editText.setText(result)
             binding.fltDate.editText.setSelection(result.length)
 
-            if (result.replace("-", "").length != 8) {
+            if (result.replace("-", "").length == 8) {
+                uldListModel.setFlight { }
+            } else {
                 uldListModel.fltNo.value = ""
+                uldListModel.fltSelect.value = ""
                 uldListModel.fltDest.value = ""
+                uldListModel.fltOrigin = ""
+                uldListModel.fltDestNm = ""
             }
 
             uldListModel.isEditing = false
