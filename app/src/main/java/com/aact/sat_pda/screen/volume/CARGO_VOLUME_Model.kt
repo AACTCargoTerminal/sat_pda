@@ -29,8 +29,8 @@ class CARGO_VOLUME_Model : ViewModel() {
     val h = MutableLiveData<String>("")
     val d = MutableLiveData<String>("")
     val pcs = MutableLiveData<String>("")
-    val volumn = MutableLiveData<String>("")
-    val volumnWt = MutableLiveData<String>("")
+    val volume = MutableLiveData<String>("")
+    val volumeWt = MutableLiveData<String>("")
     val pcsSum = MutableLiveData<String>("")
     val wtSum = MutableLiveData<String>("")
 
@@ -165,8 +165,8 @@ class CARGO_VOLUME_Model : ViewModel() {
                 w.value,
                 h.value,
                 d.value,
-                volumn.value,
-                volumnWt.value
+                volume.value,
+                volumeWt.value
             )
             when (ret) {
                 is Result.Error -> Common.sendError(ret.message)
@@ -211,14 +211,14 @@ class CARGO_VOLUME_Model : ViewModel() {
     }
 
     fun setCompute() {
-        val volume =
+        val rawVolume =
             Util.getDouble(w.value) * Util.getDouble(h.value) * Util.getDouble(d.value) * Util.getDouble(
                 pcs.value
             )
 
-        volumn.value =
-            String.format("%.3f", ((Math.ceil((volume / 1000.0) - 0.4) * 1000.0) / 1000000.0))
-        volumnWt.value = String.format("%.1f", (volume / 6000.0))
+        volume.value =
+            String.format("%.3f", ((Math.ceil((rawVolume / 1000.0) - 0.4) * 1000.0) / 1000000.0))
+        volumeWt.value = String.format("%.1f", (rawVolume / 6000.0))
     }
 
     fun setInputClear() {
@@ -226,18 +226,18 @@ class CARGO_VOLUME_Model : ViewModel() {
         h.value = ""
         d.value = ""
         pcs.value = ""
-        volumn.value = ""
-        volumnWt.value = ""
+        volume.value = ""
+        volumeWt.value = ""
     }
 
-    fun volumelistClick(param: Map<String, String>) {
+    fun volumeListClick(param: Map<String, String>) {
         val volumeSeq = param["VOLUME_SEQ"] ?: ""
         val volumeW = param["DIMENSION_WIDTH"] ?: ""
         val volumeH = param["DIMENSION_LENGTH"] ?: ""
         val volumeD = param["DIMENSION_HEIGHT"] ?: ""
         val volumePcs = param["NO_OF_PACKAGE"] ?: ""
-        val volume = param["VOLUME"] ?: ""
-        val volumeWt = param["VOLUME_WEIGHT"] ?: ""
+        val volumeValue  = param["VOLUME"] ?: ""
+        val volumeWtValue = param["VOLUME_WEIGHT"] ?: ""
 
         if (acceptSid.length == 0 || volumeSeq.isNullOrEmpty()) {
             return
@@ -261,8 +261,8 @@ class CARGO_VOLUME_Model : ViewModel() {
                         h.value = Util.getTableCell(0, data[1], "DIMENSION_LENGTH", volumeH)
                         d.value = Util.getTableCell(0, data[1], "DIMENSION_HEIGHT", volumeD)
                         pcs.value = Util.getTableCell(0, data[1], "NO_OF_PACKAGE", volumePcs)
-                        volumn.value = Util.getTableCell(0, data[1], "VOLUME", volume)
-                        volumnWt.value = Util.getTableCell(0, data[1], "VOLUME_WEIGHT", volumeWt)
+                        volume.value = Util.getTableCell(0, data[1], "VOLUME", volumeValue)
+                        volumeWt.value = Util.getTableCell(0, data[1], "VOLUME_WEIGHT", volumeWtValue)
 
                         isEditing = false
                     } else {
@@ -278,9 +278,9 @@ class CARGO_VOLUME_Model : ViewModel() {
     }
 
     fun printClick() {
-        var ip = "CARGOACCEPT"
-        if (Common.terminalCode.value == "T2") {
-            ip = "CARGOACCEPT_T2"
+        var ip = "SCALE#2"
+        if (Common.terminalCode.value != "T1") {
+            ip += "_" + Common.terminalCode.value
         }
 
         viewModelScope.launch {
@@ -294,7 +294,7 @@ class CARGO_VOLUME_Model : ViewModel() {
                     val data = ret.data.table
                     if (Util.getTableCell(0, data[0], "COL1") == "OK") {
 
-                        Common.suc.value = "출력이 완료됫습니다."
+                        Common.suc.value = "출력이 완료됐습니다."
 
                     } else {
                         Common.sendError(Util.getTableCell(0, data[0], "COL2"))
