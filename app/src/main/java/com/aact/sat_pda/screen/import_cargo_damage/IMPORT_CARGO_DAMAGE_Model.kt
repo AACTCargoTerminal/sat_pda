@@ -22,6 +22,7 @@ class IMPORT_CARGO_DAMAGE_Model :ViewModel() {
     val biz = BizAPI()
 
     var cargoSid = ""
+    var lastSearchedCargoNo = ""
     val cargoNo = MutableLiveData<String>("")
     val mawb = MutableLiveData<String>("")
     val hawb = MutableLiveData<String>("")
@@ -51,8 +52,18 @@ class IMPORT_CARGO_DAMAGE_Model :ViewModel() {
     fun setInfo() {
         viewModelScope.launch {
             Common.loadingOn(coroutineContext[Job])
+            val searchCargoNo = cargoNo.value.orEmpty()
 
-            val ret = api.getPWM_CARGO_DAMAGE_M010_002_003_004_BY_NO(cargoNo.value)
+            if (searchCargoNo.isBlank()) {
+                Common.sendError("화물번호를 입력해주세요.")
+                Common.loadingOff()
+                return@launch
+            }
+
+            lastSearchedCargoNo = searchCargoNo
+            clearDetail()
+
+            val ret = api.getPWM_CARGO_DAMAGE_M010_002_003_004_BY_NO(searchCargoNo)
 
             when(ret) {
                 is Result.Error -> Common.sendError(ret.message)
@@ -125,6 +136,8 @@ class IMPORT_CARGO_DAMAGE_Model :ViewModel() {
     }
 
 
+
+
     fun loadItems(groupCode: String) {
         val filtered = currentData.filter {
             it.row["DAMAGE_GROUP_CODE"] == groupCode
@@ -136,12 +149,14 @@ class IMPORT_CARGO_DAMAGE_Model :ViewModel() {
         }
     }
 
-    fun updateItem(itemCode: String, checkFlag: String, noOfDamage: String) {
+    fun updateItem(itemCode: String, checkFlag: String) {
         currentData.find {
             it.row["DAMAGE_ITEM_CODE"] == itemCode
         }?.let { item ->
             item.row["CHECK_FLAG"] = checkFlag
-            item.row["NO_OF_DAMAGE"] = noOfDamage
+            if (checkFlag != "Y") {
+                item.row["NO_OF_DAMAGE"] = "0"
+            }
         }
 
         // RowAdapter에서 변경사항 반영을 위해 dmgList 업데이트
@@ -216,7 +231,7 @@ class IMPORT_CARGO_DAMAGE_Model :ViewModel() {
                     remark.value ?: "",
                     Common.userId.value ?: "",
                     currDT.substring(0, 8),
-                    currDT.substring(8)
+                    currDT.substring(8, 14)
                 )
 
                 when(ret2) {
@@ -225,6 +240,10 @@ class IMPORT_CARGO_DAMAGE_Model :ViewModel() {
                         val data = ret2.data.table
                         if (Util.getTableCell(0, data[0], "COL1") == "OK") {
                             Common.suc.value = "저장완료"
+
+                            Common.loadingOff()
+                            setInfo()
+                            return@launch
                         } else {
                             Common.sendError(Util.getTableCell(0, data[0], "COL2"))
                         }
@@ -245,6 +264,22 @@ class IMPORT_CARGO_DAMAGE_Model :ViewModel() {
         chkBUC.value = false
         remark.value = ""
         dmgItemList.value = emptyList()
+        dmgList.value = emptyList()
+        dmgItemSelect = mutableMapOf("DAMAGE_GROUP_CODE" to "")
+        dmgSelect = mutableMapOf("DAMAGE_ITEM_CODE" to "")
+        originalData.clear()
+        currentData.clear()
+    }
+
+    private fun clearDetail() {
+        cargoSid = ""
+        mawb.value = ""
+        hawb.value = ""
+        dmgPcs.value = ""
+        chkBUC.value = false
+        remark.value = ""
+        dmgItemList.value = emptyList()
+        groups.value = emptyList()
         dmgList.value = emptyList()
         dmgItemSelect = mutableMapOf("DAMAGE_GROUP_CODE" to "")
         dmgSelect = mutableMapOf("DAMAGE_ITEM_CODE" to "")

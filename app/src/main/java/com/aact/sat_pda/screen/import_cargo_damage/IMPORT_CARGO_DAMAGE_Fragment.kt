@@ -52,10 +52,20 @@ class IMPORT_CARGO_DAMAGE_Fragment: BaseFragment() {
         item.strEditText(binding.dmgPcs.editText)
         item.strEditText(binding.remark.editText)
 
-        damageModel.cargoNo.observe(viewLifecycleOwner) {
-            if (it.length == 20) {
-                damageModel.setInfo()
+        damageModel.cargoNo.observe(viewLifecycleOwner) { value ->
+            val cargoNo = value.orEmpty()
+
+            if (cargoNo.length != 19) {
+                damageModel.lastSearchedCargoNo = ""
+                return@observe
             }
+
+            if (cargoNo == damageModel.lastSearchedCargoNo) {
+                return@observe
+            }
+
+            damageModel.lastSearchedCargoNo = cargoNo
+            damageModel.setInfo()
         }
 
         action.doneAction(binding.cargoNo.editText) {
@@ -72,7 +82,7 @@ class IMPORT_CARGO_DAMAGE_Fragment: BaseFragment() {
         binding.dmgItem.recyclerView.layoutManager = LinearLayoutManager(view.context)
 
         adapter.setOnItemCheckListener { itemCode, checkFlag ->
-            damageModel.updateItem(itemCode, checkFlag, if (checkFlag == "Y") "1" else "0")
+            damageModel.updateItem(itemCode, checkFlag)
         }
 
         adapter.setOnGroupCheckListener { groupCode ->
@@ -134,23 +144,19 @@ class IMPORT_CARGO_DAMAGE_Fragment: BaseFragment() {
             return
         }
 
-        if (route.params.size> 0) {
-            val temp =
-                route.params.find { it.first == "CARGO_CONTROL_NO" }?.second ?: ""
-            val temp2 =
-                route.params.find { it.first == "CARGO_CONTROL_SID" }?.second ?: ""
-            damageModel.cargoNo.value = temp
-            damageModel.cargoSid = temp2
+        if (damageModel.cargoNo.value.isNullOrEmpty()) {
+            if (route.params.size > 0) {
+                val temp =
+                    route.params.find { it.first == "CARGO_CONTROL_NO" }?.second ?: ""
+                val temp2 =
+                    route.params.find { it.first == "CARGO_CONTROL_SID" }?.second ?: ""
+                damageModel.cargoNo.value = temp
+                damageModel.cargoSid = temp2
+            }
         }
 
-
-        when {
-            damageModel.cargoSid.isNotEmpty() || damageModel.cargoNo.value.isNotEmpty() -> {
-                damageModel.setInfo()
-            }
-            else -> {
-                binding.cargoNo.editText.requestFocus()
-            }
+        if (damageModel.cargoNo.value.isNullOrEmpty()) {
+            binding.cargoNo.editText.requestFocus()
         }
 
         for (item in route.bottomItems()) {
@@ -174,6 +180,11 @@ class IMPORT_CARGO_DAMAGE_Fragment: BaseFragment() {
                             Common.sendError("화물번호가 없습니다.")
                             return
                         }
+
+                        route.params = listOf(
+                            Pair("CARGO_CONTROL_NO", damageModel.cargoNo.value.orEmpty()),
+                            Pair("CARGO_CONTROL_SID", damageModel.cargoSid)
+                        )
 
                         val params = listOf(
                             Pair("CARGO_CONTROL_SID", damageModel.cargoSid),
