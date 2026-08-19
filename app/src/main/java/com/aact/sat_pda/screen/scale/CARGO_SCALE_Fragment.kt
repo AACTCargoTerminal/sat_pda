@@ -54,7 +54,7 @@ class CARGO_SCALE_Fragment : BaseFragment() {
         val palletPcs = binding.palletPcs.editText
         val palletWt = binding.palletWt.editText
         val netWt = binding.netWt.editText
-        val volumeWt = binding.volumnWt.editText
+        val volumeWt = binding.volumeWt.editText
         val acceptPcs = binding.acceptPcs.editText
         val acceptWt = binding.acceptWt.editText
         val mfstPcs = binding.mfstPcs.editText
@@ -97,10 +97,17 @@ class CARGO_SCALE_Fragment : BaseFragment() {
         }
 
         cargoScaleModel.acceptList.observe(viewLifecycleOwner) {
+            val displayList = it.values.map { value ->
+                val splitValue = value.split(",")
+                val acceptInfo = splitValue.getOrNull(0) ?: ""
+                val statusCode = splitValue.getOrNull(1)?.trim() ?: ""
+                "$acceptInfo , $statusCode"
+            }.toTypedArray()
+
             val adapter = ArrayAdapter(
                 binding.root.context,
                 android.R.layout.simple_spinner_item,
-                it?.values?.toTypedArray() ?: emptyArray()
+                displayList
             ).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
@@ -124,10 +131,13 @@ class CARGO_SCALE_Fragment : BaseFragment() {
                 val value = cargoScaleModel.acceptList.value?.values?.elementAt(position) ?: ""
 
 
-
                 cargoScaleModel.acceptSelect.value = key
                 cargoScaleModel.acceptSeq.value = value.split(":").getOrNull(0) ?: ""
                 cargoScaleModel.cargoStatusCode = value.split(",").getOrNull(1)?.trim() ?: ""
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    cargoScaleModel.setPaperPCSWT()
+                }
 
             }
 
@@ -176,7 +186,10 @@ class CARGO_SCALE_Fragment : BaseFragment() {
                 id: Long
             ) {
                 cargoScaleModel.scaleRadioSelect.value = position
-                if (position == 1) {
+                val terminalCode = Common.terminalCode.value
+                cargoScaleModel.weight.value = ""
+
+                if (terminalCode == "T2" && position == 1) {
                     item.disableEditText(weight)
                 } else {
                     item.numDefEditText(weight)
@@ -529,6 +542,10 @@ class CARGO_SCALE_Fragment : BaseFragment() {
                                 "CARGO_CONTROL_SID",
                                 cargoScaleModel.cargoControlSid
                             ),
+                            Pair(
+                                "CARGO_ACCEPT_SEQ",
+                                cargoScaleModel.acceptSeq.value
+                            ),
                             Pair("MAWB", cargoScaleModel.mawb.value),
                             Pair("FLIGHT_NO", cargoScaleModel.fltNo.value),
                             Pair("FLIGHT_DATE", cargoScaleModel.fltDate.value)
@@ -641,6 +658,56 @@ class CARGO_SCALE_Fragment : BaseFragment() {
                         route.params = params
                         Common.addNavigate(route)
 
+                    }
+                }
+
+                is BottomItem.Tmp01 -> {
+                    item.onClick = fun() {
+                        if (keboardFlag) {
+                            keyboardCtl()
+                        }
+
+                        if (cargoScaleModel.mawb.value.trim().length == 0) {
+                            Common.sendError("MAWB 정보가 없습니다.")
+
+                            binding.mawb.editText.requestFocus()
+                            return
+                        }
+
+                        if (cargoScaleModel.acceptSelect.value.length == 0) {
+                            Common.sendError("접수정보가 없습니다. 접수 후 진행해주세요.")
+                            return
+                        }
+
+                        val acceptValue = cargoScaleModel.acceptList.value?.get(cargoScaleModel.acceptSelect.value) ?: ""
+
+                        if (acceptValue.length == 0) {
+                            Common.sendError("선택한 접수정보를 찾을 수 없습니다.")
+                            return
+                        }
+
+                        val totalPalletCnt = acceptValue.split(",").getOrNull(2)?.trim() ?: ""
+
+                        val originParams =
+                            listOf<Pair<String, String>>(
+                                Pair("CARGO_CONTROL_SID", cargoScaleModel.cargoControlSid),
+                                Pair("CARGO_ACCEPT_SID", cargoScaleModel.acceptSelect.value),
+                                Pair("MAWB", cargoScaleModel.mawb.value)
+                            )
+
+                        route.params = originParams
+
+                        val params =
+                            listOf<Pair<String, String>>(
+                                Pair("CARGO_ACCEPT_SID", cargoScaleModel.acceptSelect.value),
+                                Pair("CARGO_CONTROL_SID", cargoScaleModel.cargoControlSid),
+                                Pair("MAWB", cargoScaleModel.mawb.value),
+                                Pair("TOTAL_PALLET_CNT", totalPalletCnt)
+                            )
+
+                        val palletUpdate = Route.PalletUpdate
+                        palletUpdate.params = params
+                        Common.addNavigate(palletUpdate)
                     }
                 }
 

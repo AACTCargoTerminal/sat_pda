@@ -266,10 +266,10 @@
                 android:orientation="vertical">
 
                 <include
-                    android:id="@+id/volumnWt"
+                    android:id="@+id/volumeWt"
                     layout="@layout/cust_label_edit"
-                    bind:editValue="@{viewModel.volumnWt}"
-                    bind:labelValue="@{`Volumn 중량`}" />
+                    bind:editValue="@{viewModel.volumeWt}"
+                    bind:labelValue="@{`Volume 중량`}" />
             </LinearLayout>
 
             <LinearLayout
