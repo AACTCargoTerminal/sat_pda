@@ -91,8 +91,6 @@ class CARGO_SCALE_LIST_Model : ViewModel() {
     fun getScaleSelect(seq: String) {
         isEditing = true
 
-        acceptSeq.value = seq
-
         viewModelScope.launch {
             Common.loadingOn(coroutineContext[Job])
 
@@ -211,11 +209,10 @@ class CARGO_SCALE_LIST_Model : ViewModel() {
     }
 
     fun printClick(){
-        var printIp = ""
-        when(Common.terminalCode.value){
-            "T1" -> printIp = "CARGOACCEPT"
-            "T2" -> printIp = "CARGOACCEPT_T2"
-            else -> printIp = "CARGOACCEPT"
+        var printIp = "SCALE#2"
+
+        if (Common.terminalCode.value != "T1") {
+            printIp += "_" + Common.terminalCode.value
         }
 
         viewModelScope.launch {
@@ -228,7 +225,7 @@ class CARGO_SCALE_LIST_Model : ViewModel() {
                     val data = ret.data.table
                     if(Util.getTableCell(0,data[0],"COL1")=="OK"){
                         //진행
-                        Common.suc.value = "출력이 완료됫습니다."
+                        Common.suc.value = "출력이 완료됐습니다."
                     }else{
                         Common.sendError(Util.getTableCell(0,data[0],"COL2"))
                     }
@@ -240,7 +237,6 @@ class CARGO_SCALE_LIST_Model : ViewModel() {
     }
 
     fun inputClear() {
-        acceptSeq.value = ""
         scaleSelect.value = mapOf("SCALE_SEQ" to "")
         pcs.value = ""
         wt.value = ""
@@ -250,7 +246,7 @@ class CARGO_SCALE_LIST_Model : ViewModel() {
         netWt.value = ""
     }
 
-    fun setPalletCumpute() {
+    fun setPalletCompute() {
         if (isEditing) {
             return
         }
