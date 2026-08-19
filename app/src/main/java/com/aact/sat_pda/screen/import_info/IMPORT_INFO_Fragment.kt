@@ -49,6 +49,11 @@ class IMPORT_INFO_Fragment : BaseFragment() {
 
 
         model.cargoNo.observe(viewLifecycleOwner) {
+            if (model.skipCargoNoObserver) {
+                model.skipCargoNoObserver = false
+                return@observe
+            }
+
             if (it.length == 19) {
                 model.setInfo()
             }
@@ -86,14 +91,15 @@ class IMPORT_INFO_Fragment : BaseFragment() {
 
         val route = Common.route.value
 
-        if (route.params.size > 0) {
-            val temp =
+        if (route.params.isNotEmpty()) {
+            val cargoControlNo =
                 route.params.find { it.first == "CARGO_CONTROL_NO" }?.second ?: ""
-            model.cargoNo.value = temp
-        }
 
-        if(model.cargoNo.value.isNotEmpty()){
-            model.setInfo()
+            if (cargoControlNo.isNotEmpty() && model.cargoNo.value.isEmpty()) {
+                model.skipCargoNoObserver = true
+                model.cargoNo.value = cargoControlNo
+                model.setInfo()
+            }
         }
 
         for (item in route.bottomItems()) {
@@ -105,15 +111,15 @@ class IMPORT_INFO_Fragment : BaseFragment() {
                             return
                         }
 
-                        val originParams = listOf<Pair<String, String>>(
-                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
+                        Route.ImportInfo.params = listOf(
+                            Pair("CARGO_CONTROL_NO", model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID", model.cargoSid)
                         )
-
-                        route.params = originParams
 
                         val params1 = listOf<Pair<String, String>>(
                             Pair("CARGO_CONTROL_SID", model.cargoSid),
-                            Pair("MAWB", model.mawb.value)
+                            Pair("MAWB", model.mawb.value),
+                            Pair("HAWB", model.hawb.value.orEmpty())
                         )
                         //카메라이동
                         val camera = Route.Camera
@@ -128,11 +134,10 @@ class IMPORT_INFO_Fragment : BaseFragment() {
                             return
                         }
 
-                        val originParams = listOf<Pair<String, String>>(
-                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
+                        Route.ImportInfo.params = listOf(
+                            Pair("CARGO_CONTROL_NO", model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID", model.cargoSid)
                         )
-
-                        route.params = originParams
 
                         val params = listOf(Pair("CARGO_CONTROL_NO",model.cargoNo.value),Pair("CARGO_CONTROL_SID",model.cargoSid))
 
@@ -151,11 +156,10 @@ class IMPORT_INFO_Fragment : BaseFragment() {
                             return
                         }
 
-                        val originParams = listOf<Pair<String,String>>(
-                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
+                        Route.ImportInfo.params = listOf(
+                            Pair("CARGO_CONTROL_NO", model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID", model.cargoSid)
                         )
-
-                        route.params = originParams
 
                         val params = listOf(Pair("CARGO_CONTROL_NO",model.cargoNo.value),Pair("CARGO_CONTROL_SID",model.cargoSid))
 
@@ -171,11 +175,15 @@ class IMPORT_INFO_Fragment : BaseFragment() {
                 is BottomItem.Location -> {
                     item.onClick = fun(){
 
-                        val originParamas = listOf<Pair<String,String>>(
-                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
-                        )
+                        if(model.cargoSid.isEmpty()){
+                            Common.sendError("수입화물이 조회되지 않았습니다.")
+                            return
+                        }
 
-                        route.params = originParamas
+                        Route.ImportInfo.params = listOf(
+                            Pair("CARGO_CONTROL_NO", model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID", model.cargoSid)
+                        )
 
                         val params = listOf(Pair("CARGO_CONTROL_SID",model.cargoSid))
 
@@ -195,11 +203,10 @@ class IMPORT_INFO_Fragment : BaseFragment() {
                             return
                         }
 
-                        val originParams = listOf<Pair<String,String>>(
-                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
+                        Route.ImportInfo.params = listOf(
+                            Pair("CARGO_CONTROL_NO", model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID", model.cargoSid)
                         )
-
-                        route.params = originParams
 
                         val params = listOf(Pair("CARGO_CONTROL_NO",model.cargoNo.value),Pair("CARGO_CONTROL_SID",model.cargoSid))
 
@@ -214,16 +221,15 @@ class IMPORT_INFO_Fragment : BaseFragment() {
 
                 is BottomItem.Add -> {
                     item.onClick = fun() {
-                        if(model.cargoNo.value.isEmpty()){
+                        if(model.cargoSid.isEmpty()){
                             Common.sendError("수입화물이 조회되지 않았습니다.")
                             return
                         }
 
-                        val originParams = listOf<Pair<String,String>>(
-                            Pair("CARGO_CONTROL_NO",model.cargoNo.value)
+                        Route.ImportInfo.params = listOf(
+                            Pair("CARGO_CONTROL_NO", model.cargoNo.value),
+                            Pair("CARGO_CONTROL_SID", model.cargoSid)
                         )
-
-                        route.params = originParams
 
                         val params = listOf(
                             Pair("CARGO_CONTROL_NO", model.cargoNo.value),

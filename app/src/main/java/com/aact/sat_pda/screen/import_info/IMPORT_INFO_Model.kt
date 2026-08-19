@@ -36,6 +36,7 @@ class IMPORT_INFO_Model : ViewModel() {
     val outWt = MutableLiveData<String>("")
     val desc = MutableLiveData<String>("")
     val status = MutableLiveData<String>("")
+    var skipCargoNoObserver = false
 
     val mawbHeader = listOf(
         HeaderDTO("CARGO_CONTROL_SID", "id"),
@@ -48,31 +49,30 @@ class IMPORT_INFO_Model : ViewModel() {
         bodylist = emptyList(),
         selectValue = mapOf("CARGO_CONTROL_SID" to "", "HOUSE_AIR_WAY_BILL_NO" to "","CARGO_CONTROL_NO" to ""),
         onClick = { value ->
-            setCls()
-            cargoSid = value["CARGO_CONTROL_SID"]?:""
-            hawb.value = value["HOUSE_AIR_WAY_BILL_NO"]?:""
-            cargoNo.value = value["CARGO_CONTROL_NO"]?:""
-            if(hawb.value.indexOf("No HAWB")>0){
+            skipCargoNoObserver = true
+            cargoNo.value = value["CARGO_CONTROL_NO"] ?: ""
 
-            }else{
-                setInfoHawb()
-            }
+            setInfo()
         },
         endClick = {})
 
     fun setInfo(){
+        val cargoNoParam = cargoNo.value ?: ""
         viewModelScope.launch {
             Common.loadingOn(coroutineContext[Job])
 
-            val ret = api.getPWM_CARGO_CONTROL_M020_002_BY_NO(cargoNo.value)
+            val ret = api.getPWM_CARGO_CONTROL_M020_002_BY_NO(cargoNoParam)
 
             when(ret){
                 is Result.Error -> Common.sendError(ret.message)
                 is Result.Success<DataTable> -> {
+                    setCls()
                     val data = ret.data.table
                     if(Util.getTableCell(0,data[0],"COL1")=="OK"){
                         Common.suc.value = "조회 완료"
                         cargoSid = Util.getTableCell(0,data[1],"CARGO_CONTROL_SID")
+                        skipCargoNoObserver = true
+                        cargoNo.value = cargoNoParam
                         mawb.value = Util.getTableCell(0,data[1],"MASTER_AIR_WAY_BILL_NO")
                         hawb.value = Util.getTableCell(0, data[1], "HOUSE_AIR_WAY_BILL_NO")
                         fltDate.value = Util.getTableCell(0,data[1],"FLIGHT_DATE")
@@ -108,9 +108,7 @@ class IMPORT_INFO_Model : ViewModel() {
                     val data = ret.data.table
                     if(Util.getTableCell(0,data[0],"COL1")=="OK"){
 
-                        data[1]?.let { table->
-                            outParam(table)
-                        }
+                        outParam(data[1] ?: emptyList())
 
                     }else{
                         Common.sendError(Util.getTableCell(0,data[0],"COL2"))
@@ -138,6 +136,7 @@ class IMPORT_INFO_Model : ViewModel() {
                         Common.suc.value = "조회완료"
 
                         cargoSid = Util.getTableCell(0,data[1],"CARGO_CONTROL_SID")
+                        skipCargoNoObserver = true
                         cargoNo.value = Util.getTableCell(0,data[1],"CARGO_CONTROL_NO")
                         mawb.value = Util.getTableCell(0,data[1],"MASTER_AIR_WAY_BILL_NO")
                         hawb.value = Util.getTableCell(0,data[1],"HOUSE_AIR_WAY_BILL_NO")
@@ -177,6 +176,7 @@ class IMPORT_INFO_Model : ViewModel() {
                     if(Util.getTableCell(0,data[0],"COL1")=="OK"){
                         Common.suc.value = "조회완료"
                         cargoSid = Util.getTableCell(0,data[1],"CARGO_CONTROL_SID")
+                        skipCargoNoObserver = true
                         cargoNo.value = Util.getTableCell(0,data[1],"CARGO_CONTROL_NO")
                         mawb.value = Util.getTableCell(0,data[1],"MASTER_AIR_WAY_BILL_NO")
                         fltDate.value = Util.getTableCell(0,data[1],"FLIGHT_DATE")
