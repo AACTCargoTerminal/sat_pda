@@ -43,10 +43,16 @@ class IMPORT_BD_LIST_Fragment : BaseFragment() {
                 bdListModel.fltNo.value = selectedNo
                 bdListModel.setList()
             }
+            val prevIndex =  dataRowList.indexOfFirst { Util.getStr(it.row["FLIGHT_NO"]) == bdListModel.prevFlightNo }
+            if (prevIndex >= 0) {
+                binding.fltno.combo.setSelection(prevIndex)
+            }
         }
 
-        bdListModel.fltDate.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
+        bdListModel.fltDate.observe(viewLifecycleOwner) {date ->
+            val flightDate = date.replace("-", "")
+
+            if (flightDate.length == 8 && flightDate.all { it.isDigit() }) {
                 bdListModel.setFlight()
             }
         }
