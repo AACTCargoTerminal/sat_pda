@@ -181,8 +181,11 @@ sealed class Route(
             cargoIn.name = "입고"
             val cargoCancel = BottomItem.Exit
             cargoCancel.name = "입고취소"
+            val volume = BottomItem.Tmp01
+            volume.name = "부피"
             val list = listOf(
                 BottomItem.Scale,
+                volume,
                 update,
                 BottomItem.Location,
                 cargoIn,

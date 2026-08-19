@@ -101,7 +101,7 @@ class CARGO_CONTROL_Model : ViewModel() {
                             } ?: run {
                                 company.value = ("")
                             }
-                            Common.suc.value = "조회가 완료됬습니다."
+                            Common.suc.value = "조회가 완료됐습니다."
                         } else {
                             Common.sendError((status[0].row["COL3"] ?: "MAWB 정보 에러"))
                         }
@@ -187,7 +187,7 @@ class CARGO_CONTROL_Model : ViewModel() {
                     data[0]?.let { status ->
 
                         if (Util.getTableCell(0, status, "COL1") == "OK") {
-                            Common.suc.value = "수정이 완료됬습니다."
+                            Common.suc.value = "수정이 완료됐습니다."
                             startProc()
                         } else {
                             Common.sendError(Util.getTableCell(0, status, "COL2", "수정에러"))
@@ -205,11 +205,10 @@ class CARGO_CONTROL_Model : ViewModel() {
     }
 
     fun printProc() {
-        var ip = "CARGOACCEPT"
+        var ip = "SCALE#2"
 
-
-        if (Common.terminalCode.value == "T2") {
-            ip = "CARGOACCEPT_T2"
+        if (Common.terminalCode.value != "T1") {
+            ip += "_" + Common.terminalCode.value
         }
 
         viewModelScope.launch {
@@ -241,7 +240,7 @@ class CARGO_CONTROL_Model : ViewModel() {
                 }
 
                 else -> {
-                    Common.suc.value = "출력이 완료됬습니다."
+                    Common.suc.value = "출력이 완료됐습니다."
                 }
             }
 
@@ -376,7 +375,7 @@ class CARGO_CONTROL_Model : ViewModel() {
                     val data = ret.data.table
                     data[0]?.let { status ->
                         if (Util.getTableCell(0, status, "COL1") == "OK") {
-                            Common.suc.value = "취소가 완료됬습니다."
+                            Common.suc.value = "취소가 완료됐습니다."
                             startProc()
                         } else {
                             Common.sendError(Util.getTableCell(0, status, "COL2", "수정에러"))
