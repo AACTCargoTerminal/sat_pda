@@ -283,7 +283,7 @@
                                 android:id="@+id/releaseDate"
                                 layout="@layout/cust_label_edit"
                                 bind:editValue="@{viewModel.releaseDate}"
-                                bind:labelValue="@{`보류일자`}" />
+                                bind:labelValue="@{`해제일자`}" />
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="0dp"

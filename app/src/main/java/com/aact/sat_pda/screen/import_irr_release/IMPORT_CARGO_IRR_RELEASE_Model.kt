@@ -38,13 +38,18 @@ class IMPORT_CARGO_IRR_RELEASE_Model: ViewModel() {
     val releaseDate = MutableLiveData("")
     val releaseTime = MutableLiveData("")
     val releaseType = MutableLiveData("")
-
+    var holdTypeList: List<DataRow> = emptyList()
     var releaseTypeList: List<DataRow> = emptyList()
     val releaseTypeCode = MutableLiveData("")
 
     val releaseTypeIndex = MutableLiveData(-1)
 
-
+    suspend fun getHoldTypeList() {
+        val ret = biz.getCommonCode("IRTYP", "")
+        if (ret != null) {
+            holdTypeList = ret
+        }
+    }
 
     suspend fun getReleaseTypeList() {
         val ret = biz.getCommonCode("IRFRE", "")
@@ -64,6 +69,7 @@ class IMPORT_CARGO_IRR_RELEASE_Model: ViewModel() {
                 is Result.Error -> Common.sendError(ret.message)
                 is Result.Success<DataTable> -> {
                     val data = ret.data.table
+                    setClear()
                     if (Util.getTableCell(0,data[0],"COL1") == "OK") {
                         Common.suc.value = "조회 완료"
                         mawb.value = Util.getTableCell(0,data[1],"MASTER_AIR_WAY_BILL_NO")
@@ -73,7 +79,6 @@ class IMPORT_CARGO_IRR_RELEASE_Model: ViewModel() {
                         mfcsWt.value = Util.getTableCell(0,data[1],"MFST_NET_WEIGHT")
                         pcs.value = Util.getTableCell(0, data[1],"NO_OF_PACKAGE")
                         wt.value = Util.getTableCell(0,data[1],"NET_WEIGHT")
-                        holdType.value = Util.getTableCell(0, data[1],"HOLD_TYPE_CODE")
                         holdDate.value = Util.getTableCell(0, data[1],"HOLD_DATE")
                         holdTime.value = Util.getTableCell(0, data[1],"HOLD_TIME")
                         holdRemark.value = Util.getTableCell(0,data[1],"HOLD_REMARKS")
@@ -81,6 +86,15 @@ class IMPORT_CARGO_IRR_RELEASE_Model: ViewModel() {
                         releaseDate.value = Util.getTableCell(0, data[1], "RELEASE_DATE")
                         releaseTime.value = Util.getTableCell(0, data[1],"RELEASE_TIME")
                         releaseType.value = Util.getTableCell(0,data[1],"RELEASE_TYPE_CODE")
+
+                        val holdCode =  Util.getTableCell(0, data[1], "HOLD_TYPE_CODE")
+                        holdTypeCode = holdCode
+
+                        val name = holdTypeList.firstOrNull {
+                                it.row["CODE_CODE"] == holdCode
+                        }?.row?.get("CODE_NAME")?: ""
+
+                        holdType.value = name
 
                         val releaseCode = Util.getTableCell(0,data[1],"RELEASE_TYPE_CODE")
                         releaseTypeCode.value = releaseCode
@@ -114,7 +128,7 @@ class IMPORT_CARGO_IRR_RELEASE_Model: ViewModel() {
             Common.loadingOn(coroutineContext[Job])
 
             val ret = api.setPWM_CARGO_HOLD_M020_011(cargoSid
-                                                    ,holdType.value ?: ""
+                                                    ,holdTypeCode
                                                     ,releaseTypeCode.value ?: ""
                                                     ,releaseDate.value ?: ""
                                                     , (releaseTime.value + "000000").substring(0,6)
@@ -140,8 +154,6 @@ class IMPORT_CARGO_IRR_RELEASE_Model: ViewModel() {
     }
 
     fun setClear() {
-        cargoSid = ""
-        holdTypeCode = ""
         mawb.value = ""
         hawb.value = ""
         assign.value = ""
