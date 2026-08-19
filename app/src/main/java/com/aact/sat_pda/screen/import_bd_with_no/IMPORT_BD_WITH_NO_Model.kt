@@ -73,6 +73,8 @@ class IMPORT_BD_WITH_NO_Model: ViewModel() {
                         assign.value = Util.getTableCell(0,data[1],"ASSIGN_CODE")
                     }else {
                         Common.sendError(Util.getTableCell(0,data[0],"COL2"))
+                        Common.loadingOff()
+                        return@launch
                     }
 
                     val ret2 = api.getPWM_ULD_BREAK_DOWN_M020_005(cargoSid)
