@@ -2,24 +2,30 @@ package com.aact.sat_pda.appconfig
 
 import androidx.lifecycle.MutableLiveData
 import com.aact.sat_pda.dto.DataRow
+import com.aact.sat_pda.BuildConfig
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.Stack
 
 object Common {
 
-    val serverIp: List<DataRow> = listOf(
-        DataRow(linkedMapOf("ip" to "localhost:60330", "name" to "개발환경1")),
-        DataRow(linkedMapOf("ip" to "192.168.200.152:60330", "name" to "개발환경2")),
-        DataRow(linkedMapOf("ip" to "192.168.200.179", "name" to "개발환경3")),
-        DataRow(linkedMapOf("ip" to "192.168.0.69", "name" to "개발환경4")),
-        DataRow(linkedMapOf("ip" to "192.168.0.57", "name" to "운영환경")),
-    )
+    val serverIp: List<DataRow> = BuildConfig.SERVER_LIST
+        .split(",")
+        .map { server ->
+            val (ip, name) = server.split("|", limit = 2)
 
-    val serverKey = "aactsharpt2lkoalaicnkorea"
-    val timeout: Long = 20L
-    val programId: String = "PDA Android"
-    val selectServer = MutableLiveData("192.168.0.57")
+            DataRow(
+                linkedMapOf(
+                    "ip" to ip.trim(),
+                    "name" to name.trim()
+                )
+            )
+        }
+
+    val serverKey = BuildConfig.SERVER_KEY
+    val timeout: Long = BuildConfig.SERVER_TIMEOUT
+    val programId: String = BuildConfig.PROGRAM_ID
+    val selectServer = MutableLiveData(BuildConfig.DEFAULT_SERVER_IP)
 
 
     val userId = MutableLiveData<String>("")
@@ -37,7 +43,7 @@ object Common {
     val terminalName = MutableLiveData("")
     val userIp = MutableLiveData("")
     val memo = MutableLiveData("")
-    val version = MutableLiveData("2.07")
+    val version = MutableLiveData(BuildConfig.PDA_VERSION)
     val filename = MutableLiveData("")
     val updateFlag = MutableLiveData<Boolean>(false)
     val updateMsg = MutableLiveData<String>("업데이트중...")

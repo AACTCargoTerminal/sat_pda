@@ -206,18 +206,16 @@ class MainActivity : AppCompatActivity() {
         // 권한 요청
         requestPermissionsIfNeeded()
 
-        if(ApplicationInfo.FLAG_DEBUGGABLE and this.applicationInfo.flags == 0) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (!packageManager.canRequestPackageInstalls()) {
-                    // 알 수 없는 소스 설치 권한 요청
-                    val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).apply {
-                        data = Uri.parse("package:$packageName")
-                    }
-                    unknownSourcesLauncher.launch(intent)
-                }
-            }
+        val defaultServerIp = BuildConfig.DEFAULT_SERVER_IP.substringBefore(":")
+        val updateServerIp = BuildConfig.UPDATE_SERVER_IP.substringBefore(":")
+
+        if (defaultServerIp == updateServerIp) {
             startUpdateWorker(this)
+        } else {
+            Common.updateFlag.value = false
+            WorkManager.getInstance(this).cancelAllWorkByTag("updateCheck")
         }
+
         startSound()
         audioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -246,7 +244,16 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        Common.selectServer.observe(this) {
+        Common.selectServer.observe(this) { server ->
+            val serverIp = server.substringBefore(":")
+
+            if (serverIp == updateServerIp) {
+                startUpdateWorker(this)
+            } else {
+                Common.updateFlag.value = false
+                WorkManager.getInstance(this).cancelAllWorkByTag("updateCheck")
+            }
+
             val ret = startProc()
             when (ret) {
                 is Result.Error -> Common.sendError(ret.message)
