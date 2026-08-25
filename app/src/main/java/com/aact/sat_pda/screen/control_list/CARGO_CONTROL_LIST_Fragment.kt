@@ -18,9 +18,17 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
+    companion object {
+        private var saveFltDate = ""
+        private var saveFltNo = ""
+        private var saveScheduleSid = ""
+    }
+
     private var _binding: FragmentCargoListBinding? = null
     private val binding get() = _binding!!
     private val controlListModel: CARGO_CONTROL_LIST_Model by lazy { CARGO_CONTROL_LIST_Model() }
+    private var settingRouteParams = false
+    private var returnFromControl = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +53,12 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
             onClick = { value ->
                 controlListModel.fltSelect = value["SCHEDULE_SID"] ?: ""
                 controlListModel.fltNo.value = value["FLIGHT_NO"] ?: ""
+
+                controlListModel.selectClick(
+                    mawb = Util.getStr(controlListModel.mawb.value),
+                    fltDate = controlListModel.fltDate.value.replace("-", ""),
+                    fltNo = Util.getStr(controlListModel.fltNo.value)
+                )
             },
             endClick = {})
 
@@ -57,11 +71,14 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
         item.strEditText(fltNoEdit)
 
         controlListModel.mawb.observe(viewLifecycleOwner) {
+            fltDateEdit.isEnabled = it.length != 11
+            fltNoEdit.isEnabled = it.length != 11
+
             if(it.length == 11){
                 val txt = Util.getStr(it)
                 controlListModel.selectClick(
                     mawb = txt,
-                    fltDate = controlListModel.fltNo.value.replace("-", ""),
+                    fltDate = controlListModel.fltDate.value.replace("-", ""),
                     fltNo = Util.getStr(controlListModel.fltNo.value)
                 )
                 mawbEdit.clearFocus()
@@ -105,15 +122,36 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                 }
 
                 1 -> {
-                    //수출화물 이동
+                    if(returnFromControl){
+                        returnFromControl = false
 
-                    val params =
-                        listOf(Pair("CARGO_CONTROL_SID", value[0].row["CARGO_CONTROL_SID"] ?: ""))
+                        binding.cargoTableContent.removeAllViews()
+                        val table = item.getTable_Click(
+                            context = binding.root.context,
+                            headerList = controlListModel.headerList,
+                            bodyList = value,
+                            selectValue = controlListModel.selectList,
+                            height = 400,
+                        ) {
+                            controlListModel.selectList =
+                                Util.validSelectTable(controlListModel.selectList, it)
+                        }
 
-                    val control = Route.Control
-                    control.params = params
-                    Common.addNavigate(control)
+                        binding.cargoTableContent.addView(table)
+                    }else{
+                        saveFltDate = controlListModel.fltDate.value
+                        saveFltNo = controlListModel.fltNo.value
+                        saveScheduleSid = controlListModel.fltSelect
+                        returnFromControl = true
 
+                        //수출화물 이동
+                        val params =
+                            listOf(Pair("CARGO_CONTROL_SID", value[0].row["CARGO_CONTROL_SID"] ?: ""))
+
+                        val control = Route.Control
+                        control.params = params
+                        Common.addNavigate(control)
+                    }
                 }
 
                 else -> {
@@ -140,7 +178,7 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
             val txt = Util.getStr(controlListModel.mawb.value)
             controlListModel.selectClick(
                 mawb = txt,
-                fltDate = controlListModel.fltNo.value.replace("-", ""),
+                fltDate = controlListModel.fltDate.value.replace("-", ""),
                 fltNo = Util.getStr(controlListModel.fltNo.value)
             )
             mawbEdit.clearFocus()
@@ -149,7 +187,7 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
         var isEditing = false
 
         action.textChange_after(fltDateEdit) { s ->
-            if (isEditing) return@textChange_after
+            if (isEditing || settingRouteParams) return@textChange_after
             isEditing = true
 
             val str = s?.toString() ?: ""
@@ -159,6 +197,9 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
             fltDateEdit.setSelection(result.length)
 
             if (result.replace("-", "").length == 8) {
+                controlListModel.fltSelect = ""
+                controlListModel.fltNo.value = ""
+
                 lifecycleScope.launch {
 
                     Common.loadingOn(coroutineContext[Job])
@@ -168,6 +209,13 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                     }
                     Common.loadingOff()
                 }
+
+                controlListModel.selectClick(
+                    mawb = "",
+                    fltDate = result.replace("-", ""),
+                    fltNo = "",
+                    firstLoad = true
+                )
             }
 
             isEditing = false
@@ -178,13 +226,70 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.mawb.editText.post {
-            binding.mawb.editText.requestFocus()
+
+        if(saveFltDate.isNotEmpty()){
+            returnFromControl = true
+
+            val restoreDate = saveFltDate
+            val restoreFltNo = saveFltNo
+            val restoreScheduleSid = saveScheduleSid
+
+            settingRouteParams = true
+            controlListModel.fltDate.value = restoreDate
+
+            binding.root.post {
+                controlListModel.fltNo.value = restoreFltNo
+                controlListModel.fltSelect = restoreScheduleSid
+                settingRouteParams = false
+
+                val date = restoreDate.replace("-", "")
+
+                lifecycleScope.launch {
+                    Common.loadingOn(coroutineContext[Job])
+                    val ret = BizAPI().getFltight(date)
+                    ret?.let { data ->
+                        controlListModel.fltBodyList.value = data
+                    }
+                    Common.loadingOff()
+                }
+
+                if(restoreFltNo.isNotEmpty() && restoreScheduleSid.isNotEmpty()){
+                    controlListModel.selectClick(
+                        mawb = "",
+                        fltDate = date,
+                        fltNo = restoreFltNo
+                    )
+                }else{
+                    controlListModel.selectClick(
+                        mawb = "",
+                        fltDate = date,
+                        fltNo = "",
+                        firstLoad = true
+                    )
+                }
+            }
+
+            saveFltDate = ""
+            saveFltNo = ""
+            saveScheduleSid = ""
+        }else{
+            binding.mawb.editText.post {
+                binding.mawb.editText.requestFocus()
+            }
+            controlListModel.fltDate.value = Util.getNowDate()
+            controlListModel.fltSelect = ""
+            controlListModel.fltNo.value = ""
+
+            controlListModel.selectClick(
+                mawb = "",
+                fltDate = controlListModel.fltDate.value.replace("-", ""),
+                fltNo = "",
+                firstLoad = true
+            )
         }
-        controlListModel.fltDate.value = Util.getNowDate()
 
         val route = Common.route.value.bottomItems()
-        
+
         for(item in route){
             when(item){
                 is BottomItem.Search ->{
@@ -201,7 +306,7 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                         binding.mawb.editText.clearFocus()
                     }
                 }
-                
+
                 is BottomItem.Add ->{
                     item.onClick = fun(){
                         //접수 링크
@@ -224,11 +329,16 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                         Common.addNavigate(accept)
                     }
                 }
-                
+
                 is BottomItem.Open ->{
                     item.onClick = {
                         val sid = controlListModel.selectList["CARGO_CONTROL_SID"]
                         if (!sid.isNullOrEmpty()) {
+                            saveFltDate = controlListModel.fltDate.value
+                            saveFltNo = controlListModel.fltNo.value
+                            saveScheduleSid = controlListModel.fltSelect
+                            returnFromControl = true
+
                             val params = listOf(
                                 Pair("CARGO_CONTROL_SID", sid)
                             )
