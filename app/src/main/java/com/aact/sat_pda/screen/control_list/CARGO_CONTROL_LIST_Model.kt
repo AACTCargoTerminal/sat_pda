@@ -39,6 +39,13 @@ class CARGO_CONTROL_LIST_Model : ViewModel() {
     val fltNo = MutableLiveData<String>("")
     val mawb = MutableLiveData<String>("")
 
+    var saveFltDate = ""
+    var saveFltNo = ""
+    var saveScheduleSid = ""
+    var settingRouteParams = false
+    var returnFromControl = false
+    var isEditing = false
+
     fun selectClick(fltDate:String,fltNo:String, mawb: String, firstLoad:Boolean = false) {
         val api: MainAPI = MainAPI_Impl()
 
