@@ -16,6 +16,7 @@ import com.aact.sat_pda.dto.TreeDTO
 class CARGO_DAMAGE_EXPORT_Model: ViewModel() {
     val api = MainAPI_Impl()
     var isEditing = false
+    var bSearchCon = true
 
     var cargoControlSid = ""
     val damageExportSid = MutableLiveData<String>("")
@@ -51,6 +52,10 @@ class CARGO_DAMAGE_EXPORT_Model: ViewModel() {
                                 )
                             }
                             groups.value = list_tmp
+
+                            if(damageExportSid.value.length > 0){
+                                getCode()
+                            }
                         } ?: run {
                             groups.value = emptyList()
                         }
@@ -127,7 +132,7 @@ class CARGO_DAMAGE_EXPORT_Model: ViewModel() {
             append("AND TCM.USABLE_FLAG = 'Y' ")
             append("AND TCM.INOUT_FLAG = 'E' ")
             append("AND TCM.USABLE_FLAG = 'Y' ")
-            append("TCM.MASTER_AIR_WAY_BILL_NO = '${mawb_tmp}'")
+            append("AND TCM.MASTER_AIR_WAY_BILL_NO = '${mawb_tmp}'")
         }.toString()
 
         viewModelScope.launch {
@@ -268,7 +273,12 @@ class CARGO_DAMAGE_EXPORT_Model: ViewModel() {
                                 damagePcs.value
                             )
                             sumPcs.value =
-                                Util.getTableCell(0, data[1], "NO_OF_PACKAGE", sumPcs.value)
+                                Util.getTableCell(
+                                    0,
+                                    data[1],
+                                    if(acceptType == "Y" && damageExportSid.value == "0") "STOCK_NO_OF_PACKAGE" else "NO_OF_PACKAGE",
+                                    sumPcs.value
+                                )
                             remark.value = Util.getTableCell(0, data[1], "REMARK", remark.value)
                             goods.value = Util.getTableCell(0, data[1], "GOODS", goods.value)
                         } else {
@@ -363,44 +373,55 @@ class CARGO_DAMAGE_EXPORT_Model: ViewModel() {
 
     }
 
-    fun printPdf(){
+    fun printPdf() {
         val dmgSid = damageExportSid.value
-        val terminalCode = Common.terminalCode.value
-        var printIp = ""
 
-        if(dmgSid.length <= 1){
+        if (dmgSid.length <= 1) {
             Common.sendError("MAWB를 확인해주세요")
             return
         }
 
-        when(terminalCode){
-            "T1" -> printIp = "SCALE#2_T1"
-            "T2" -> printIp = "SCALE#2_T2"
-            "T3" -> printIp = "SCALE#2_T3"
-            else -> printIp = "TEST"
+        var ip = "SCALE#2"
+
+        if (Common.terminalCode.value != "T1") {
+            ip += "_" + Common.terminalCode.value
         }
 
         viewModelScope.launch {
             Common.loadingOn(coroutineContext[Job])
 
-            val ret = api.setPWM_CARGO_DAMAGE_EXPORT_PRINT(printIp,dmgSid)
+            var ret: Result<DataTable>
 
-            when(ret){
-                is Result.Error -> Common.sendError(ret.message)
-                is Result.Success<DataTable> -> {
-                    val data = ret.data.table
-                    if(Util.getTableCell(0,data[0],"COL1")=="OK"){
-                        // 진행
-                        Common.suc.value = "출력이 완료됬습니다."
-                    }else{
-                        Common.sendError(Util.getTableCell(0,data[0],"COL2","오류가 발생햇습니다."))
-                    }
+            ret = api.setPWM_CARGO_SCALE_PRINT_MAWB(cargoControlSid, ip)
+
+            when (ret) {
+                is Result.Error -> {
+                    Common.sendError(ret.message)
+                    Common.loadingOff()
+                    return@launch
+                }
+
+                else -> {
+
+                }
+            }
+
+            ret = api.setPWM_CARGO_VOLUME_PRINT_MAWB(cargoControlSid, ip)
+
+            when (ret) {
+                is Result.Error -> {
+                    Common.sendError(ret.message)
+                    Common.loadingOff()
+                    return@launch
+                }
+
+                else -> {
+                    Common.suc.value = "출력이 완료됐습니다."
                 }
             }
 
             Common.loadingOff()
         }
-
     }
 
     fun setClear() {
