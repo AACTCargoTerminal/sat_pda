@@ -39,7 +39,14 @@ class CARGO_CONTROL_LIST_Model : ViewModel() {
     val fltNo = MutableLiveData<String>("")
     val mawb = MutableLiveData<String>("")
 
-    fun selectClick(fltDate:String,fltNo:String, mawb: String) {
+    var saveFltDate = ""
+    var saveFltNo = ""
+    var saveScheduleSid = ""
+    var settingRouteParams = false
+    var returnFromControl = false
+    var isEditing = false
+
+    fun selectClick(fltDate:String,fltNo:String, mawb: String, firstLoad:Boolean = false) {
         val api: MainAPI = MainAPI_Impl()
 
         viewModelScope.launch {
@@ -50,13 +57,18 @@ class CARGO_CONTROL_LIST_Model : ViewModel() {
             var sid = ""
 
             if(mawb.length != 11){
-                if(fltNo.length < 4 || fltSelect == ""){
-                    Common.sendError("편번을 확인해주세요")
-                    Common.loadingOff()
-                    return@launch
+                if(firstLoad){
+                    date = fltDate
+                    sid = ""
+                }else{
+                    if(fltNo.length < 4 || fltSelect == ""){
+                        Common.sendError("편번을 확인해주세요")
+                        Common.loadingOff()
+                        return@launch
+                    }
+                    date = fltDate
+                    sid = fltSelect
                 }
-                date = fltDate
-                sid = fltSelect
             }
 
             val ret = api.getPWM_CARGO_OPERATION_L010_001(I_FLIGHT_DATE = date, I_MASTER_AIR_WAY_BILL_NO = mawb, I_SCHEDULE_SID = sid)
@@ -68,7 +80,22 @@ class CARGO_CONTROL_LIST_Model : ViewModel() {
 
                         if(Util.getTableCell(0,status,"COL1")  == "OK"){
                             Common.suc.value = "조회가 완료됬습니다."
-                            bodyList.value = data[1]?:emptyList()
+
+                            val list = data[1]?:emptyList()
+
+                            if(list.isNotEmpty()){
+                                selectList = mapOf(
+                                    "CARGO_CONTROL_SID" to (list[0].row["CARGO_CONTROL_SID"] ?: ""),
+                                    "MASTER_AIR_WAY_BILL_NO" to (list[0].row["MASTER_AIR_WAY_BILL_NO"] ?: "")
+                                )
+                            }else{
+                                selectList = mapOf(
+                                    "CARGO_CONTROL_SID" to "",
+                                    "MASTER_AIR_WAY_BILL_NO" to ""
+                                )
+                            }
+
+                            bodyList.value = list
                             Common.loadingOff()
                             return@launch
                         }else{

@@ -31,6 +31,11 @@ interface MainAPI {
         I_FILESIZE: String
     ): Result<DataTable>
 
+    suspend fun setPCM_PDA_M010_021_001(
+        I_OBJECT_SID: String,
+        I_EDM_SID: String
+    ): Result<DataTable>
+
     //수출 화물 목록
     suspend fun getPWM_CARGO_CONTROL_M010_001_002(
         I_CARGO_CONTROL_SID: String
@@ -162,7 +167,13 @@ interface MainAPI {
         I_AGENT_CUSTOMER_NAME: String,
         I_GOSHOW_FLAG: String,
         I_FROM_WAREHOUSE_FLAG: String,
-        I_BUP_FLAG: String
+        I_BUP_FLAG: String,
+        I_NO_OF_PALLET: String
+    ): Result<DataTable>
+
+    suspend fun setPWM_CARGO_ACCEPT_M010_013(
+        I_CARGO_ACCEPT_SID: String,
+        I_NO_OF_PALLET: String
     ): Result<DataTable>
 
     suspend fun setPWM_CARGO_SCALE_M010_011(
@@ -283,6 +294,11 @@ interface MainAPI {
         data: String,
         I_FILENAME: String,
         I_FILESIZE: String
+    ): Result<DataTable>
+
+    suspend fun setPWM_CARGO_DAMAGE_M010_016_001(
+        I_DAMAGE_EXPORT_SID: String,
+        I_EDM_SID: String
     ): Result<DataTable>
 
     suspend fun getPWM_CARGO_DAMAGE_M010_009(

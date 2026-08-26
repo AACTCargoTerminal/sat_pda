@@ -44,6 +44,10 @@ class CARGO_DAMAGE_EXPORT_Fragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         damageModel.mawb.observe(viewLifecycleOwner) {
+            if(!damageModel.bSearchCon){
+                return@observe
+            }
+
             if(it.length == 0){
                 damageModel.setClear()
             }else if(it.length == 11){
@@ -55,6 +59,10 @@ class CARGO_DAMAGE_EXPORT_Fragment : BaseFragment() {
         }
 
         damageModel.damageExportSid.observe(viewLifecycleOwner) {
+            if(!damageModel.bSearchCon){
+                return@observe
+            }
+
             if(it.length > 0){
                 damageModel.getCode()
                 damageModel.searchInfo()
@@ -105,12 +113,23 @@ class CARGO_DAMAGE_EXPORT_Fragment : BaseFragment() {
         if(route.params.size > 0){
             val temp_param = route.params
 
+            damageModel.bSearchCon = false
             temp_param.forEach {
                 when (it.first) {
                     "CARGO_CONTROL_SID" -> damageModel.cargoControlSid = it.second
                     "MAWB" -> damageModel.mawb.value = it.second
                     "ACCEPT_TYPE" -> damageModel.acceptType = it.second
                     "DAMAGE_EXPORT_SID" -> damageModel.damageExportSid.value= it.second
+                }
+            }
+            damageModel.bSearchCon = true
+
+            if(damageModel.damageExportSid.value.length > 0){
+                damageModel.searchInfo()
+            }else if(damageModel.mawb.value.length == 11){
+                when(damageModel.acceptType){
+                    "N" -> damageModel.searchMawb_before()
+                    "Y" -> damageModel.searchMawb_after()
                 }
             }
         }

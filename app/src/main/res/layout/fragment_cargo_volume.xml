@@ -148,21 +148,21 @@
                     bind:labelValue="@{`수량`}" />
 
                 <include
-                    android:id="@+id/volumn"
+                    android:id="@+id/volume"
                     layout="@layout/cust_label_edit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
-                    bind:editValue="@{viewModel.volumn}"
+                    bind:editValue="@{viewModel.volume}"
                     bind:labelValue="@{`VOL`}" />
 
                 <include
-                    android:id="@+id/volumnWt"
+                    android:id="@+id/volumeWt"
                     layout="@layout/cust_label_edit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
-                    bind:editValue="@{viewModel.volumnWt}"
+                    bind:editValue="@{viewModel.volumeWt}"
                     bind:labelValue="@{`VOL W/T`}" />
             </LinearLayout>
 
@@ -195,7 +195,7 @@
                     android:id="@+id/wtSum"
                     layout="@layout/cust_label_edit"
                     bind:editValue="@{viewModel.wtSum}"
-                    bind:labelValue="@{`Volumn W/T 합`}" />
+                    bind:labelValue="@{`Volume W/T 합`}" />
             </LinearLayout>
 
             <LinearLayout
@@ -211,7 +211,7 @@
                 <include
                     android:id="@+id/volumeList"
                     layout="@layout/cust_label"
-                    bind:labelValue="@{`Volumn 목록`}" />
+                    bind:labelValue="@{`Volume 목록`}" />
             </LinearLayout>
 
         </GridLayout>

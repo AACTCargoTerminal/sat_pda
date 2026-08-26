@@ -1,3 +1,11 @@
+import java.util.Properties
+
+val env = Properties().apply {
+    rootProject.file("env.properties")
+        .reader(Charsets.UTF_8)
+        .use { load(it) }
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,6 +27,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        buildConfigField("String", "SERVER_LIST", "\"${env["SERVER_LIST"]}\"")
+        buildConfigField("String", "DEFAULT_SERVER_IP", "\"${env["DEFAULT_SERVER_IP"]}\"")
+        buildConfigField("String", "SERVER_KEY", "\"${env["SERVER_KEY"]}\"")
+        buildConfigField("long", "SERVER_TIMEOUT", "${env["SERVER_TIMEOUT"]}L")
+        buildConfigField("String", "PROGRAM_ID", "\"${env["PROGRAM_ID"]}\"")
+        buildConfigField("String", "PDA_VERSION", "\"${env["PDA_VERSION"]}\"")
+        buildConfigField("String", "UPDATE_SERVER_IP", "\"${env["UPDATE_SERVER_IP"]}\"")
     }
 
     buildTypes {

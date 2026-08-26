@@ -46,26 +46,21 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
         item.disableEditText(binding.cargoDes.editText)
         item.strEditText(binding.pcs.editText)
         item.strEditText(binding.wt.editText)
-        item.disableEditText(binding.wt.editText)
 
 
         action.doneAction(binding.pcs.editText) {
             binding.wt.editText.requestFocus()
         }
 
-        action.doneAction(binding.wt.editText) {
-            infobdModel.setBreakDown()
-        }
-
         action.doneAction(binding.cargoNo.editText) {
             infobdModel.setInfo()
         }
 
-        infobdModel.cargoNo.observe(viewLifecycleOwner) {
-            if (it.length == 22) {
-                infobdModel.setInfo()
-            }
-            else {
+        action.textChange_after(binding.cargoNo.editText) { s ->
+            val cargoNo = s?.toString()?.trim() ?: ""
+
+            infobdModel.cargoNo.value = cargoNo
+            if (cargoNo.length == 19) {
                 infobdModel.setInfo()
             }
         }
@@ -113,9 +108,9 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
         }
 
         if (infobdModel.cargoNo.value.isNullOrEmpty()) {
-            infobdModel.setInfo()
-        } else {
             binding.cargoNo.editText.requestFocus()
+        } else {
+            infobdModel.setInfo()
         }
 
 
@@ -192,6 +187,7 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
                         }
                         if (infobdModel.hawb.value.isEmpty()) {
                             Common.sendError("HAWB이 입력이 안되었습니다.")
+                            return
                         }
 
                         //수량 체크
@@ -199,6 +195,7 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
                         val sumMfcsPcs = infobdModel.sumMfcsPcs.value?.toDoubleOrNull() ?: 0.0
                         if (sumPcs != sumMfcsPcs) {
                             Common.sendError("적하목록 수량과 하기수량이 불일치 합니다.")
+                            return
                         }
 
                         //입고화면으로 Route
@@ -221,11 +218,23 @@ class IMPORT_BD_WITH_NO_Fragment : BaseFragment() {
                     }
                 }
                 is BottomItem.Camera -> {
-                    item.onClick = fun(){
+                    item.onClick = fun() {
                         if (keboardFlag) {
                             keyboardCtl()
                         }
-                        infobdModel.setInfo()
+                        if (infobdModel.cargoNo.value.isNullOrEmpty()) {
+                            Common.sendError("화물번호가 없습니다.")
+                            return
+                        }
+
+                        val params1 = listOf<Pair<String, String>>(
+                            Pair("CARGO_CONTROL_SID", infobdModel.cargoSid),
+                            Pair("MAWB", infobdModel.mawb.value.orEmpty())
+                        )
+
+                        val camera = Route.Camera
+                        camera.params = params1
+                        Common.addNavigate(camera)
                     }
                 }
                 else -> null

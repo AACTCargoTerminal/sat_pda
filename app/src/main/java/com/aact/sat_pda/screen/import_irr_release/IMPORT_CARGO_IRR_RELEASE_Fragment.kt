@@ -32,6 +32,7 @@ class IMPORT_CARGO_IRR_RELEASE_Fragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        item.disableEditText(binding.cargoNo.editText)
         item.disableEditText(binding.mawb.editText)
         item.disableEditText(binding.hawb.editText)
         item.disableEditText(binding.assign.editText)
@@ -43,7 +44,7 @@ class IMPORT_CARGO_IRR_RELEASE_Fragment: BaseFragment() {
         item.disableEditText(binding.holdRemark.editText)
         item.disableEditText(binding.holdDate.editText)
         item.disableEditText(binding.holdTime.editText)
-
+        item.strEditText(binding.releaseRemark.editText)
 
         irrReleaseModel.releaseTypeIndex.observe(viewLifecycleOwner) { index ->
             if (index >= 0 && index < irrReleaseModel.releaseTypeList.size) {
@@ -51,22 +52,6 @@ class IMPORT_CARGO_IRR_RELEASE_Fragment: BaseFragment() {
                 irrReleaseModel.releaseTypeCode.postValue(code ?: "")
             }
         }
-
-        irrReleaseModel.cargoNo.observe(viewLifecycleOwner) {
-            if (it.isNullOrEmpty()) return@observe
-            else if(it.length == 19) {
-                irrReleaseModel.setInfo()
-            }
-        }
-
-        action.doneAction(binding.cargoNo.editText) {
-            if (keboardFlag) {
-                keyboardCtl()
-            }
-            irrReleaseModel.setInfo()
-        }
-
-
     }
 
     override fun onStart() {
@@ -87,6 +72,7 @@ class IMPORT_CARGO_IRR_RELEASE_Fragment: BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             Common.loadingOn(null)
 
+            irrReleaseModel.getHoldTypeList()
             irrReleaseModel.getReleaseTypeList()
 
             if (irrReleaseModel.releaseTypeList.isNotEmpty()) {
@@ -114,8 +100,7 @@ class IMPORT_CARGO_IRR_RELEASE_Fragment: BaseFragment() {
                 irrReleaseModel.cargoSid = cargoControlSid
                 irrReleaseModel.holdTypeCode = holdTypeCode
                 irrReleaseModel.cargoNo.value = cargoControlNo  // observe가 트리거되어 setInfo() 자동 호출
-            }
-            else if (irrReleaseModel.cargoSid.isNotEmpty()) {
+
                 irrReleaseModel.setInfo()
             }
 

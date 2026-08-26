@@ -63,6 +63,48 @@ class OPERATION_ULD_Fragment : BaseFragment() {
             }
         }
 
+        uldModel.contourCode.observe(viewLifecycleOwner) { contour ->
+            if (contour == "BULK" && uldModel.bulkFlag.value != true) {
+                uldModel.bulkFlag.value = true
+            }
+        }
+
+        uldModel.bulkFlag.observe(viewLifecycleOwner) { bulk ->
+            if (bulk == true) {
+                if (uldModel.contourCode.value != "BULK") {
+                    uldModel.contourCode.value = "BULK"
+                }
+            } else {
+                if (uldModel.contourCode.value == "BULK") {
+                    uldModel.contourCode.value = ""
+                }
+            }
+        }
+
+        action.textChange_after(binding.uldType.editText) {
+            if (uldModel.isUldSetting) {
+                return@textChange_after
+            }
+
+            uldModel.clearUldInfo()
+        }
+
+        action.textChange_after(binding.uldSerialNo.editText) {
+            if (uldModel.isUldSetting) {
+                return@textChange_after
+            }
+
+            uldModel.clearUldInfo()
+        }
+
+        action.textChange_after(binding.uldCarrier.editText) {
+            if (uldModel.isUldSetting) {
+                return@textChange_after
+            }
+
+            uldModel.clearUldInfo()
+        }
+
         action.doneAction(binding.fltNo.editText) {
             if (keboardFlag) {
                 keyboardCtl()
@@ -440,6 +482,14 @@ class OPERATION_ULD_Fragment : BaseFragment() {
                                     Common.loadingOff()
                                     return@launch
                                 }
+
+                                val validAgain = uldModel.setULDValid()
+
+                                if (!validAgain) {
+                                    Common.sendError("입력한 ULD가 재고에 없거나, 적합하지 않습니다.")
+                                    Common.loadingOff()
+                                    return@launch
+                                }
                             }else{
                                 val uldNo =
                                     uldModel.uldType.value + uldModel.uldSerialNo.value + uldModel.uldCarrier.value
@@ -478,7 +528,16 @@ class OPERATION_ULD_Fragment : BaseFragment() {
                 }
 
                 is BottomItem.Tmp02 ->{
-                    item.onClick={
+                    item.onClick = fun() {
+                        if (keboardFlag) {
+                            keyboardCtl()
+                        }
+
+                        if (uldModel.operationSid.isEmpty()) {
+                            Common.sendError("저장되지 않은 작업ULD입니다.")
+                            return
+                        }
+
                         val uldNo =
                             uldModel.uldType.value + uldModel.uldSerialNo.value + uldModel.uldCarrier.value
                         val originParams = listOf(

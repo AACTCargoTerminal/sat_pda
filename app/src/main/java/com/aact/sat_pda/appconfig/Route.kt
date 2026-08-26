@@ -48,6 +48,7 @@ import com.aact.sat_pda.screen.uld_mawb.OPERATION_ULD_MAWBLIST_Fragment
 import com.aact.sat_pda.screen.uld_scale.OPERATION_ULD_SCALE_Fragment
 import com.aact.sat_pda.screen.uldlist.OPERATION_ULD_LIST_Fragment
 import com.aact.sat_pda.screen.volume.CARGO_VOLUME_Fragment
+import com.aact.sat_pda.screen.pallet.PALLET_UPDATE_Fragment
 
 sealed class Route(
     val route: String,
@@ -180,8 +181,11 @@ sealed class Route(
             cargoIn.name = "입고"
             val cargoCancel = BottomItem.Exit
             cargoCancel.name = "입고취소"
+            val volume = BottomItem.Tmp01
+            volume.name = "부피"
             val list = listOf(
                 BottomItem.Scale,
+                volume,
                 update,
                 BottomItem.Location,
                 cargoIn,
@@ -198,8 +202,11 @@ sealed class Route(
         override fun fragment(): Fragment = CAMERA_Fragment()
         override fun bottomItems(): List<BottomItem> {
             BottomItem.setDefault()
+            val delete = BottomItem.Tmp01
+            delete.name = "삭제"
             val list = listOf(
                 BottomItem.Save,
+                BottomItem.Delete
             )
             return list
         }
@@ -225,6 +232,8 @@ sealed class Route(
             volume.name = "부피"
             val cargoIn = BottomItem.Add
             cargoIn.name = "입고"
+            val upt = BottomItem.Tmp01
+            upt.name = "파렛트수정"
 
             val list = listOf(
                 BottomItem.KeyBoard to execute,
@@ -233,7 +242,8 @@ sealed class Route(
                 volume to create,
                 cargoIn to create,
                 BottomItem.List to create,
-                BottomItem.Print to print,
+                upt to update,
+                BottomItem.Print to print
             )
             return list.filter { (_, permission) -> permission == "Y" }
                 .map { (item, _) -> item }
@@ -519,10 +529,13 @@ sealed class Route(
             val irrRelease = BottomItem.Tmp01
             irrRelease.name = "보류해제"
 
+            val update = BottomItem.Save
+            update.name = "수정"
+
             val list = listOf(
                 BottomItem.KeyBoard,
                 BottomItem.Add,
-                BottomItem.Save,
+                update,
                 irrRelease,
                 BottomItem.Camera
 
@@ -613,12 +626,12 @@ sealed class Route(
 
             BottomItem.setDefault()
 
-            val cancel = BottomItem.List
-            cancel.name = "목록"
+            val search = BottomItem.Search
+            search.name = "조회"
 
             val list = listOf(
                 BottomItem.KeyBoard,
-                cancel
+                search
             )
 
             return list
@@ -792,6 +805,25 @@ sealed class Route(
                 BottomItem.KeyBoard,
                 save,
                 cancel
+            )
+
+            return list
+        }
+    }
+
+    object PalletUpdate : Route("palletUpdate", "총 파렛트 수정") {
+        override fun fragment(): Fragment = PALLET_UPDATE_Fragment()
+
+        override fun bottomItems(): List<BottomItem> {
+
+            BottomItem.setDefault()
+
+            val save  = BottomItem.Save
+            save .name = "저장"
+
+            val list = listOf(
+                BottomItem.KeyBoard,
+                save
             )
 
             return list

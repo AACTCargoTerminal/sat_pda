@@ -45,8 +45,13 @@ class OPERATION_ULD_SCALE_Fragment : BaseFragment() {
         binding.dollyWeight.editText.showSoftInputOnFocus = false
         item.disableEditText(binding.scaleUser.editText)
 
-        item.setSpiner_Str(view.context, binding.scaleNo.combo,uldModel.scaleNoList) {
-            uldModel.scaleNoSelect.value = it
+        item.setSpiner_Str(view.context, binding.scaleNo.combo,uldModel.scaleNoList) { selected ->
+            uldModel.scaleNoSelect.value = selected
+
+            when (selected) {
+                "1:10FT" -> uldModel.dollyWeight.value = "0"
+                "2:20FT" -> uldModel.dollyWeight.value = "3720"
+            }
         }
 
         uldModel.scaleNoSelect.observe(viewLifecycleOwner) {
@@ -102,7 +107,11 @@ class OPERATION_ULD_SCALE_Fragment : BaseFragment() {
             binding.fltDate.editText.setText(result)
             binding.fltDate.editText.setSelection(result.length)
 
-            if (result.replace("-", "").length != 8) {
+            if (result.replace("-", "").length == 8) {
+                lifecycleScope.launch {
+                    uldModel.setFlight(false)
+                }
+            } else {
                 uldModel.fltNo.value = ""
                 uldModel.fltSelect = ""
                 uldModel.fltDest.value = ""
@@ -138,11 +147,6 @@ class OPERATION_ULD_SCALE_Fragment : BaseFragment() {
         action.doneAction(binding.fltDest.editText) {
             if (keboardFlag) {
                 keyboardCtl()
-            }
-
-            if (uldModel.fltSelect.isEmpty()) {
-                Common.sendError("편번을 선택해주세요")
-                return@doneAction
             }
 
             lifecycleScope.launch {

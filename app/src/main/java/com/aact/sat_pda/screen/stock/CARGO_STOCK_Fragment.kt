@@ -34,6 +34,7 @@ class CARGO_STOCK_Fragment: BaseFragment() {
 
         //2. Edit부분 변수설정
         val acceptDate = binding.acceptDate.editText
+        val acceptSeq = binding.acceptSeq.editText
         val mawb = binding.mawb.editText
         val hawb = binding.hawb.editText
         val fltDate = binding.fltdate.editText
@@ -48,6 +49,7 @@ class CARGO_STOCK_Fragment: BaseFragment() {
         //3. Edit부분 변경 기본 숫자입력 키보드 안올라오게 설정해줘야됨 ( readOnly : itemProc.disable... , 한글가능처리 : itemProc.str... 외 키보드안올라오게 )
 
         item.disableEditText(acceptDate)
+        item.disableEditText(acceptSeq)
         item.disableEditText(mawb)
         item.disableEditText(hawb)
         item.disableEditText(fltDate)
@@ -111,7 +113,7 @@ class CARGO_STOCK_Fragment: BaseFragment() {
             val temp2 = route.params.find { it.first == "CARGO_ACCEPT_SEQ" }?.second ?: ""
             val temp3 = route.params.find { it.first == "AUTO_FLAG" }?.second ?: ""
             cargoStockModel.acceptSid = temp1
-            cargoStockModel.acceptSeq = temp2
+            cargoStockModel.acceptSeq.value = temp2
             cargoStockModel.autoFlag = temp3
         }
         cargoStockModel.getInfo()

@@ -219,6 +219,45 @@ class MainAPI_Impl : MainAPI {
         }
     }
 
+    override suspend fun setPCM_PDA_M010_021_001(
+        I_OBJECT_SID: String,
+        I_EDM_SID: String
+    ): Result<DataTable> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val reqData = mapOf(
+                    "I_OBJECT_SID" to I_OBJECT_SID,
+                    "I_EDM_SID" to I_EDM_SID,
+                    "I_LANGUAGE_CODE" to Common.langCode.value,
+                    "GUID" to Util.getGUID(),
+                    "I_REQUEST_USER_ID" to Common.userId.value,
+                    "I_REQUEST_IP_ADDRESS" to Common.userTerminalIp.value,
+                    "I_REQUEST_PROGRAM_ID" to Common.programId
+                )
+
+                val result = Util.sendAPI(
+                    reqData = reqData,
+                    methodName = "setPCM_PDA_M010_021_001"
+                )
+
+                when (result) {
+                    is Result.Success -> {
+                        Result.Success(result.data)
+                    }
+
+                    is Result.Error -> {
+                        Result.Error(result.message)
+                    }
+                }
+
+            } catch (e: CancellationException) {
+                Result.Error("작업이 취소되었습니다.")
+            } catch (e: Exception) {
+                Result.Error(e.message ?: "API.setPCM_PDA_M010_021_001")
+            }
+        }
+    }
+
     override suspend fun getPWM_CARGO_CONTROL_M010_001_002(I_CARGO_CONTROL_SID: String): Result<DataTable> {
         return withContext(Dispatchers.IO) {
             try {
@@ -1017,7 +1056,8 @@ class MainAPI_Impl : MainAPI {
         I_AGENT_CUSTOMER_NAME: String,
         I_GOSHOW_FLAG: String,
         I_FROM_WAREHOUSE_FLAG: String,
-        I_BUP_FLAG: String
+        I_BUP_FLAG: String,
+        I_NO_OF_PALLET: String
     ): Result<DataTable> {
         return withContext(Dispatchers.IO) {
             try {
@@ -1035,6 +1075,7 @@ class MainAPI_Impl : MainAPI {
                     "I_GOSHOW_FLAG" to I_GOSHOW_FLAG,
                     "I_FROM_WAREHOUSE_FLAG" to I_FROM_WAREHOUSE_FLAG,
                     "I_BUP_FLAG" to I_BUP_FLAG,
+                    "I_NO_OF_PALLET" to I_NO_OF_PALLET,
                     "I_LANGUAGE_CODE" to Common.langCode.value,
                     "I_PROGRESS_GUID" to Util.getGUID(),
                     "I_REQUEST_USER_ID" to Common.userId.value,
@@ -1061,6 +1102,48 @@ class MainAPI_Impl : MainAPI {
                 Result.Error(e.message ?: "API.setPWM_CARGO_ACCEPT_M010_011")
             }
 
+        }
+    }
+
+    override suspend fun setPWM_CARGO_ACCEPT_M010_013(
+        I_CARGO_ACCEPT_SID: String,
+        I_NO_OF_PALLET: String
+    ): Result<DataTable> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val reqData = mapOf<String, String>(
+                    "I_CARGO_ACCEPT_SID" to I_CARGO_ACCEPT_SID,
+                    "I_NO_OF_PALLET" to I_NO_OF_PALLET,
+                    "I_LANGUAGE_CODE" to Common.langCode.value,
+                    "I_PROGRESS_GUID" to Util.getGUID(),
+                    "I_REQUEST_USER_ID" to Common.userId.value,
+                    "I_REQUEST_IP_ADDRESS" to Common.userTerminalIp.value,
+                    "I_REQUEST_PROGRAM_ID" to Common.programId
+                )
+
+                val result = Util.sendAPI(
+                    reqData = reqData,
+                    methodName = "setPWM_CARGO_ACCEPT_M010_013"
+                )
+
+                when (result) {
+                    is Result.Success -> {
+                        Result.Success(result.data)
+                    }
+
+                    is Result.Error -> {
+                        Result.Error(result.message)
+                    }
+                }
+
+            } catch (e: CancellationException) {
+                Result.Error("작업이 취소되었습니다.")
+
+            } catch (e: Exception) {
+                Result.Error(
+                    e.message ?: "API.setPWM_CARGO_ACCEPT_M010_013"
+                )
+            }
         }
     }
 
@@ -1784,6 +1867,42 @@ class MainAPI_Impl : MainAPI {
                 Result.Error(e.message ?: "API.setPWM_CARGO_DAMAGE_M010_016")
             }
 
+        }
+    }
+
+    override suspend fun setPWM_CARGO_DAMAGE_M010_016_001(
+        I_DAMAGE_EXPORT_SID: String,
+        I_EDM_SID: String
+    ): Result<DataTable> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val reqData = mapOf(
+                    "I_DAMAGE_EXPORT_SID" to I_DAMAGE_EXPORT_SID,
+                    "I_EDM_SID" to I_EDM_SID,
+                    "I_LANGUAGE_CODE" to Common.langCode.value,
+                    "GUID" to Util.getGUID(),
+                    "I_REQUEST_USER_ID" to Common.userId.value,
+                    "I_REQUEST_IP_ADDRESS" to Common.userTerminalIp.value,
+                    "I_REQUEST_PROGRAM_ID" to Common.programId
+                )
+
+                val result = Util.sendAPI(
+                    reqData = reqData,
+                    methodName = "setPWM_CARGO_DAMAGE_M010_016_001"
+                )
+                when (result) {
+                    is Result.Success -> {
+                        Result.Success(result.data)
+                    }
+
+                    is Result.Error -> Result.Error(result.message)
+                }
+
+            } catch (e: CancellationException) {
+                Result.Error("작업이 취소되었습니다.")
+            } catch (e: Exception) {
+                Result.Error(e.message?: "API.setPWM_CARGO_DAMAGE_M010_016_001")
+            }
         }
     }
 

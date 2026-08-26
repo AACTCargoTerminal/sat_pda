@@ -23,6 +23,7 @@ class OPERATION_ULD_Model : ViewModel() {
     val api = MainAPI_Impl()
 
     var isEditing = false
+    var isUldSetting = false
 
     var uldNo = ""
     var operationSid = ""
@@ -217,9 +218,13 @@ class OPERATION_ULD_Model : ViewModel() {
         if (arg1.length <= 5) {
             return
         }
+        isUldSetting = true
+
         uldType.value = arg1.substring(0, 3)
         uldCarrier.value = arg1.substring(arg1.length - 2)
         uldSerialNo.value = arg1.substring(3, arg1.length - 2)
+
+        isUldSetting = false
     }
 
     fun getInfo() {
@@ -271,6 +276,24 @@ class OPERATION_ULD_Model : ViewModel() {
                             Util.changeDate(Util.getTableCell(0, data[1], "FLIGHT_DATE"))
 
                         fltNo.value = Util.getTableCell(0, data[1], "FLIGHT_NO")
+
+                        if (fltNo.value.isNotEmpty()) {
+                            setFlight(false)
+                            val findData =
+                                fltList.find { row ->
+                                    Util.getStr(row.row["FLIGHT_NO"]) == fltNo.value
+                                }
+                            if (findData != null) {
+                                fltSelect = Util.getStr(findData.row["SCHEDULE_SID"])
+                            } else {
+                                fltNo.value = ""
+                                fltSelect = ""
+                            }
+                        } else {
+                            fltNo.value = ""
+                            fltSelect = ""
+                        }
+
                         fltOrigin = Util.getTableCell(0, data[1], "ORIGIN_CODE")
                         fltDest.value = Util.getTableCell(0, data[1], "DESTINATION_CODE")
                         fltDestName = Util.getTableCell(0, data[1], "DESTINATION_CODE")
@@ -346,7 +369,7 @@ class OPERATION_ULD_Model : ViewModel() {
         val ret = api.getPWM_ULD_INVENTORY_P020_001(
             "",
             "",
-            uldType.value + uldSerialNo + uldCarrier.value,
+            uldType.value + uldSerialNo.value + uldCarrier.value,
             "Y"
         )
 
@@ -462,7 +485,7 @@ class OPERATION_ULD_Model : ViewModel() {
             is Result.Success<DataTable> -> {
                 val data = ret.data.table
                 if (Util.getTableCell(0, data[0], "COL1") == "OK") {
-
+                    uldValid = ""
                     return true
 
                 } else {
@@ -506,6 +529,28 @@ class OPERATION_ULD_Model : ViewModel() {
         transAt.value = ""
         transFlt.value = ""
 
+    }
+
+    fun clearUldInfo() {
+        operationSid = ""
+        uldValid = ""
+
+        position.value = ""
+
+        bupFlag.value = true
+        bulkFlag.value = false
+        thruFlag.value = false
+        raFlag.value = false
+
+        status.value = ""
+        uldWeight.value = ""
+        bdWeight.value = ""
+        bdPcs.value = ""
+        originScaleWt = ""
+
+        agent.value = ""
+        agentName = ""
+        remark.value = ""
     }
 
     fun setDelete() {
@@ -642,10 +687,10 @@ class OPERATION_ULD_Model : ViewModel() {
     }
 
     fun printClick() {
-        var ip = "CARGOACCEPT"
+        var ip = "SCALE#2"
 
-        if (Common.terminalCode.value == "T2") {
-            ip = "CARGOACCEPT_T2"
+        if (Common.terminalCode.value != "T1") {
+            ip += "_" + Common.terminalCode.value
         }
 
         val agent_tmp = agent.value

@@ -38,6 +38,7 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
 
         val fltDateEdit = binding.fltdate.editText
         fltDateEdit.showSoftInputOnFocus = false
+        item.disableEditText(binding.totalCount.editText)
         item.disableEditText(binding.i00Count.editText)
         item.disableEditText(binding.i02Count.editText)
         item.disableEditText(binding.i03Count.editText)
@@ -94,8 +95,10 @@ class IMPORT_INFO_LIST_Fragment : BaseFragment() {
         }
 
 
-        infoListModel.fltDate.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
+        infoListModel.fltDate.observe(viewLifecycleOwner) { date ->
+            val date8 = date.replace("-", "")
+
+            if (date8.length == 8) {
                 infoListModel.getFlight()
             }
         }

@@ -21,7 +21,6 @@ class CARGO_STOCK_Model : ViewModel() {
     val api = MainAPI_Impl()
     val biz = BizAPI()
     var acceptSid = ""
-    var acceptSeq = ""
     var autoFlag = ""
 
     val positionList = MutableLiveData<List<DataRow>>(emptyList())
@@ -29,6 +28,7 @@ class CARGO_STOCK_Model : ViewModel() {
     val rackList = MutableLiveData<List<String>>(emptyList())
     val spcFlagList = listOf("N", "Y")
 
+    val acceptSeq = MutableLiveData<String>("")
     val acceptDate = MutableLiveData<String>("")
     val mawb = MutableLiveData<String>("")
     val hawb = MutableLiveData<String>("")
@@ -122,7 +122,7 @@ class CARGO_STOCK_Model : ViewModel() {
                                     rackNo.value = rack
                                 }
 
-                                if(autoFlag == "Y" && spc.value.length == 0){
+                                if(autoFlag == "Y" &&spc.value.isEmpty() &&!position.value?.first.isNullOrEmpty() &&!rackNo.value.isNullOrEmpty()){
                                     setCargoIn()
                                 }
 
@@ -172,7 +172,7 @@ class CARGO_STOCK_Model : ViewModel() {
             val ret = api.setPWM_CARGO_STOCK_M010_011(
                 acceptSid,
                 currDT.substring(0, 8),
-                currDT.substring(8, 12),
+                currDT.substring(8, 14),
                 positionObj.first,
                 rackObj,
                 spcFlag.value

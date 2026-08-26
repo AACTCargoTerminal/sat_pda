@@ -202,6 +202,7 @@
                 <include
                     android:id="@+id/unloadCode"
                     layout="@layout/cust_label_edit"
+                    bind:editValue="@{viewModel.unloadCode}"
                     bind:labelValue="@{`하기물품유형코드`}" />
             </LinearLayout>
             <LinearLayout

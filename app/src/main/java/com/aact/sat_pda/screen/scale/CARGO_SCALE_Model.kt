@@ -43,9 +43,9 @@ class CARGO_SCALE_Model : ViewModel() {
     var customerCode = ""
     val pcs = MutableLiveData<String>("")
     val spc = MutableLiveData<String>("")
-    val palletPcs = MutableLiveData<String>("")
+    val palletPcs = MutableLiveData<String>("1")
     val palletWt = MutableLiveData<String>("")
-    val volumnWt = MutableLiveData<String>("")
+    val volumeWt = MutableLiveData<String>("")
     val acceptPcs = MutableLiveData<String>("")
     val acceptWt = MutableLiveData<String>("")
     val mfstPcs = MutableLiveData<String>("")
@@ -120,21 +120,52 @@ class CARGO_SCALE_Model : ViewModel() {
         val scaleSelect = scaleRadioSelect.value
         val terminalCode = Common.terminalCode.value
 
-        when {
+        val ip1 = "WGIP#1"
+        val ip2 = "WGIP#2"
+        val ip3 = "WGIP#3"
+        val ip6 = "WGIP#6"
 
-            scaleSelect == 0 && terminalCode == "T1" -> ip = "CARGOXRAY"
-            scaleSelect == 0 && terminalCode == "T2" -> ip = "CARGOXRAY_T2"
-            scaleSelect == 1 && terminalCode == "T1" -> ip = "CARGOACCEPT"
-            scaleSelect == 1 && terminalCode == "T2" -> ip = "CARGOACCEPT_T2"
-            scaleSelect == 2 && terminalCode == "T1" -> ip = "CARGOBUP"
-            scaleSelect == 2 && terminalCode == "T2" -> ip = "CARGOBUP_T2"
-            scaleSelect == 3 && terminalCode == "T1" -> ip = "CARGOXRAY2"
-            scaleSelect == 3 && terminalCode == "T2" -> ip = "CARGOXRAY2_T2"
-            else -> {
-                Common.sendError("알수 없는 Scale입니다.")
-                return
+        when (scaleSelect) {
+            0 -> {
+                ip =
+                    if (terminalCode == "T1") {
+                        ip1
+                    } else {
+                        "${ip1}_${terminalCode}"
+                    }
             }
 
+            1 -> {
+                ip =
+                    if (terminalCode == "T1") {
+                        ip2
+                    } else {
+                        "${ip2}_${terminalCode}"
+                    }
+            }
+
+            2 -> {
+                ip =
+                    if (terminalCode == "T1") {
+                        ip3
+                    } else {
+                        "${ip3}_${terminalCode}"
+                    }
+            }
+
+            3 -> {
+                ip =
+                    if (terminalCode == "T1") {
+                        ip6
+                    } else {
+                        "${ip6}_${terminalCode}"
+                    }
+            }
+
+            else -> {
+                Common.sendError("알 수 없는 Scale 입니다.")
+                return
+            }
         }
 
         viewModelScope.launch {
@@ -151,7 +182,7 @@ class CARGO_SCALE_Model : ViewModel() {
 
                         if (Util.getTableCell(0, status, "COL1") == "OK") {
                             weight.value = Util.getTableCell(0, status, "COL3")
-                            Common.suc.value = "Scale이 완료됬습니다."
+                            Common.suc.value = "Scale이 완료됐습니다."
                         } else {
                             Common.sendError(Util.getTableCell(0, status, "COL2"))
                         }
@@ -190,24 +221,24 @@ class CARGO_SCALE_Model : ViewModel() {
                             data[1]?.let { data1 ->
                                 val tempList = linkedMapOf<String, String>()
                                 if (data1.size > 0) {
-                                    tempList.put("", "")
 
                                     data1.forEach { cells ->
                                         val addStr =
-                                            Util.getStr(cells.row["CARGO_ACCEPT_SEQ"]) + " : " +  cells.row["ACCEPTED_TIME"] + " , " + Util.getStr(cells.row["CARGO_STATUS_CODE"])
+                                            Util.getStr(cells.row["CARGO_ACCEPT_SEQ"]) + " : " +  cells.row["ACCEPTED_TIME"] + " , " + Util.getStr(cells.row["CARGO_STATUS_CODE"]) + " , " + Util.getStr(cells.row["NO_OF_PALLET"])
                                         tempList.put(
                                             Util.getStr(cells.row["CARGO_ACCEPT_SID"]),
                                             addStr
                                         )
                                         cargoStatusCode = Util.getStr(cells.row["CARGO_STATUS_CODE"])
                                     }
+                                    val lastIndex = data1.size - 1
 
                                     cargoControlSid =
-                                        Util.getTableCell(0, data1, "CARGO_CONTROL_SID")
+                                        Util.getTableCell(lastIndex, data1, "CARGO_CONTROL_SID")
                                     acceptSelect.value =
-                                        Util.getTableCell(0, data1, "CARGO_ACCEPT_SID")
+                                        Util.getTableCell(lastIndex, data1, "CARGO_ACCEPT_SID")
                                     acceptSeq.value =
-                                        Util.getTableCell(0, data1, "CARGO_ACCEPT_SEQ")
+                                        Util.getTableCell(lastIndex, data1, "CARGO_ACCEPT_SEQ")
 
                                 }
                                 acceptList.value = tempList
@@ -229,7 +260,7 @@ class CARGO_SCALE_Model : ViewModel() {
                                     }
 
                                 }
-                                Common.suc.value = "조회가 완료됬습니다."
+                                Common.suc.value = "조회가 완료됐습니다."
                             }
                         } else {
                             setClearAll()
@@ -289,7 +320,7 @@ class CARGO_SCALE_Model : ViewModel() {
                     mfstWt.value = Util.getTableCell(0, data[1], "MFST_NET_WEIGHT")
                     acceptPcs.value = Util.getTableCell(0, data[1], "ACCEPT_NO_OF_PACKAGE")
                     acceptWt.value = Util.getTableCell(0, data[1], "ACCEPT_NET_WEIGHT")
-                    volumnWt.value = Util.getTableCell(0, data[2], "SUM_VOLUME_WEIGHT")
+                    volumeWt.value = Util.getTableCell(0, data[2], "SUM_VOLUME_WEIGHT")
                 } else {
                     Common.sendError(Util.getTableCell(0, data[0], "COL2", "조회에러"))
                 }
@@ -338,7 +369,7 @@ class CARGO_SCALE_Model : ViewModel() {
         spc.value = ""
         palletPcs.value = ""
         palletWt.value = ""
-        volumnWt.value = ""
+        volumeWt.value = ""
         acceptPcs.value = ""
         acceptWt.value = ""
         mfstPcs.value = ""
@@ -370,8 +401,26 @@ class CARGO_SCALE_Model : ViewModel() {
                 }
             }
 
+            val wt = Util.getDouble(weight.value)
+            val palletCntText = Util.getStr(palletPcs.value).trim()
+            val palletCnt = Util.getDouble(palletPcs.value)
+
+            val palletIndex = palletSelect.value ?: -1
+
+            if (palletIndex < 0 && wt != 0.0) {
+                Common.sendError("파렛트를(필수선택) 확인하십시요.")
+                Common.loadingOff()
+                return@launch
+            }
+
             if (Util.getDouble(netWt.value) < 0.0) {
                 Common.sendError("순중량이 (-) 입니다. PCS, WT, 파렛트 수량을 확인하여 주십시요.")
+                Common.loadingOff()
+                return@launch
+            }
+
+            if (palletCntText == "" || palletCnt < 0.0) {
+                Common.sendError("총 파렛트 값을 확인해주세요.")
                 Common.loadingOff()
                 return@launch
             }
@@ -392,7 +441,8 @@ class CARGO_SCALE_Model : ViewModel() {
                     Util.getStr(agentName.value),
                     "N",
                     "N",
-                    "N"
+                    "N",
+                    palletCntText
                 )
 
                 when (ret) {
@@ -480,7 +530,7 @@ class CARGO_SCALE_Model : ViewModel() {
         weight.value = ""
         netWt.value = ""
         palletWt.value = ""
-        palletPcs.value = ""
+        palletPcs.value = "1"
     }
 
     fun printClick(){
@@ -493,25 +543,53 @@ class CARGO_SCALE_Model : ViewModel() {
 
             val scaleSelect = scaleRadioSelect.value
             val terminalCode = Common.terminalCode.value
-            if(scaleSelect == 0&& terminalCode == "T1"){
-                printIp = "SCALE#1"
-            }else if(scaleSelect == 0 && terminalCode == "T2"){
-                printIp = "SCALE#1_T2"
-            }else if(scaleSelect == 1 && terminalCode == "T1"){
-                printIp = "SCALE#2"
-            }else if(scaleSelect == 1 && terminalCode == "T2"){
-                printIp = "SCALE#2_T2"
-            }else if(scaleSelect == 2 && terminalCode == "T1"){
-                printIp = "SCALE#3"
-            }else if(scaleSelect == 2 && terminalCode == "T2"){
-                printIp = "SCALE#3_T2"
-            }else if(scaleSelect == 3 && terminalCode == "T1"){
-                printIp = "SCALE#X2"
-            }else if(scaleSelect == 3 && terminalCode == "T2"){
-                printIp = "SCALE#X2_T2"
-            }else {
-                Common.sendError("알 수 없는 Scale 입니다.")
-                return
+
+            val printIp1 = "SCALE#1"
+            val printIp2 = "SCALE#2"
+            val printIp3 = "SCALE#3"
+            val printIpX2 = "SCALE#X2"
+
+            when (scaleSelect) {
+                0 -> {
+                    printIp =
+                        if (terminalCode == "T1") {
+                            printIp1
+                        } else {
+                            "${printIp1}_${terminalCode}"
+                        }
+                }
+
+                1 -> {
+                    printIp =
+                        if (terminalCode == "T1") {
+                            printIp2
+                        } else {
+                            "${printIp2}_${terminalCode}"
+                        }
+                }
+
+                2 -> {
+                    printIp =
+                        if (terminalCode == "T1") {
+                            printIp3
+                        } else {
+                            "${printIp3}_${terminalCode}"
+                        }
+                }
+
+                3 -> {
+                    printIp =
+                        if (terminalCode == "T1") {
+                            printIpX2
+                        } else {
+                            "${printIpX2}_${terminalCode}"
+                        }
+                }
+
+                else -> {
+                    Common.sendError("알 수 없는 Scale 입니다.")
+                    return
+                }
             }
 
             viewModelScope.launch {
@@ -524,7 +602,7 @@ class CARGO_SCALE_Model : ViewModel() {
                     is Result.Success<DataTable> -> {
                         val data = ret.data.table
                         if(Util.getTableCell(0,data[0],"COL1")=="OK"){
-                            Common.suc.value = "출력이 완료됫습니다."
+                            Common.suc.value = "출력이 완료됐습니다."
                         }else{
                             Util.getTableCell(0,data[0],"COL2")
                         }

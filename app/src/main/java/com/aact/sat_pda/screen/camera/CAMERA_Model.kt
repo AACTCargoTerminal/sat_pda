@@ -58,13 +58,7 @@ class CAMERA_Model : ViewModel() {
                 is Result.Success<DataTable> -> {
                     val data = ret.data.table
                     if (Util.getTableCell(0, data[0], "COL1") == "OK") {
-
-                        data[1]?.let { data1 ->
-                            cameraList.value = data1
-                        } ?: run {
-                            cameraList.value = emptyList()
-                        }
-
+                        setCameraList(data[1])
                     } else {
                         Common.sendError(Util.getTableCell(0, data[0], "COL2"))
                     }
@@ -73,6 +67,10 @@ class CAMERA_Model : ViewModel() {
 
             Common.loadingOff()
         }
+    }
+
+    private fun setCameraList(data: List<DataRow>?) {
+        cameraList.value = data?.reversed() ?: emptyList()
     }
 
     fun parseAndUpload(context: Context, uri: Uri) {
@@ -107,11 +105,7 @@ class CAMERA_Model : ViewModel() {
                         val data = ret.data.table
                         if(Util.getTableCell(0,data[0],"COL1")=="OK"){
                             Common.suc.value = "저장 됐습니다."
-                            data[1]?.let { data1 ->
-                                cameraList.value = data1
-                            }?:run {
-                                cameraList.value = emptyList()
-                            }
+                            setCameraList(data[1])
                         }else{
                             Common.sendError(Util.getTableCell(0,data[0],"COL2"))
                         }
@@ -152,6 +146,51 @@ class CAMERA_Model : ViewModel() {
             } catch (e: Exception) {
                 null
             }
+        }
+    }
+
+    fun deletePicture() {
+        viewModelScope.launch {
+            Common.loadingOn(coroutineContext[Job])
+
+            val edmSid = cameraSelect.value?.get("EDM_SID") ?: ""
+
+            if (edmSid.isEmpty()) {
+                Common.sendError("선택한 항목이 없습니다.")
+                Common.loadingOff()
+                return@launch
+            }
+
+            val ret: Result<DataTable>
+
+            if (damageExportSid.isEmpty()) {
+                ret = api.setPCM_PDA_M010_021_001(cargoControlSid,edmSid)
+            } else {
+                ret = api.setPWM_CARGO_DAMAGE_M010_016_001(damageExportSid,edmSid)
+            }
+
+            when (ret) {
+                is Result.Error -> {
+                    Common.sendError(ret.message)
+                }
+
+                is Result.Success<DataTable> -> {
+                    val data = ret.data.table
+
+                    if (
+                        Util.getTableCell(0,data[0],"COL1") == "OK"
+                    ) {
+                        Common.suc.value = "삭제됐습니다."
+                        setCameraList(data[1])
+                        cameraSelect.value = mapOf("EDM_SID" to "","SOURCE_FILE_NAME" to "")
+                    } else {
+                        Common.sendError(
+                            Util.getTableCell(0,data[0],"COL2")
+                        )
+                    }
+                }
+            }
+            Common.loadingOff()
         }
     }
 }

@@ -258,16 +258,19 @@ class CARGO_CONTROL_Fragment : BaseFragment() {
                 }
 
                 is BottomItem.Location -> {
-                    item.onClick = {
+                    item.onClick = fun(){
                         if (keboardFlag) {
                             keyboardCtl()
                         }
                         val params = listOf(
-                            Pair(
-                                "CARGO_CONTROL_SID",
-                                cargoModel.cargoControlSid
-                            )
+                            Pair("CARGO_CONTROL_SID", cargoModel.cargoControlSid)
                         )
+                        val acceptSid = cargoModel.selectList["CARGO_ACCEPT_SID"]
+
+                        if (acceptSid.isNullOrEmpty()) {
+                            Common.sendError("선택한 항목이 없습니다.")
+                            return
+                        }
                         // 이동
                         val location = Route.Location
                         location.params = params
@@ -311,6 +314,39 @@ class CARGO_CONTROL_Fragment : BaseFragment() {
                         val scale = Route.Scale
                         scale.params = params
                         Common.addNavigate(scale)
+                    }
+                }
+                is BottomItem.Tmp01 -> {
+                    item.onClick = fun() {
+                        if (keboardFlag) {
+                            keyboardCtl()
+                        }
+
+                        val acceptSid = cargoModel.selectList["CARGO_ACCEPT_SID"]
+
+                        if (acceptSid.isNullOrEmpty()) {
+                            Common.sendError("선택한 항목이 없습니다.")
+                            return
+                        }
+
+                        val selectedRow = cargoModel.bodyList.value?.find {
+                            it.row["CARGO_ACCEPT_SID"] == acceptSid
+                        }
+
+                        val acceptTime = selectedRow?.row?.get("ACCEPTED_TIME") ?: ""
+
+                        val params = listOf(
+                            Pair("CARGO_CONTROL_SID", cargoModel.cargoControlSid),
+                            Pair("CARGO_ACCEPT_SID", acceptSid),
+                            Pair("CARGO_ACCEPT_TIME", acceptTime),
+                            Pair("MAWB", cargoModel.mawb.value.orEmpty()),
+                            Pair("FLIGHT_NO", cargoModel.fltNo.value.orEmpty()),
+                            Pair("FLIGHT_DATE", cargoModel.fltDate.value.orEmpty())
+                        )
+
+                        val volume = Route.Volume
+                        volume.params = params
+                        Common.addNavigate(volume)
                     }
                 }
 

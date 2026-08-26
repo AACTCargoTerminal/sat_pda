@@ -28,6 +28,7 @@ class IMPORT_BD_LIST_Model : ViewModel() {
 
     var scheduleSid = ""
     var terminalCode = ""
+    var prevFlightNo = ""
 
 
     var cargoNo = MutableLiveData<String>("")
@@ -46,7 +47,7 @@ class IMPORT_BD_LIST_Model : ViewModel() {
         HeaderDTO("STATUS_NAME","상태", 100),
         HeaderDTO("MFST_NO_OF_PACKAGE","예약수량", 100),
         HeaderDTO("ACCEPTED_NO_OF_PACKAGE","접수수량", 100),
-        HeaderDTO("STOCK_NO_OF_PACKAGE","재고수량", 100),
+        HeaderDTO("STOCK_NO_OF_PACKAGE","입고수량", 100),
         HeaderDTO("RELEASED_NO_OF_PACKAGE","출고수량", 100),
         HeaderDTO("MASTER_AIR_WAY_BILL_NO","MAWB", 200),
         HeaderDTO("HOUSE_AIR_WAY_BILL_NO","HAWB", 200),
@@ -56,6 +57,7 @@ class IMPORT_BD_LIST_Model : ViewModel() {
 
 
     fun setFlight() {
+        prevFlightNo = fltNo.value ?: ""
         val flt_date = (fltDate.value ?: "").replace("-", "")
 
         viewModelScope.launch {

@@ -79,6 +79,15 @@
                 android:orientation="horizontal">
 
                 <include
+                    android:id="@+id/totalCount"
+                    layout="@layout/cust_label_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    bind:editValue="@{viewModel.totalCount}"
+                    bind:labelValue="@{`전체`}" />
+
+                <include
                     android:id="@+id/i00Count"
                     layout="@layout/cust_label_edit"
                     android:layout_width="0dp"

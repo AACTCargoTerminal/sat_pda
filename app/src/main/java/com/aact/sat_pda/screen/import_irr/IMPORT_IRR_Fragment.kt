@@ -38,17 +38,30 @@ class IMPORT_IRR_Fragment : BaseFragment() {
         item.disableEditText(binding.assign.editText)
         item.disableEditText(binding.mfcsPcs.editText)
         item.disableEditText(binding.mfcsWt.editText)
+        item.limitEditText(binding.pcs.editText,8)
         binding.pcs.editText.showSoftInputOnFocus = false
+        item.limitEditText(binding.wt.editText,8)
         binding.wt.editText.showSoftInputOnFocus = false
+        item.limitEditText(binding.remark.editText,200)
         item.strEditText(binding.remark.editText)
+        item.limitEditText(binding.irrPcs.editText,8)
         binding.irrPcs.editText.showSoftInputOnFocus = false
+        item.limitEditText(binding.holdDate.editText,8)
         binding.holdDate.editText.showSoftInputOnFocus = false
+        item.limitEditText(binding.holdTime.editText,6)
         binding.holdTime.editText.showSoftInputOnFocus = false
 
         item.setSpiner_Str(view.context, binding.spFlag.combo, model.ynList) {
             model.spFlag.value = it
         }
 
+        model.spFlag.observe(viewLifecycleOwner) {
+            val index = model.ynList.indexOf(it)
+
+            if (index >= 0) {
+                binding.spFlag.combo.setSelection(index)
+            }
+        }
     }
 
     override fun onStart() {
@@ -106,6 +119,14 @@ class IMPORT_IRR_Fragment : BaseFragment() {
                 model.holdTypeCode = holdTypeCode
                 model.cargoNo.value = cargoControlNo
                 model.setInfo()
+
+                val selectedIndex = model.typeList.indexOfFirst {
+                    it.row["CODE_CODE"] == model.holdTypeCode
+                }
+
+                if (selectedIndex >= 0) {
+                    binding.holdType.combo.setSelection(selectedIndex)
+                }
             }
 
             Common.loadingOff()

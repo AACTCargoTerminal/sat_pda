@@ -42,8 +42,8 @@ class IMPORT_CARGO_IN_Model: ViewModel() {
     val location = MutableLiveData<String>("")
     val rackNo = MutableLiveData<String>("")
 
-    val ediFlag = MutableLiveData<String>("")
-    val spFlag = MutableLiveData<String>("")
+    val ediFlag = MutableLiveData<String>("N")
+    val spFlag = MutableLiveData<String>("N")
 
     val locationList = MutableLiveData<List<String>>()
     val rackNoList = MutableLiveData<List<String>>()
@@ -107,13 +107,11 @@ class IMPORT_CARGO_IN_Model: ViewModel() {
 
         if (cargoSid.isEmpty()){
             Common.sendError("입고처리 화물이 조회되지 않았습니다.")
-            Common.loadingOff()
             return
         }
 
         if (location.value.isNullOrEmpty() || rackNo.value.isNullOrEmpty()) {
             Common.sendError("입고위치, RackNo를 확인하십시오")
-            Common.loadingOff()
             return
         }
         viewModelScope.launch {
@@ -128,11 +126,14 @@ class IMPORT_CARGO_IN_Model: ViewModel() {
                                                             workWt.value)
 
                 when(ret) {
-                    is Result.Error -> Common.sendError(ret.message)
+                    is Result.Error -> {
+                        Common.sendError(ret.message)
+                        Common.loadingOff()
+                        return@launch
+                    }
                     is Result.Success<DataTable> -> {
                         val data = ret.data.table
-                        if (Util.getTableCell(0,data[0],"COL1")=="OK") {
-                        } else {
+                        if (Util.getTableCell(0,data[0],"COL1")!="OK") {
                             Common.sendError(Util.getTableCell(0,data[0],"COL2"))
                             Common.loadingOff()
                             return@launch

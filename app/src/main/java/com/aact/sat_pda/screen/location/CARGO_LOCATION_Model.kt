@@ -88,15 +88,15 @@ class CARGO_LOCATION_Model : ViewModel() {
                     if (Util.getTableCell(0, data[0], "COL1") == "OK") {
                         mawb.postValue(Util.getTableCell(0, data[1], "MASTER_AIR_WAY_BILL_NO"))
                         hawb.postValue(Util.getTableCell(0, data[1], "HOUSE_AIR_WAY_BILL_NO"))
-                        fltDate.postValue(Util.getTableCell(0, data[1], "FLIGHT_NO"))
-                        fltNo.postValue(Util.getTableCell(0, data[1], "FLIGHT_DATE"))
+                        fltDate.postValue(Util.getTableCell(0, data[1], "FLIGHT_DATE"))
+                        fltNo.postValue(Util.getTableCell(0, data[1], "FLIGHT_NO"))
 
                         data[2]?.let {
                             locationList.postValue(it)
                         } ?: run {
                             locationList.postValue(emptyList())
                         }
-                        Common.suc.value = "조회가 완료됬습니다."
+                        Common.suc.value = "조회가 완료됐습니다."
                     } else {
                         Common.sendError(Util.getTableCell(0, data[0], "COL2", "이동 조회 에러"))
                     }
@@ -158,8 +158,9 @@ class CARGO_LOCATION_Model : ViewModel() {
                         selectLocation =
                             mapOf("LOCATION_CODE" to "", "RACK_NO" to "", "NO_OF_PACKAGE" to "", "LOCATION_NAME" to "")
                         position.postValue(Pair("",""))
+                        rackNo.postValue("")
                         pcs.postValue("")
-                        Common.suc.value = "저장이 완료됬습니다."
+                        Common.suc.value = "저장이 완료됐습니다."
                         outParam("Y")
                         return@launch
                     }else{

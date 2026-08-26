@@ -47,7 +47,7 @@ class CARGO_ACCEPT_Fragment : BaseFragment() {
         item.disableEditText(binding.ec.editText)
         binding.mfcsPackage.editText.showSoftInputOnFocus = false
         binding.mfcsWeight.editText.showSoftInputOnFocus = false
-
+        binding.palletPackage.editText.showSoftInputOnFocus = false
 
         item.setSpiner_Str(view.context, binding.goShow.combo, acceptModel.ynList) {
             acceptModel.goshowSelect.value = it
@@ -73,6 +73,12 @@ class CARGO_ACCEPT_Fragment : BaseFragment() {
                 binding.bup.combo.setSelection(index)
             }
 
+            if (it == "Y") {
+                acceptModel.pltPcs.value = "0"
+                binding.palletPackage.editText.isEnabled = false
+            } else {
+                binding.palletPackage.editText.isEnabled = true
+            }
         }
         acceptModel.goshowSelect.observe(viewLifecycleOwner) {
             val index = acceptModel.ynList.indexOf(it)

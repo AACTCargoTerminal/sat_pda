@@ -37,6 +37,7 @@ class CARGO_ACCEPT_Model : ViewModel() {
     val agentName = MutableLiveData<String>("")
     val mfstPcs = MutableLiveData<String>("")
     val mfstWt = MutableLiveData<String>("")
+    val pltPcs = MutableLiveData<String>("")
     val goshowSelect = MutableLiveData<String>("N")
     val transSelect = MutableLiveData<String>("N")
     val bupSelect = MutableLiveData<String>("N")
@@ -114,7 +115,7 @@ class CARGO_ACCEPT_Model : ViewModel() {
                     if(Util.getTableCell(0,data[0],"COL1")=="OK"){
                         val data1 = data[1]
                         if(!data1.isNullOrEmpty()){
-                            Common.suc.value = "조회 됬습니다."
+                            Common.suc.value = "조회 됐습니다."
                             acceptSid = Util.getTableCell(0,data1,"CARGO_ACCEPT_SID")
                             fltDate.value = Util.getTableCell(0,data1,"FLIGHT_DATE")
                             fltNo.value = Util.getTableCell(0,data1,"FLIGHT_NO")
@@ -122,6 +123,7 @@ class CARGO_ACCEPT_Model : ViewModel() {
                             fltDest.value = Util.getTableCell(0,data1,"DESTINATION_CODE")
                             mfstPcs.value = Util.getTableCell(0,data1,"MFST_NO_OF_PACKAGE")
                             mfstWt.value = Util.getTableCell(0,data1,"MFST_NET_WEIGHT")
+                            pltPcs.value = Util.getTableCell(0, data1, "NO_OF_PALLET")
                             goshowSelect.value = Util.getTableCell(0,data1,"GOSHOW_FLAG")
                             transSelect.value = Util.getTableCell(0,data1,"FROM_WAREHOUSE_FLAG")
                             bupSelect.value = Util.getTableCell(0,data1,"BUP_FLAG")
@@ -143,6 +145,7 @@ class CARGO_ACCEPT_Model : ViewModel() {
         var agentCode_tmp = agentCode.value
         var agentName_tmp = agentName.value
         var fltDest_tmp = fltDest.value
+        val pltPcs_tmp = pltPcs.value
 
         if(mawb_tmp.length < 11){
             Common.sendError("MAWB를 확인해주세요")
@@ -195,7 +198,8 @@ class CARGO_ACCEPT_Model : ViewModel() {
                 agentName_tmp,
                 goshowSelect.value,
                 transSelect.value,
-                bupSelect.value)
+                bupSelect.value,
+                pltPcs_tmp)
             when(ret){
                 is Result.Error -> Common.sendError(ret.message)
                 is Result.Success<DataTable> -> {
@@ -238,6 +242,7 @@ class CARGO_ACCEPT_Model : ViewModel() {
         agentCode.value = ""
         mfstPcs.value = ""
         mfstWt.value = ""
+        pltPcs.value = ""
         goshowSelect.value = "N"
         transSelect.value = "N"
         bupSelect.value = "N"

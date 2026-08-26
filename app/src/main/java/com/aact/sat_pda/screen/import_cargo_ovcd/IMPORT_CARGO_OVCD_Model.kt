@@ -166,11 +166,6 @@ class IMPORT_CARGO_OVCD_Model : ViewModel() {
             return
         }
 
-        if(wt.value.isNullOrEmpty()) {
-            Common.sendError("중량을 확인하십시오.")
-            return
-        }
-
         if (scheduleSid.isEmpty()) {
             Common.sendError("편번을 선택하십시오.")
             return
@@ -190,8 +185,8 @@ class IMPORT_CARGO_OVCD_Model : ViewModel() {
                 origin.value ?: "",
                 dest.value ?: "",
                 "",
-                pcs.value ?: "0",
-                wt.value ?: "0",
+                "0",
+                "0",
                 pcs.value ?: "0",
                 wt.value ?: "0",
                 holdTypeCode.value ?: "",

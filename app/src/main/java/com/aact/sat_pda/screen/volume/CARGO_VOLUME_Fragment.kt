@@ -9,15 +9,15 @@ import android.widget.ArrayAdapter
 import com.aact.sat_pda.Biz.Util
 import com.aact.sat_pda.appconfig.BottomItem
 import com.aact.sat_pda.appconfig.Common
-import com.aact.sat_pda.databinding.FragmentCargoVolumnBinding
+import com.aact.sat_pda.databinding.FragmentCargoVolumeBinding
 import com.aact.sat_pda.screen.BaseFragment
 import kotlin.text.isNullOrEmpty
 
 class CARGO_VOLUME_Fragment: BaseFragment() {
 
-    private var _binding: FragmentCargoVolumnBinding? = null
+    private var _binding: FragmentCargoVolumeBinding? = null
     private val binding get() = _binding!!
-    private val volumnModel: CARGO_VOLUME_Model by lazy { CARGO_VOLUME_Model() }
+    private val volumeModel: CARGO_VOLUME_Model by lazy { CARGO_VOLUME_Model() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,10 +25,10 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentCargoVolumnBinding.inflate(inflater, container, false)
+        _binding = FragmentCargoVolumeBinding.inflate(inflater, container, false)
 
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = volumnModel
+        binding.viewModel = volumeModel
         item.limitEditText(binding.mawb.editText,11)
         item.disableEditText(binding.fltDate.editText)
         item.disableEditText(binding.fltNo.editText)
@@ -36,8 +36,8 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
         binding.h.editText.showSoftInputOnFocus = false
         binding.d.editText.showSoftInputOnFocus = false
         binding.pcs.editText.showSoftInputOnFocus = false
-        binding.volumn.editText.showSoftInputOnFocus = false
-        binding.volumnWt.editText.showSoftInputOnFocus = false
+        binding.volume.editText.showSoftInputOnFocus = false
+        binding.volumeWt.editText.showSoftInputOnFocus = false
         item.disableEditText(binding.pcsSum.editText)
         item.disableEditText(binding.wtSum.editText)
 
@@ -48,40 +48,40 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        volumnModel.mawb.observe(viewLifecycleOwner) {
+        volumeModel.mawb.observe(viewLifecycleOwner) {
             if(it.length == 11){
-                volumnModel.getAcceptList()
+                volumeModel.getAcceptList()
             }
         }
 
-        volumnModel.pcs.observe(viewLifecycleOwner) {
-            if(volumnModel.isEditing){
+        volumeModel.pcs.observe(viewLifecycleOwner) {
+            if(volumeModel.isEditing){
                 return@observe
             }
-            volumnModel.setCompute()
+            volumeModel.setCompute()
         }
-        volumnModel.w.observe(viewLifecycleOwner) {
-            if(volumnModel.isEditing){
+        volumeModel.w.observe(viewLifecycleOwner) {
+            if(volumeModel.isEditing){
                 return@observe
             }
-            volumnModel.setCompute()
+            volumeModel.setCompute()
         }
-        volumnModel.h.observe(viewLifecycleOwner) {
-            if(volumnModel.isEditing){
+        volumeModel.h.observe(viewLifecycleOwner) {
+            if(volumeModel.isEditing){
                 return@observe
             }
-            volumnModel.setCompute()
+            volumeModel.setCompute()
         }
-        volumnModel.d.observe(viewLifecycleOwner) {
-            if(volumnModel.isEditing){
+        volumeModel.d.observe(viewLifecycleOwner) {
+            if(volumeModel.isEditing){
                 return@observe
             }
-            volumnModel.setCompute()
+            volumeModel.setCompute()
         }
 
 
 
-        volumnModel.acceptList.observe(viewLifecycleOwner) {
+        volumeModel.acceptList.observe(viewLifecycleOwner) {
             val tempList = it.map { row ->
                 val seq = row.row["CARGO_ACCEPT_SEQ"] ?: ""
                 val time = row.row["ACCEPTED_TIME"] ?: ""
@@ -108,7 +108,7 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
                     id: Long
                 ) {
 
-                    volumnModel.acceptSelect.value = position
+                    volumeModel.acceptSelect.value = position
 
                 }
 
@@ -116,19 +116,24 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
                 }
             }
 
-        volumnModel.acceptSelect.observe(viewLifecycleOwner) {
-            if (it > -1&&!volumnModel.acceptList.value.isNullOrEmpty()) {
+        volumeModel.acceptSelect.observe(viewLifecycleOwner) {
+            if (it > -1&&!volumeModel.acceptList.value.isNullOrEmpty()) {
 
                 binding.acceptList.combo.setSelection(it)
 
 
-                val acceptList = volumnModel.acceptList.value
-                val seq = acceptList[it].row["CARGO_ACCEPT_SEQ"]
-                val sid = acceptList[it].row["CARGO_ACCEPT_SID"]
+                val acceptList = volumeModel.acceptList.value!!
+                val seq = acceptList[it].row["CARGO_ACCEPT_SEQ"] ?: ""
+                val sid = acceptList[it].row["CARGO_ACCEPT_SID"] ?: ""
+                val cargoSid = acceptList[it].row["CARGO_CONTROL_SID"] ?: ""
 
-                if (!(seq.isNullOrEmpty() && sid.isNullOrEmpty())) {
-                    volumnModel.setList()
+                if (sid.isNotEmpty()) {
+                    volumeModel.acceptSid = sid
+                    volumeModel.cargoControlSid = cargoSid
+
+                    volumeModel.setList()
                 }
+
                 binding.w.editText.apply {
                     requestFocus()
                     setSelection(text?.length ?: 0)
@@ -136,49 +141,51 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
             }
         }
 
-        volumnModel.volumeSelect.observe(viewLifecycleOwner) {
-            volumnModel.volumelistClick(it)
+        volumeModel.volumeSelect.observe(viewLifecycleOwner) {
+            volumeModel.volumeListClick(it)
         }
 
-        volumnModel.volumeList.observe(viewLifecycleOwner) {
+        volumeModel.volumeList.observe(viewLifecycleOwner) {
             var pcs = 0
             var wt = 0.0
             it?.forEach {
                 pcs += Util.getInt(it.row["NO_OF_PACKAGE"] ?: "0")
                 wt += Util.getDouble(it.row["VOLUME_WEIGHT"] ?: "0.0")
             }
-            volumnModel.pcsSum.value = pcs.toString()
-            volumnModel.wtSum.value = String.format("%.3f", wt)
+            volumeModel.pcsSum.value = pcs.toString()
+            volumeModel.wtSum.value = String.format("%.3f", wt)
 
             binding.volumeList.custItem.removeAllViews()
             val table = item.getTable_Click(
                 context = binding.root.context,
-                headerList = volumnModel.volumeHeader,
+                headerList = volumeModel.volumeHeader,
                 bodyList = it,
-                selectValue = volumnModel.volumeSelect.value,
+                selectValue = volumeModel.volumeSelect.value,
                 height = 320,
             ) {
-                volumnModel.volumeSelect.value =
-                    Util.validSelectTable(volumnModel.volumeSelect.value, it)
+                volumeModel.volumeSelect.value =
+                    Util.validSelectTable(volumeModel.volumeSelect.value, it)
             }
             binding.volumeList.custItem.addView(table)
         }
 
         action.doneAction(binding.mawb.editText) {
-            volumnModel.getAcceptList()
+            volumeModel.getAcceptList()
+        }
+        action.doneAction(binding.w.editText) {
+            binding.h.editText.requestFocus()
+        }
+
+        action.doneAction(binding.h.editText) {
+            binding.d.editText.requestFocus()
+        }
+
+        action.doneAction(binding.d.editText) {
+            binding.pcs.editText.requestFocus()
         }
         action.doneAction(binding.pcs.editText) {
             if(keboardFlag){
                 keyboardCtl()
-            }
-            volumnModel.setSave{ bool->
-                if(bool){
-                    Common.suc.value = "Volume 저장완료"
-                    binding.w.editText.apply {
-                        requestFocus()
-                        setSelection(text?.length ?: 0)
-                    }
-                }
             }
         }
 
@@ -195,16 +202,16 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
 
             temp_param.forEach {
                 when (it.first) {
-                    "CARGO_CONTROL_SID" -> volumnModel.cargoControlSid = it.second
-                    "CARGO_ACCEPT_SID" -> volumnModel.acceptSid = it.second
-                    "MAWB" -> volumnModel.mawb.value = it.second
-                    "FLIGHT_NO" -> volumnModel.fltNo.value = it.second
-                    "FLIGHT_DATE" -> volumnModel.fltDate.value = it.second
+                    "CARGO_CONTROL_SID" -> volumeModel.cargoControlSid = it.second
+                    "CARGO_ACCEPT_SID" -> volumeModel.acceptSid = it.second
+                    "MAWB" -> volumeModel.mawb.value = it.second
+                    "FLIGHT_NO" -> volumeModel.fltNo.value = it.second
+                    "FLIGHT_DATE" -> volumeModel.fltDate.value = it.second
                 }
             }
         }
 
-        if(volumnModel.cargoControlSid.length == 0){
+        if(volumeModel.cargoControlSid.length == 0){
             binding.mawb.editText.requestFocus()
         }
 
@@ -220,10 +227,10 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
                         if(keboardFlag){
                             keyboardCtl()
                         }
-                        volumnModel.setSave{ bool->
+                        volumeModel.setSave{ bool->
                             if(bool){
                                 Common.suc.value = "Volume 저장완료"
-                                volumnModel.volumeSelect.value = mapOf(
+                                volumeModel.volumeSelect.value = mapOf(
                                     "VOLUME_SEQ" to "",
                                     "NO_OF_PACKAGE" to "",
                                     "DIMENSION_WIDTH" to "",
@@ -232,7 +239,7 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
                                     "VOLUME_WEIGHT" to "",
                                     "VOLUME" to "",
                                 )
-                                volumnModel.setInputClear()
+                                volumeModel.setInputClear()
                                 binding.w.editText.apply {
                                     requestFocus()
                                     setSelection(text?.length ?: 0)
@@ -246,15 +253,15 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
                         if(keboardFlag){
                             keyboardCtl()
                         }
-                        val volumeSelect = volumnModel.volumeSelect.value["VOLUME_SEQ"]
+                        val volumeSelect = volumeModel.volumeSelect.value["VOLUME_SEQ"]
 
-                        if(volumnModel.acceptSid.length == 0 ||  volumeSelect.isNullOrEmpty()){
+                        if(volumeModel.acceptSid.length == 0 ||  volumeSelect.isNullOrEmpty()){
                             Common.sendError("목록을 선택하여주세요.")
                             return
                         }
 
                         showYesNo( "확인", "선택한 부피목록을 삭제합니까?", {
-                            volumnModel.setDelete(volumeSelect)
+                            volumeModel.setDelete(volumeSelect)
                         }, { return@showYesNo })
                     }
                 }
@@ -263,7 +270,7 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
                         if(keboardFlag){
                             keyboardCtl()
                         }
-                        volumnModel.printClick()
+                        volumeModel.printClick()
                     }
                 }
                 is BottomItem.Add -> {
@@ -271,7 +278,7 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
                         if(keboardFlag){
                             keyboardCtl()
                         }
-                        volumnModel.volumeSelect.value = mapOf(
+                        volumeModel.volumeSelect.value = mapOf(
                             "VOLUME_SEQ" to "",
                             "NO_OF_PACKAGE" to "",
                             "DIMENSION_WIDTH" to "",
@@ -280,7 +287,8 @@ class CARGO_VOLUME_Fragment: BaseFragment() {
                             "VOLUME_WEIGHT" to "",
                             "VOLUME" to "",
                         )
-                        volumnModel.setInputClear()
+                        volumeModel.setInputClear()
+                        binding.w.editText.requestFocus()
                     }
                 }
                 else -> null

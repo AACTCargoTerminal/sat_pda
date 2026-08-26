@@ -306,46 +306,45 @@ class OPERATION_ULD_SCALE_Model : ViewModel() {
         val scaleRb = scaleNoSelect.value
 
         val index = scaleNoList.indexOf(scaleRb)
-        var ip = ""
-        val terminalCode = Common.terminalCode.value
+        if (index < 0) {
+            Common.sendError("저울을 선택해주세요")
+            return
+        }
 
-        if (index >= 0) {
-            if (index == 0 && terminalCode == "T1") {
-                ip = "RAMP1"
-            } else if (index == 0 && terminalCode == "T2") {
-                ip = "RAMP1_T2"
-            } else if (index == 1 && terminalCode == "T1") {
-                ip = "RAMP2"
-            } else if (index == 1 && terminalCode == "T2") {
-                ip = "RAMP2_T2"
-            } else {
+        var ip = when (index) {
+            0 -> "WGIP#4"
+            1 -> "WGIP#5"
+            else -> {
                 Common.sendError("알 수 없는 저울입니다.")
                 return
             }
-
-            viewModelScope.launch {
-                Common.loadingOn(coroutineContext[Job])
-
-                val ret = api.getScaleWeight(ip)
-                when (ret) {
-                    is Result.Error -> Common.sendError(ret.message)
-                    is Result.Success<DataTable> -> {
-                        val data = ret.data.table
-                        if (Util.getTableCell(0, data[0], "COL1") == "OK") {
-                            weight.value = Util.getTableCell(0, data[0], "COL3")
-                            Common.suc.value = "저울 측정 완료"
-                        } else {
-                            Common.sendError(Util.getTableCell(0, data[0], "COL2"))
-                        }
-                    }
-                }
-
-                Common.loadingOff()
-            }
-        } else {
-            Common.sendError("저울을 선택해주세요")
         }
 
+        if (Common.terminalCode.value != "T1") {
+            ip += "_" + Common.terminalCode.value
+        }
+
+        viewModelScope.launch {
+            Common.loadingOn(coroutineContext[Job])
+
+            val ret = api.getScaleWeight(ip)
+
+            when (ret) {
+                is Result.Error -> Common.sendError(ret.message)
+
+                is Result.Success<DataTable> -> {
+                    val data = ret.data.table
+                    if (Util.getTableCell(0, data[0], "COL1") == "OK") {
+                        weight.value = Util.getTableCell(0, data[0], "COL3")
+                        Common.suc.value = "저울 측정 완료"
+                    } else {
+                        Common.sendError(Util.getTableCell(0, data[0], "COL2"))
+                    }
+                }
+            }
+
+            Common.loadingOff()
+        }
     }
 
 
@@ -406,12 +405,11 @@ class OPERATION_ULD_SCALE_Model : ViewModel() {
     }
 
     suspend fun printClick() {
-        var ip = "RAMP"
-        val terminalCode = Common.terminalCode.value
-        val wtTotal = Util.getDouble(weight.value) + Util.getDouble(dollyWeight.value)
-        if (terminalCode == "T2") {
-            ip = "RAMP_T2"
+        var ip = "SCALE#4"
+        if (Common.terminalCode.value != "T1") {
+            ip += "_" + Common.terminalCode.value
         }
+        val wtTotal = Util.getDouble(weight.value) + Util.getDouble(dollyWeight.value)
 
         val ret = api.setPWM_ULD_SCALE_PRINT(
             uldNo.value,
@@ -428,13 +426,13 @@ class OPERATION_ULD_SCALE_Model : ViewModel() {
         )
 
         when(ret){
-            is Result.Error -> Common.sendError(ret.message)
+            is Result.Error -> {Common.sendError("인쇄에 실패했습니다. ${ret.message}")}
             is Result.Success<DataTable> -> {
                 val data = ret.data.table
-                if(Util.getTableCell(0,data[0],"COL1")=="OK"){
-
-                }else{
-                    Common.sendError(Util.getTableCell(0,data[0],"COL2"))
+                if (Util.getTableCell(0, data[0], "COL1") != "OK") {
+                    Common.sendError(
+                        "인쇄에 실패했습니다. " + Util.getTableCell(0, data[0], "COL2")
+                    )
                 }
             }
         }

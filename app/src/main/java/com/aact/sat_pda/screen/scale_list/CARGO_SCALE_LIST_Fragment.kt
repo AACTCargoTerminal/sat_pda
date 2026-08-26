@@ -64,13 +64,12 @@ class CARGO_SCALE_LIST_Fragment : BaseFragment() {
                 cargoScaleListModel.spcList.value = it
             }
 
-            cargoScaleListModel.setList()
             Common.loadingOff()
         }
 
 
         cargoScaleListModel.palletPcs.observe(viewLifecycleOwner) {
-            cargoScaleListModel.setPalletCumpute()
+            cargoScaleListModel.setPalletCompute()
             cargoScaleListModel.setNetWTCompute()
         }
 
@@ -144,7 +143,7 @@ class CARGO_SCALE_LIST_Fragment : BaseFragment() {
                 id: Long
             ) {
                 cargoScaleListModel.palletSelect.value = position
-                cargoScaleListModel.setPalletCumpute()
+                cargoScaleListModel.setPalletCompute()
                 cargoScaleListModel.setNetWTCompute()
             }
 
@@ -168,6 +167,18 @@ class CARGO_SCALE_LIST_Fragment : BaseFragment() {
                 )
             }
         }
+
+        action.doneAction(binding.pcs.editText) {
+            binding.wt.editText.requestFocus()
+        }
+
+        action.doneAction(binding.wt.editText) {
+            binding.palletWt.editText.requestFocus()
+        }
+
+        action.doneAction(binding.palletWt.editText) {
+            binding.netWt.editText.requestFocus()
+        }
     }
 
     override fun onStart() {
@@ -182,11 +193,20 @@ class CARGO_SCALE_LIST_Fragment : BaseFragment() {
                 when (it.first) {
                     "CARGO_CONTROL_SID" -> cargoScaleListModel.cargoControlSid = it.second
                     "CARGO_ACCEPT_SID" -> cargoScaleListModel.acceptSid = it.second
+                    "CARGO_ACCEPT_SEQ" -> cargoScaleListModel.acceptSeq.value = it.second
                     "MAWB" -> cargoScaleListModel.mawb.value = it.second
                     "FLIGHT_NO" -> cargoScaleListModel.fltNo.value = it.second
                     "FLIGHT_DATE" -> cargoScaleListModel.fltDate.value = it.second
                 }
             }
+        }
+
+        lifecycleScope.launch {
+            Common.loadingOn(coroutineContext[Job])
+
+            cargoScaleListModel.setList()
+
+            Common.loadingOff()
         }
 
         for(item in route.bottomItems()){
