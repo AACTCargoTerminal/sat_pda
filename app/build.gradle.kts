@@ -37,8 +37,18 @@ android {
         buildConfigField("String", "UPDATE_SERVER_IP", "\"${env["UPDATE_SERVER_IP"]}\"")
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file(env.getProperty("KEYSTORE_PATH"))
+            storePassword = env.getProperty("KEYSTORE_PASSWORD")
+            keyAlias = env.getProperty("KEY_ALIAS")
+            keyPassword = env.getProperty("KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
