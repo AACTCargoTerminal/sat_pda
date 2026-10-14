@@ -297,6 +297,7 @@ class OPERATION_ULD_Fragment : BaseFragment() {
         uldModel.setDefault {
             if (it) {
                 binding.uldSerialNo.editText.requestFocus()
+                uldModel.isUldSetting = false;
             }
         }
 
