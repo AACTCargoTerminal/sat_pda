@@ -196,6 +196,7 @@ class CARGO_DAMAGE_EXPORT_Fragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Route.DamageExport.name = "반입전 파손화물"
         _binding = null
     }
 }
