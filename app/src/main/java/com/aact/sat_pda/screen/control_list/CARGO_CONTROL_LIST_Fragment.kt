@@ -49,7 +49,6 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                 controlListModel.selectClick(
                     mawb = Util.getStr(controlListModel.mawb.value),
                     fltDate = controlListModel.fltDate.value.replace("-", ""),
-                    fltNo = Util.getStr(controlListModel.fltNo.value)
                 )
             },
             endClick = {})
@@ -71,7 +70,6 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                 controlListModel.selectClick(
                     mawb = txt,
                     fltDate = controlListModel.fltDate.value.replace("-", ""),
-                    fltNo = Util.getStr(controlListModel.fltNo.value)
                 )
                 mawbEdit.clearFocus()
             }
@@ -114,38 +112,21 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                 }
 
                 1 -> {
-                    if(controlListModel.returnFromControl){
-                        controlListModel.returnFromControl = false
-
-                        binding.cargoTableContent.removeAllViews()
-                        val table = item.getTable_Click(
-                            context = binding.root.context,
-                            headerList = controlListModel.headerList,
-                            bodyList = value,
-                            selectValue = controlListModel.selectList,
-                            height = 400,
-                        ) {
-                            controlListModel.selectList =
-                                Util.validSelectTable(controlListModel.selectList, it)
-                        }
-
-                        binding.cargoTableContent.addView(table)
-                    }else{
-                        controlListModel.saveFltDate = controlListModel.fltDate.value
-                        controlListModel.saveFltNo = controlListModel.fltNo.value
-                        controlListModel.saveScheduleSid = controlListModel.fltSelect
-                        controlListModel.returnFromControl = true
-
-                        //수출화물 이동
-                        val params =
-                            listOf(Pair("CARGO_CONTROL_SID", value[0].row["CARGO_CONTROL_SID"] ?: ""))
-
-                        val control = Route.Control
-                        control.params = params
-                        Common.addNavigate(control)
+                    controlListModel.returnFromControl = false
+                    binding.cargoTableContent.removeAllViews()
+                    val table = item.getTable_Click(
+                        context = binding.root.context,
+                        headerList = controlListModel.headerList,
+                        bodyList = value,
+                        selectValue = controlListModel.selectList,
+                        height = 400,
+                    ) {
+                        controlListModel.selectList =
+                            Util.validSelectTable(controlListModel.selectList, it)
                     }
-                }
 
+                    binding.cargoTableContent.addView(table)
+                }
                 else -> {
                     binding.cargoTableContent.removeAllViews()
                     val table = item.getTable_Click(
@@ -171,7 +152,6 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
             controlListModel.selectClick(
                 mawb = txt,
                 fltDate = controlListModel.fltDate.value.replace("-", ""),
-                fltNo = Util.getStr(controlListModel.fltNo.value)
             )
             mawbEdit.clearFocus()
         }
@@ -203,8 +183,6 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                 controlListModel.selectClick(
                     mawb = "",
                     fltDate = result.replace("-", ""),
-                    fltNo = "",
-                    firstLoad = true
                 )
             }
 
@@ -212,6 +190,23 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
         }
 
 
+    }
+
+    private fun openDamage() {
+        controlListModel.damageClick { cargoControlSid, damageExportSid ->
+
+            val damage = Route.DamageExport
+
+            damage.name = "반입후 파손화물"
+
+            damage.params = listOf(
+                Pair("CARGO_CONTROL_SID", cargoControlSid),
+                Pair("DAMAGE_EXPORT_SID", damageExportSid),
+                Pair("ACCEPT_TYPE", "Y")
+            )
+
+            Common.addNavigate(damage)
+        }
     }
 
     override fun onStart() {
@@ -247,14 +242,11 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                     controlListModel.selectClick(
                         mawb = "",
                         fltDate = date,
-                        fltNo = restoreFltNo
                     )
                 }else{
                     controlListModel.selectClick(
                         mawb = "",
                         fltDate = date,
-                        fltNo = "",
-                        firstLoad = true
                     )
                 }
             }
@@ -273,8 +265,6 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
             controlListModel.selectClick(
                 mawb = "",
                 fltDate = controlListModel.fltDate.value.replace("-", ""),
-                fltNo = "",
-                firstLoad = true
             )
         }
 
@@ -291,7 +281,6 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                         controlListModel.selectClick(
                             mawb = txt,
                             fltDate = controlListModel.fltDate.value.replace("-", ""),
-                            fltNo = Util.getStr(controlListModel.fltNo.value)
                         )
                         binding.mawb.editText.clearFocus()
                     }
@@ -339,6 +328,12 @@ class CARGO_CONTROL_LIST_Fragment : BaseFragment() {
                         } else {
                             Common.sendError("선택한 화물이없습니다.")
                         }
+                    }
+                }
+
+                is BottomItem.Damage -> {
+                    item.onClick = {
+                        openDamage()
                     }
                 }
                 else -> null

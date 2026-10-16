@@ -15,6 +15,7 @@ sealed class BottomItem(
     object KeyBoard : BottomItem("키보드", R.drawable.keyboard)
     object Save : BottomItem("저장", R.drawable.save)
     object Open : BottomItem("열기", R.drawable.open_in_browser)
+    object Damage : BottomItem("반입 후 파손", R.drawable.open_in_browser)
     object Search : BottomItem("조회", R.drawable.search)
     object Add : BottomItem("추가", R.drawable.add)
     object Print : BottomItem("인쇄", R.drawable.print)
@@ -38,6 +39,7 @@ sealed class BottomItem(
             KeyBoard.name = KeyBoard.defaultName
             Save.name = Save.defaultName
             Open.name = Open.defaultName
+            Damage.name = Damage.defaultName
             Search.name = Search.defaultName
             Add.name = Add.defaultName
             Print.name = Print.defaultName

@@ -163,6 +163,7 @@ sealed class Route(
             val list = listOf(
                 accept to create,
                 BottomItem.Open to read,
+                BottomItem.Damage to execute,
                 BottomItem.Search to read,
                 BottomItem.KeyBoard to execute
             )
