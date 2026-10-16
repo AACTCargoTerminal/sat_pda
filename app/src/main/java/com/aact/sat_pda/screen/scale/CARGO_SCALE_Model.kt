@@ -43,7 +43,7 @@ class CARGO_SCALE_Model : ViewModel() {
     var customerCode = ""
     val pcs = MutableLiveData<String>("")
     val spc = MutableLiveData<String>("")
-    val palletPcs = MutableLiveData<String>("1")
+    val palletPcs = MutableLiveData<String>("0")
     val palletWt = MutableLiveData<String>("")
     val volumeWt = MutableLiveData<String>("")
     val acceptPcs = MutableLiveData<String>("")
@@ -367,7 +367,7 @@ class CARGO_SCALE_Model : ViewModel() {
         customerCode = ""
         pcs.value = ""
         spc.value = ""
-        palletPcs.value = ""
+        palletPcs.value = "0"
         palletWt.value = ""
         volumeWt.value = ""
         acceptPcs.value = ""
@@ -530,7 +530,7 @@ class CARGO_SCALE_Model : ViewModel() {
         weight.value = ""
         netWt.value = ""
         palletWt.value = ""
-        palletPcs.value = "1"
+        palletPcs.value = "0"
     }
 
     fun printClick(){

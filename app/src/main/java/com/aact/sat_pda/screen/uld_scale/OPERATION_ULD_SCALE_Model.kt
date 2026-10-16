@@ -312,8 +312,8 @@ class OPERATION_ULD_SCALE_Model : ViewModel() {
         }
 
         var ip = when (index) {
-            0 -> "WGIP#4"
-            1 -> "WGIP#5"
+            0 -> "WGIP#5"
+            1 -> "WGIP#4"
             else -> {
                 Common.sendError("알 수 없는 저울입니다.")
                 return
