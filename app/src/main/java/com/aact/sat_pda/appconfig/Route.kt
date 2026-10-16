@@ -163,6 +163,7 @@ sealed class Route(
             val list = listOf(
                 accept to create,
                 BottomItem.Open to read,
+                BottomItem.Damage to execute,
                 BottomItem.Search to read,
                 BottomItem.KeyBoard to execute
             )
@@ -237,9 +238,9 @@ sealed class Route(
 
             val list = listOf(
                 BottomItem.KeyBoard to execute,
-                BottomItem.Save to update,
-                BottomItem.Scale to read,
                 volume to create,
+                BottomItem.Scale to read,
+                BottomItem.Save to update,
                 cargoIn to create,
                 BottomItem.List to create,
                 upt to update,

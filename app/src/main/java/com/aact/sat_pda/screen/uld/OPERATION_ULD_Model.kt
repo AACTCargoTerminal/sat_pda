@@ -133,6 +133,8 @@ class OPERATION_ULD_Model : ViewModel() {
 
     fun setDefault(outParam: (suc: Boolean) -> Unit) {
 
+
+
         viewModelScope.launch {
             Common.loadingOn(coroutineContext[Job])
 
@@ -169,7 +171,7 @@ class OPERATION_ULD_Model : ViewModel() {
             } else {
                 typeList = ret
             }
-
+            isUldSetting = true;
             if (uldNo.isEmpty()) {
                 uldType.value = "PMC"
             } else {
@@ -218,103 +220,92 @@ class OPERATION_ULD_Model : ViewModel() {
         if (arg1.length <= 5) {
             return
         }
-        isUldSetting = true
-
         uldType.value = arg1.substring(0, 3)
         uldCarrier.value = arg1.substring(arg1.length - 2)
         uldSerialNo.value = arg1.substring(3, arg1.length - 2)
-
-        isUldSetting = false
     }
 
-    fun getInfo() {
+    suspend fun getInfo() {
 
         uldValid = ""
 
-        viewModelScope.launch {
-            Common.loadingOn(coroutineContext[Job])
+        val ret = api.getPWM_OPERATION_ULD_M010_001(operationSid)
 
-            val ret = api.getPWM_OPERATION_ULD_M010_001(operationSid)
+        when (ret) {
+            is Result.Error -> Common.sendError(ret.message)
+            is Result.Success<DataTable> -> {
+                val data = ret.data.table
+                if (Util.getTableCell(0, data[0], "COL1") == "OK") {
 
-            when (ret) {
-                is Result.Error -> Common.sendError(ret.message)
-                is Result.Success<DataTable> -> {
-                    val data = ret.data.table
-                    if (Util.getTableCell(0, data[0], "COL1") == "OK") {
+                    Common.suc.value = "조회가 완료됐습니다."
 
-                        Common.suc.value = "조회가 완료됐습니다."
+                    uldValid = "Y"
+                    contourCode.value = Util.getTableCell(0, data[1], "CONTOUR_CODE")
+                    contourNo.value = Util.getTableCell(0, data[1], "CONTOUR_NO")
 
-                        uldValid = "Y"
-                        contourCode.value = Util.getTableCell(0, data[1], "CONTOUR_CODE")
-                        contourNo.value = Util.getTableCell(0, data[1], "CONTOUR_NO")
+                    position.value = Util.getTableCell(0, data[1], "LOCATION_CODE")
+                    if (Util.getTableCell(0, data[1], "BUP_FLAG") == "Y") {
+                        bupFlag.value = true
+                    } else {
+                        bupFlag.value = false
+                    }
 
-                        position.value = Util.getTableCell(0, data[1], "LOCATION_CODE")
-                        if (Util.getTableCell(0, data[1], "BUP_FLAG") == "Y") {
-                            bupFlag.value = true
-                        } else {
-                            bupFlag.value = false
-                        }
+                    if (Util.getTableCell(0, data[1], "BULK_FLAG") == "Y") {
+                        bulkFlag.value = true
+                    } else {
+                        bulkFlag.value = false
+                    }
 
-                        if (Util.getTableCell(0, data[1], "BULK_FLAG") == "Y") {
-                            bulkFlag.value = true
-                        } else {
-                            bulkFlag.value = false
-                        }
+                    if (Util.getTableCell(0, data[1], "THRU_FLAG") == "Y") {
+                        thruFlag.value = true
+                    } else {
+                        thruFlag.value = false
+                    }
 
-                        if (Util.getTableCell(0, data[1], "THRU_FLAG") == "Y") {
-                            thruFlag.value = true
-                        } else {
-                            thruFlag.value = false
-                        }
+                    uldWeight.value = Util.getTableCell(0, data[1], "SCALED_WEIGHT")
+                    originScaleWt = Util.getTableCell(0, data[1], "SCALED_WEIGHT")
+                    remark.value = Util.getTableCell(0, data[1], "REMARKS")
+                    status.value = Util.getTableCell(0, data[1], "ULD_STATUS_NAME")
 
-                        uldWeight.value = Util.getTableCell(0, data[1], "SCALED_WEIGHT")
-                        originScaleWt = Util.getTableCell(0, data[1], "SCALED_WEIGHT")
-                        remark.value = Util.getTableCell(0, data[1], "REMARKS")
-                        status.value = Util.getTableCell(0, data[1], "ULD_STATUS_NAME")
+                    fltDate.value =
+                        Util.changeDate(Util.getTableCell(0, data[1], "FLIGHT_DATE"))
 
-                        fltDate.value =
-                            Util.changeDate(Util.getTableCell(0, data[1], "FLIGHT_DATE"))
+                    fltNo.value = Util.getTableCell(0, data[1], "FLIGHT_NO")
 
-                        fltNo.value = Util.getTableCell(0, data[1], "FLIGHT_NO")
-
-                        if (fltNo.value.isNotEmpty()) {
-                            setFlight(false)
-                            val findData =
-                                fltList.find { row ->
-                                    Util.getStr(row.row["FLIGHT_NO"]) == fltNo.value
-                                }
-                            if (findData != null) {
-                                fltSelect = Util.getStr(findData.row["SCHEDULE_SID"])
-                            } else {
-                                fltNo.value = ""
-                                fltSelect = ""
+                    if (fltNo.value.isNotEmpty()) {
+                        setFlight(false)
+                        val findData =
+                            fltList.find { row ->
+                                Util.getStr(row.row["FLIGHT_NO"]) == fltNo.value
                             }
+                        if (findData != null) {
+                            fltSelect = Util.getStr(findData.row["SCHEDULE_SID"])
                         } else {
                             fltNo.value = ""
                             fltSelect = ""
                         }
-
-                        fltOrigin = Util.getTableCell(0, data[1], "ORIGIN_CODE")
-                        fltDest.value = Util.getTableCell(0, data[1], "DESTINATION_CODE")
-                        fltDestName = Util.getTableCell(0, data[1], "DESTINATION_CODE")
-
-                        bdWeight.value = Util.getTableCell(0, data[1], "NET_WEIGHT")
-                        bdPcs.value = Util.getTableCell(0, data[1], "NO_OF_PACKAGE")
-
-                        agent.value = Util.getTableCell(0, data[1], "AGENT_AGENCY_CODE")
-                        agentName = Util.getTableCell(0, data[1], "AGENT_CUSTOMER_NAME")
-
-                        transAt.value = Util.getTableCell(0, data[1], "TRANSFERAT")
-                        transFlt.value = Util.getTableCell(0, data[1], "TRANSFERFLT")
-
                     } else {
-                        Common.sendError(Util.getTableCell(0, data[0], "COL2"))
+                        fltNo.value = ""
+                        fltSelect = ""
                     }
+
+                    fltOrigin = Util.getTableCell(0, data[1], "ORIGIN_CODE")
+                    fltDest.value = Util.getTableCell(0, data[1], "DESTINATION_CODE")
+                    fltDestName = Util.getTableCell(0, data[1], "DESTINATION_CODE")
+
+                    bdWeight.value = Util.getTableCell(0, data[1], "NET_WEIGHT")
+                    bdPcs.value = Util.getTableCell(0, data[1], "NO_OF_PACKAGE")
+
+                    agent.value = Util.getTableCell(0, data[1], "AGENT_AGENCY_CODE")
+                    agentName = Util.getTableCell(0, data[1], "AGENT_CUSTOMER_NAME")
+
+                    transAt.value = Util.getTableCell(0, data[1], "TRANSFERAT")
+                    transFlt.value = Util.getTableCell(0, data[1], "TRANSFERFLT")
+
+                } else {
+                    Common.sendError(Util.getTableCell(0, data[0], "COL2"))
                 }
             }
-
-
-            Common.loadingOff()
         }
     }
 
