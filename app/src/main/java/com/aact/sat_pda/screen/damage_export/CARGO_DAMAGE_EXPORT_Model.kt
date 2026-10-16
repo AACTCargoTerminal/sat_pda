@@ -20,7 +20,7 @@ class CARGO_DAMAGE_EXPORT_Model: ViewModel() {
 
     var cargoControlSid = ""
     val damageExportSid = MutableLiveData<String>("")
-    var acceptType = ""
+    var acceptType = "N"
     var fltSelect = ""
 
     val mawb = MutableLiveData<String>("")
@@ -257,7 +257,7 @@ class CARGO_DAMAGE_EXPORT_Model: ViewModel() {
                     is Result.Success<DataTable> -> {
                         val data = it.data.table
                         if (Util.getTableCell(0, data[0], "COL1") == "OK") {
-                            Common.suc.value = "조회가 완료됬습니다."
+                            Common.suc.value = "조회가 완료됐습니다."
                             if(mawb.value.length < 11){
                                 mawb.value =
                                     Util.getTableCell(0, data[1], "MASTER_AIR_WAY_BILL_NO", mawb.value)
@@ -333,7 +333,7 @@ class CARGO_DAMAGE_EXPORT_Model: ViewModel() {
                 is Result.Success<DataTable> -> {
                     val data = ret.data.table
                     if (Util.getTableCell(0, data[0], "COL1") == "OK") {
-                        Common.suc.value = "저장이 완료됬습니다."
+                        Common.suc.value = "저장이 완료됐습니다."
                         damageExportSid.value = Util.getTableCell(0, data[0], "COL2")
                     } else {
                         Common.sendError(Util.getTableCell(0, data[0], "COL2"))

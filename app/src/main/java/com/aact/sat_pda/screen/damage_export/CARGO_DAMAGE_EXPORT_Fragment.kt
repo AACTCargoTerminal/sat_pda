@@ -141,7 +141,14 @@ class CARGO_DAMAGE_EXPORT_Fragment : BaseFragment() {
                         if(keboardFlag){
                             keyboardCtl()
                         }
-                        damageModel.parseXml(damageModel.groups.value)
+                        if (damageModel.fltSelect.isBlank()) {
+                            when (damageModel.acceptType) {
+                                "N" -> damageModel.searchMawb_before()
+                                "Y" -> damageModel.searchMawb_after()
+                            }
+                        } else {
+                            damageModel.parseXml(damageModel.groups.value)
+                        }
                     }
                 }
                 is BottomItem.Camera -> {
