@@ -36,6 +36,7 @@ class CARGO_VOLUME_Model : ViewModel() {
 
     val acceptList = MutableLiveData<List<DataRow>>(emptyList())
     val acceptSelect = MutableLiveData<Int>(-1)
+    var saveFocus = false
 
     val volumeHeader = listOf(
         HeaderDTO("VOLUME_SEQ", "NO", 80),
@@ -152,6 +153,60 @@ class CARGO_VOLUME_Model : ViewModel() {
         }
     }
 
+    fun setSaveFocus(): Boolean {
+        if(!saveFocus){
+            saveFocus = true
+            return false
+        }else{
+            saveFocus = false
+            return true
+        }
+    }
+
+    fun setAcceptSelect(position: Int) {
+        val list = acceptList.value ?: return
+
+        if(position < 0 || position >= list.size){
+            return
+        }
+
+        val sid = list[position].row["CARGO_ACCEPT_SID"] ?: ""
+        val cargoSid = list[position].row["CARGO_CONTROL_SID"] ?: ""
+
+        if(sid.isNotEmpty()){
+            acceptSid = sid
+            cargoControlSid = cargoSid
+            setList()
+        }
+    }
+
+    fun setVolumeSum() {
+        var totalPcs = 0
+        var totalWt = 0.0
+
+        volumeList.value?.forEach {
+            totalPcs += Util.getInt(it.row["NO_OF_PACKAGE"] ?: "0")
+            totalWt += Util.getDouble(it.row["VOLUME_WEIGHT"] ?: "0.0")
+        }
+
+        pcsSum.value = totalPcs.toString()
+        wtSum.value = String.format("%.3f", totalWt)
+    }
+
+    fun setVolumeClear() {
+        volumeSelect.value = mapOf(
+            "VOLUME_SEQ" to "",
+            "NO_OF_PACKAGE" to "",
+            "DIMENSION_WIDTH" to "",
+            "DIMENSION_LENGTH" to "",
+            "DIMENSION_HEIGHT" to "",
+            "VOLUME_WEIGHT" to "",
+            "VOLUME" to "",
+        )
+        setInputClear()
+        saveFocus = false
+    }
+
     fun setSave(callback: (Boolean) -> Unit) {
         val volumeSelect = volumeSelect.value["VOLUME_SEQ"] ?: ""
 
@@ -174,7 +229,7 @@ class CARGO_VOLUME_Model : ViewModel() {
                     val data = ret.data.table
                     if (Util.getTableCell(0, data[0], "COL1") == "OK") {
                         setList()
-                        setInputClear()
+                        setVolumeClear()
                         callback(true)
                     } else {
                         Common.sendError(Util.getTableCell(0, data[0], "COL2"))

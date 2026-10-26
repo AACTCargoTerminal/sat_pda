@@ -136,6 +136,18 @@ class OPERATION_ULD_LIST_Fragment : BaseFragment() {
         //하단 바텀버튼 클릭지정
         val route = Common.route.value
 
+        if (route.params.isNotEmpty()) {
+            uldListModel.fltDate.value =
+                route.params.find { it.first == "DATE" }?.second?: uldListModel.fltDate.value
+            uldListModel.fltNo.value =
+                route.params.find { it.first == "FLIGHT_NO" }?.second?: uldListModel.fltNo.value
+            uldListModel.fltSelect.value =
+                route.params.find { it.first == "SCHEDULE_SID" }?.second
+                    ?: uldListModel.fltSelect.value
+        }
+
+        uldListModel.getList()
+
         for (item in route.bottomItems()) {
             when (item) {
                 is BottomItem.Search -> {
@@ -146,7 +158,13 @@ class OPERATION_ULD_LIST_Fragment : BaseFragment() {
 
                 is BottomItem.Add -> {
                     item.onClick = fun() {
-                        val params = listOf(Pair("DATE",Util.validDate(uldListModel.fltDate.value)), Pair("SCHEDULE_SID",uldListModel.fltSelect.value))
+                        val params = listOf(
+                            Pair("DATE",Util.validDate(uldListModel.fltDate.value)),
+                            Pair("SCHEDULE_SID",uldListModel.fltSelect.value),
+                            Pair("FLIGHT_NO", uldListModel.fltNo.value ?: "")
+                        )
+
+                        Common.route.value.params = params
 
                         val route = Route.OperationUld
                         route.params = params
@@ -168,6 +186,14 @@ class OPERATION_ULD_LIST_Fragment : BaseFragment() {
                             ),
                             Pair("ULD_NO", uldListModel.selectList["ULD_NO"] ?: "")
                         )
+
+                        val listParams = listOf(
+                            Pair("DATE", Util.validDate(uldListModel.fltDate.value)),
+                            Pair("SCHEDULE_SID", uldListModel.fltSelect.value ?: ""),
+                            Pair("FLIGHT_NO", uldListModel.fltNo.value ?: "")
+                        )
+
+                        Common.route.value.params = listParams
 
                         val route = Route.OperationUld
                         route.params = params
