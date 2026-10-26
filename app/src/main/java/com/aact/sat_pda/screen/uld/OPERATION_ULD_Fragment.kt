@@ -278,10 +278,14 @@ class OPERATION_ULD_Fragment : BaseFragment() {
             val temp3 = route.params.find { it.first == "DATE" }?.second ?: Util.getNowDate()
             val temp4 = route.params.find { it.first == "FLIGHT_NO" }?.second ?: ""
             val temp5 = route.params.find { it.first == "STATUS_FLAG" }?.second ?: ""
+            val temp6 = route.params.find { it.first == "SCHEDULE_SID" }?.second ?: ""
             uldModel.operationSid = temp
             uldModel.uldNo = temp2
             uldModel.fltDate.value = temp3
             uldModel.fltNo.value = temp4
+            if (temp.isEmpty()) {
+                uldModel.fltSelect = temp6
+            }
 
             if (temp5 == "C") {
                 val idx = route.params.indexOfFirst { it.first == "STATUS_FLAG" }

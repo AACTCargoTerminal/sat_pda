@@ -134,7 +134,6 @@ class OPERATION_ULD_Model : ViewModel() {
     fun setDefault(outParam: (suc: Boolean) -> Unit) {
 
 
-
         viewModelScope.launch {
             Common.loadingOn(coroutineContext[Job])
 
@@ -183,37 +182,32 @@ class OPERATION_ULD_Model : ViewModel() {
             }
 
             if (operationSid.isNotEmpty()) {
-                //조회
+                // 기존 ULD 조회
                 getInfo()
             } else {
-
-                if (fltNo.value.isNotEmpty()) {
+                if (fltSelect.isEmpty() && fltNo.value.isNotEmpty()) {
                     setFlight(false)
-                    val findData =
-                        fltList.find { row -> Util.getStr(row.row["FLIGHT_NO"]) == fltNo.value }
+
+                    val findData = fltList.find { row ->
+                        Util.getStr(row.row["FLIGHT_NO"]) == fltNo.value
+                    }
+
                     if (findData != null) {
                         fltSelect = Util.getStr(findData.row["SCHEDULE_SID"])
                     } else {
                         fltNo.value = ""
                         fltSelect = ""
                     }
-                } else {
-                    fltNo.value = ""
-                    fltSelect = ""
                 }
 
                 if (fltSelect.isNotEmpty()) {
                     setOriginDest(false)
                 }
-
-
             }
 
             Common.loadingOff()
             outParam(true)
         }
-
-
     }
 
     fun setUldNoToControl(arg1: String) {
