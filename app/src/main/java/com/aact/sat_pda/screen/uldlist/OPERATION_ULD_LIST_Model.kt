@@ -122,6 +122,9 @@ class OPERATION_ULD_LIST_Model : ViewModel() {
     fun getList() {
 
         val date = fltDate.value?.replace("-", "") ?: ""
+        val flightNo = fltNo.value ?: ""
+        val origin = fltOrigin
+        val dest = fltDest.value ?: ""
 
         if (!Util.validYYYYMMDD(date)) {
             Common.sendError("일자를 확인해주세요")
@@ -132,7 +135,7 @@ class OPERATION_ULD_LIST_Model : ViewModel() {
             Common.loadingOn(coroutineContext[Job])
 
             val ret =
-                api.getPWM_OPERATION_ULD_L010_001(date, fltNo.value, fltOrigin, fltDest.value)
+                api.getPWM_OPERATION_ULD_L010_001(date, flightNo, origin, dest)
 
             when (ret) {
                 is Result.Error -> Common.sendError(ret.message)

@@ -131,8 +131,6 @@ class OPERATION_ULD_LIST_Fragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
 
-        uldListModel.getList()
-
         //하단 바텀버튼 클릭지정
         val route = Common.route.value
 
@@ -142,8 +140,13 @@ class OPERATION_ULD_LIST_Fragment : BaseFragment() {
             uldListModel.fltNo.value =
                 route.params.find { it.first == "FLIGHT_NO" }?.second?: uldListModel.fltNo.value
             uldListModel.fltSelect.value =
-                route.params.find { it.first == "SCHEDULE_SID" }?.second
-                    ?: uldListModel.fltSelect.value
+                route.params.find { it.first == "SCHEDULE_SID" }?.second?: uldListModel.fltSelect.value
+        }
+
+        val scheduleSid = uldListModel.fltSelect.value ?: ""
+
+        if (scheduleSid.isNotEmpty()) {
+            uldListModel.getDest(scheduleSid)
         }
 
         uldListModel.getList()
