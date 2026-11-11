@@ -50,6 +50,7 @@ class CARGO_SCALE_Fragment : BaseFragment() {
         val weight = binding.weight.editText
         val spc = binding.spc.editText
         val scaleNo = binding.scaleNo.combo
+        var restoringScaleSelection = false
         val pallet = binding.pallet.combo
         val palletPcs = binding.palletPcs.editText
         val palletWt = binding.palletWt.editText
@@ -149,35 +150,6 @@ class CARGO_SCALE_Fragment : BaseFragment() {
             cargoScaleModel.setPalletCumpute()
         }
 
-        cargoScaleModel.scaleRadio.observe(viewLifecycleOwner) {
-
-            val tempList: List<String> = it?.let { array ->
-                array.mapIndexed { index, item ->
-                    when {
-                        index == 0 -> "1"
-                        index == 1 -> "2"
-                        index == 2 -> "3"
-                        index == 3 -> if (Common.terminalCode.value == "T2") "X2" else null
-                        else -> null
-                    }
-
-                }
-            }?.filterNotNull() ?: run { emptyList() }
-
-            val adapter =
-                ArrayAdapter(
-                    binding.root.context,
-                    android.R.layout.simple_spinner_item,
-                    tempList
-                ).apply {
-                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                }
-            scaleNo.setAdapter(adapter)
-            if (tempList?.size ?: 0 > cargoScaleModel.scaleRadioSelect.value) {
-                scaleNo.setSelection(cargoScaleModel.scaleRadioSelect.value)
-            }
-
-        }
         scaleNo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -185,9 +157,16 @@ class CARGO_SCALE_Fragment : BaseFragment() {
                 position: Int,
                 id: Long
             ) {
-                cargoScaleModel.scaleRadioSelect.value = position
+                if (!restoringScaleSelection) {
+                    val previousPosition = cargoScaleModel.scaleRadioSelect.value ?: 1
+
+                    if (previousPosition != position) {
+                        cargoScaleModel.scaleRadioSelect.value = position
+                        cargoScaleModel.weight.value = ""
+                    }
+                }
+
                 val terminalCode = Common.terminalCode.value
-                cargoScaleModel.weight.value = ""
 
                 if (terminalCode == "T2" && position == 1) {
                     item.disableEditText(weight)
@@ -319,12 +298,38 @@ class CARGO_SCALE_Fragment : BaseFragment() {
 
         }
 
-
-        cargoScaleModel.scaleRadioSelect.observe(viewLifecycleOwner) {
-            if (cargoScaleModel.scaleRadio.value?.size ?: 0 > it) {
-                scaleNo.setSelection(it)
+        cargoScaleModel.scaleRadio.observe(viewLifecycleOwner) {
+            val tempList = it.mapIndexedNotNull { index, _ ->
+                when (index) {
+                    0 -> "1"
+                    1 -> "2"
+                    2 -> "3"
+                    3 -> if (Common.terminalCode.value == "T2") "X2" else null
+                    else -> null
+                }
             }
 
+            val selectedPosition = cargoScaleModel.scaleRadioSelect.value ?: 1
+
+            restoringScaleSelection = true
+
+            val adapter = ArrayAdapter(
+                binding.root.context,
+                android.R.layout.simple_spinner_item,
+                tempList
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+
+            scaleNo.adapter = adapter
+
+            if (selectedPosition in tempList.indices) {
+                scaleNo.setSelection(selectedPosition)
+            }
+
+            scaleNo.post {
+                restoringScaleSelection = false
+            }
         }
 
         cargoScaleModel.palletList.observe(viewLifecycleOwner) {
@@ -418,6 +423,12 @@ class CARGO_SCALE_Fragment : BaseFragment() {
             cargoScaleModel.isEditing = false
         }
 
+        Common.route.observe(viewLifecycleOwner) { currentRoute ->
+            if (currentRoute == Route.Menu) {
+                Route.Scale.params = Route.Scale.params
+                    .filter { it.first != "SCALE_NO" }
+            }
+        }
 
     }
 
@@ -425,6 +436,17 @@ class CARGO_SCALE_Fragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         val route = Common.route.value
+
+        val savedScaleNo = route.params
+            .find { it.first == "SCALE_NO" }
+            ?.second
+            ?.toIntOrNull()
+
+        if (savedScaleNo != null && Common.backList.isNotEmpty()) {
+            cargoScaleModel.scaleRadioSelect.value = savedScaleNo
+        } else {
+            cargoScaleModel.scaleRadioSelect.value = 1
+        }
 
         if (route.params.size > 0) {
             val temp =
@@ -646,7 +668,8 @@ class CARGO_SCALE_Fragment : BaseFragment() {
                         val originParmas = listOf(
                             Pair("CARGO_CONTROL_SID", cargoScaleModel.cargoControlSid),
                             Pair("CARGO_ACCEPT_SID", cargoScaleModel.acceptSelect.value),
-                            Pair("MAWB", cargoScaleModel.mawb.value)
+                            Pair("MAWB", cargoScaleModel.mawb.value),
+                            Pair("SCALE_NO", (cargoScaleModel.scaleRadioSelect.value ?: 1).toString())
                         )
 
                         Common.route.value.params = originParmas

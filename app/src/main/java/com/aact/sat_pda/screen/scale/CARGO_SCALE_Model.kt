@@ -355,6 +355,8 @@ class CARGO_SCALE_Model : ViewModel() {
     fun setClearAll() {
         cargoControlSid = ""
         acceptSelect.value = ""
+        acceptSeq.value = ""
+        cargoStatusCode = ""
         acceptList.value = linkedMapOf()
         weight.value = ""
         fltDest.value = ""
@@ -426,6 +428,15 @@ class CARGO_SCALE_Model : ViewModel() {
             }
 
             var reloadFlag = false
+
+            // 신규 MAWB 저장 시 이전 화물정보가 남아 있는지 확인
+            android.util.Log.d(
+                "CARGO_SCALE_CHECK",
+                "MAWB=${mawb.value}, " +
+                        "CARGO_CONTROL_SID=$cargoControlSid, " +
+                        "CARGO_ACCEPT_SID=${acceptSelect.value}, " +
+                        "STATUS=$cargoStatusCode"
+            )
 
             if (Util.getStr(cargoControlSid).length == 0 && Util.getStr(acceptSelect.value).length == 0) {
                 val ret = api.setPWM_CARGO_ACCEPT_M010_011(

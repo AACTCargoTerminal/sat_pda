@@ -126,22 +126,20 @@ class CARGO_CONTROL_Fragment : BaseFragment() {
             cargoModel.isEditing = false
         }
 
-        cargoModel.fltList.observe(viewLifecycleOwner) {
-            action.doneAction(fltNo) {
-                if (!it.isNullOrEmpty()) {
-                    getCommonParse(
-                        subContent = fltTable,
-                        body = it,
-                        filterStr = cargoModel.fltNo.value,
-                        filterColumn = listOf("FLIGHT_NO")
-                    )
-                } else {
-                    Common.sendError("해당 편번이 없습니다.")
-                }
+        action.doneAction(fltNo) {
+            val fltData = cargoModel.fltList.value
+
+            if (!fltData.isNullOrEmpty()) {
+                getCommonParse(
+                    subContent = fltTable,
+                    body = fltData,
+                    filterStr = cargoModel.fltNo.value ?: "",
+                    filterColumn = listOf("FLIGHT_NO")
+                )
+            } else {
+                Common.sendError("해당 편번이 없습니다.")
             }
         }
-
-
 
         action.doneAction(fltDest) {
             if (keboardFlag) {

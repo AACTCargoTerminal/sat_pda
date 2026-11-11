@@ -82,9 +82,13 @@ class CARGO_CONTROL_Model : ViewModel() {
                             )
 
                             temp_fltList?.let { fltData ->
-                                val temp_row =
-                                    fltData.find { rows -> rows.row["SCHEDULE_SID"] == temp_fltSid }
+                                fltList.value = fltData
+
+                                val temp_row = fltData.find { rows -> rows.row["SCHEDULE_SID"] == temp_fltSid }
                                 fltNo.value = (temp_row?.row["FLIGHT_NO"] ?: "")
+                            } ?: run {
+                                fltList.value = emptyList()
+                                fltNo.value = ""
                             }
 
                             fltSelect.postValue(temp_fltSid)
