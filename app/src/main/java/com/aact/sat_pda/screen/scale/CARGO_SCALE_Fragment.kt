@@ -437,17 +437,6 @@ class CARGO_SCALE_Fragment : BaseFragment() {
         super.onStart()
         val route = Common.route.value
 
-        val savedScaleNo = route.params
-            .find { it.first == "SCALE_NO" }
-            ?.second
-            ?.toIntOrNull()
-
-        if (savedScaleNo != null && Common.backList.isNotEmpty()) {
-            cargoScaleModel.scaleRadioSelect.value = savedScaleNo
-        } else {
-            cargoScaleModel.scaleRadioSelect.value = 1
-        }
-
         if (route.params.size > 0) {
             val temp =
                 route.params.find { it.first == "CARGO_CONTROL_SID" }?.second ?: ""
@@ -455,9 +444,20 @@ class CARGO_SCALE_Fragment : BaseFragment() {
                 route.params.find { it.first == "CARGO_ACCEPT_SID" }?.second ?: ""
             val temp3 =
                 route.params.find { it.first == "MAWB" }?.second ?: ""
+            val temp4 =
+                route.params.find { it.first == "SCALE_NO" }?.second ?: ""
+
             cargoScaleModel.cargoControlSid = temp
             cargoScaleModel.acceptSelect.value = temp2
             cargoScaleModel.mawb.value = temp3
+
+            val savedScaleNo = temp4.toIntOrNull()
+
+            if (savedScaleNo != null && Common.backList.isNotEmpty()) {
+                cargoScaleModel.scaleRadioSelect.value = savedScaleNo
+            } else {
+                cargoScaleModel.scaleRadioSelect.value = 1
+            }
         }
         cargoScaleModel.getList()
         val mawb = binding.mawb.editText
