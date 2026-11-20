@@ -14,3 +14,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/deploy.sh
+/app/release/*.apk
