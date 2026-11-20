@@ -34,7 +34,6 @@ class IMPORT_INFO_Fragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         item.strEditText(binding.cargoNo.editText)
         item.limitEditText(binding.mawb.editText,11)
-        item.disableEditText(binding.hawb.editText)
         item.disableEditText(binding.fltDate.editText)
         item.disableEditText(binding.fltNo.editText)
         item.disableEditText(binding.assign.editText)
@@ -47,6 +46,11 @@ class IMPORT_INFO_Fragment : BaseFragment() {
         item.disableEditText(binding.desc.editText)
         item.disableEditText(binding.status.editText)
 
+        binding.hawb.editText.apply {
+            keyListener = null
+            isFocusable = false
+            isClickable = true
+        }
 
         model.cargoNo.observe(viewLifecycleOwner) {
             if (model.skipCargoNoObserver) {
@@ -59,28 +63,82 @@ class IMPORT_INFO_Fragment : BaseFragment() {
             }
         }
 
+        model.mawb.observe(viewLifecycleOwner) {
+            if(model.skipMawbObserver){
+                model.skipMawbObserver = false
+                return@observe
+            }
+
+            if(it.length != 11){
+                model.lastMawb = ""
+                return@observe
+            }
+
+            if(model.lastMawb == it){
+                return@observe
+            }
+
+            model.lastMawb = it
+
+            if(keboardFlag){
+                keyboardCtl()
+            }
+
+            model.setHAWBList { table ->
+                if(model.mawb.value != it){
+                    return@setHAWBList
+                }
+
+                val cargoControlNo =
+                    table.firstOrNull()?.row?.get("CARGO_CONTROL_NO") ?: ""
+
+                if(cargoControlNo.isNotEmpty()){
+                    model.setInfo(cargoControlNo)
+                }else{
+                    model.setInfoMawb()
+                }
+            }
+        }
 
         action.doneAction(binding.cargoNo.editText) {
             model.setInfo()
         }
+
         action.doneAction(binding.mawb.editText) {
-            model.setHAWBList{ table->
-                    if(table.size ==1){
-                        model.setInfoMawb()
-                    }else if(table.size > 1){
-                        getCommonParse(
-                            subContent = model.modalTable,
-                            body = table,
-                            filterStr = "",
-                            filterColumn = listOf("HOUSE_AIR_WAY_BILL_NO")
-                        )
-                    }else{
-                        model.setInfoMawb()
-                    }
+            if (keboardFlag) {
+                keyboardCtl()
+            }
+
+            if (model.mawb.value?.length == 11) {
+                binding.mawb.editText.clearFocus()
             }
         }
 
+        binding.hawb.editText.setOnClickListener {
+            val inputMawb = model.mawb.value ?: ""
 
+            if(inputMawb.length != 11){
+                Common.sendError("MAWB 번호를 확인하세요.")
+                return@setOnClickListener
+            }
+
+            model.setHAWBList { table ->
+                if(model.mawb.value != inputMawb){
+                    return@setHAWBList
+                }
+
+                if(table.isNotEmpty()){
+                    getCommonParse(
+                        subContent = model.modalTable,
+                        body = table,
+                        filterStr = "",
+                        filterColumn = listOf("HOUSE_AIR_WAY_BILL_NO")
+                    )
+                }else{
+                    Common.sendError("조회된 HAWB가 없습니다.")
+                }
+            }
+        }
 
     }
 

@@ -512,10 +512,10 @@ sealed class Route(
                 BottomItem.KeyBoard,
                 BottomItem.Camera,
                 irr,
-                bd,
                 cargoLoc,
-                dmg,
-                inCargo
+                inCargo,
+                bd,
+                dmg
             )
             return list
         }

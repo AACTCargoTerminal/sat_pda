@@ -157,6 +157,7 @@ class IMPORT_CARGO_IN_Model: ViewModel() {
                     val data1 = ret2.data.table
                     if (Util.getTableCell(0,data1[0],"COL1") == "OK") {
                         Common.suc.value = "저장완료"
+                        Common.getStack()
                     } else {
                         Common.sendError(Util.getTableCell(0,data1[0],"COL2"))
                     }
